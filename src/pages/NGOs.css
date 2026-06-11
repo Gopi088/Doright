@@ -1,0 +1,57 @@
+.ngos-hero { padding: 80px 0 60px; background: var(--orange-light); }
+.ngos-search { margin-top: 28px; }
+.ngos-search-input {
+  width: 100%; max-width: 540px; padding: 14px 20px;
+  border: 2px solid var(--gray-border); border-radius: 10px;
+  font-family: var(--font-body); font-size: 15px; color: var(--charcoal);
+  background: var(--white); outline: none; transition: border-color 0.15s;
+}
+.ngos-search-input:focus { border-color: var(--orange); }
+
+.ngos-body { padding: 56px 0 80px; }
+.ngos-filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 36px; }
+.ngos-filter-btn {
+  padding: 8px 18px; border-radius: 40px; border: 1.5px solid var(--gray-border);
+  background: var(--white); font-family: var(--font-main); font-size: 13px;
+  font-weight: 600; color: var(--gray-mid); cursor: pointer; transition: all 0.15s;
+}
+.ngos-filter-btn:hover { border-color: var(--orange); color: var(--orange); }
+.ngos-filter-btn.active { background: var(--orange); border-color: var(--orange); color: var(--white); }
+
+.ngos-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+.ngo-card {
+  background: var(--white); border: 1.5px solid var(--gray-border); border-radius: var(--radius);
+  padding: 20px; display: flex; flex-direction: column; gap: 14px;
+  transition: box-shadow 0.18s, border-color 0.18s;
+}
+.ngo-card:hover { box-shadow: var(--shadow-lg); border-color: var(--orange-mid); }
+.ngo-card-avatar {
+  width: 48px; height: 48px; border-radius: 12px; background: var(--orange);
+  color: var(--white); font-family: var(--font-main); font-size: 20px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+}
+.ngo-card-top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.ngo-card-name { font-family: var(--font-main); font-size: 15px; font-weight: 700; color: var(--charcoal); }
+.ngo-verified {
+  font-size: 11px; font-weight: 700; color: #16a34a;
+  background: #dcfce7; border-radius: 20px; padding: 3px 8px;
+}
+.ngo-card-cat { font-size: 13px; color: var(--gray-mid); }
+.ngo-card-meta { display: flex; align-items: center; gap: 12px; font-size: 12px; color: var(--gray-mid); }
+.ngo-sdg {
+  background: var(--orange-light); color: var(--orange);
+  padding: 2px 8px; border-radius: 4px; font-weight: 700;
+}
+.ngo-card-btn {
+  background: none; border: 1.5px solid var(--orange); border-radius: 7px;
+  color: var(--orange); font-family: var(--font-main); font-size: 13px; font-weight: 700;
+  padding: 9px; cursor: pointer; transition: all 0.15s; margin-top: auto;
+}
+.ngo-card-btn:hover { background: var(--orange); color: var(--white); }
+.ngos-empty { text-align: center; padding: 60px 0; color: var(--gray-mid); font-size: 15px; }
+
+.ngos-cta { background: var(--orange); padding: 72px 0; }
+.ngos-cta-inner { max-width: 560px; }
+
+@media (max-width: 840px) { .ngos-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 540px) { .ngos-grid { grid-template-columns: 1fr; } }

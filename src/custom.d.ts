@@ -1,0 +1,5 @@
+declare module "*.avif";
+declare module "*.jpg";
+declare module "*.jpeg";
+declare module "*.png";
+declare module "*.webp";
