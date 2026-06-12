@@ -6,12 +6,23 @@ interface Props {
   py?: string;
   id?: string;
   style?: CSSProperties;
+  as?: 'section' | 'div' | 'article';
+  ariaLabel?: string;
 }
 
-export default function Section({ children, bg = '#FFFFFF', py = '80px', id, style }: Props) {
+export default function Section({ children, bg = '#FFFFFF', py = '80px', id, style, as: Tag = 'section', ariaLabel }: Props) {
   return (
-    <section id={id} style={{ background: bg, padding: `${py} 0`, ...style }}>
+    <Tag id={id} aria-label={ariaLabel}
+      style={{
+        background: bg,
+        padding: `${py} 0`,
+        // Critical: prevent sections from overflowing horizontally
+        width: '100%',
+        overflow: 'hidden',
+        position: 'relative',
+        ...style,
+      }}>
       {children}
-    </section>
+    </Tag>
   );
 }

@@ -4,7 +4,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Container from '../components/ui/Container';
 import Button from '../components/ui/Button';
-import { colors, fontWeights, shadows, radius } from '../styles/theme';
+import { colors, fontWeights, shadows, radius } from '../styles/theme'; import { fonts } from '../styles/theme';
 import { blogPosts } from '../data/index';
 
 const allCats = ['All','Fundraising','Compliance','SDG Goals','Donor Relations','Technology','Impact'];
@@ -18,7 +18,7 @@ export default function Blog() {
   const visible = activeCat==='All' ? rest : rest.filter(p=>p.category===activeCat);
 
   return (
-    <div style={{ fontFamily:"'Inter','Plus Jakarta Sans',sans-serif", background:colors.white }}>
+    <div style={{ fontFamily:fonts.body, background:colors.white }}>
       <Navbar />
 
       {/* Hero */}
@@ -28,7 +28,7 @@ export default function Blog() {
             <span style={{ display:'inline-block', background:colors.primaryLight, color:colors.primary, fontSize:'11px', fontWeight:fontWeights.bold, borderRadius:radius.full, padding:'5px 14px', marginBottom:'16px', letterSpacing:'0.05em', textTransform:'uppercase' as const, border:`1px solid ${colors.primaryBorder}` }}>
               Doright Blog
             </span>
-            <h1 style={{ fontSize:'clamp(24px,4vw,46px)', fontWeight:fontWeights.extrabold, fontFamily:"'Plus Jakarta Sans','Inter',sans-serif", color:colors.dark, margin:'0 0 16px', letterSpacing:'-1px', lineHeight:1.15 }}>
+            <h1 style={{ fontSize:'clamp(24px,4vw,46px)', fontWeight:fontWeights.extrabold, fontFamily:fonts.display, color:colors.dark, margin:'0 0 16px', letterSpacing:'-1px', lineHeight:1.15 }}>
               Insights for Impact-Driven NGOs
             </h1>
             <p style={{ fontSize:'14.5px', color:colors.gray, lineHeight:1.75, maxWidth:'520px', margin:'0 auto' }}>
@@ -46,7 +46,7 @@ export default function Blog() {
             <div style={{ flex:'1 1 280px', minHeight:'220px', background:`linear-gradient(135deg,${colors.primaryLight},${colors.primaryBorder})`, minWidth:0 }}/>
             <div style={{ flex:'1 1 320px', padding:'clamp(24px,3vw,40px)', minWidth:0 }}>
               <span style={{ display:'inline-block', background:catColors[featured.category]||colors.primary, color:'#fff', fontSize:'11px', fontWeight:fontWeights.bold, borderRadius:radius.full, padding:'3px 10px', marginBottom:'14px' }}>{featured.category}</span>
-              <h2 style={{ fontSize:'clamp(17px,2.4vw,25px)', fontWeight:fontWeights.extrabold, color:colors.dark, margin:'0 0 14px', lineHeight:1.3, fontFamily:"'Plus Jakarta Sans','Inter',sans-serif", letterSpacing:'-0.3px' }}>{featured.title}</h2>
+              <h2 style={{ fontSize:'clamp(17px,2.4vw,25px)', fontWeight:fontWeights.extrabold, color:colors.dark, margin:'0 0 14px', lineHeight:1.3, fontFamily:fonts.display, letterSpacing:'-0.3px' }}>{featured.title}</h2>
               <p style={{ fontSize:'14px', color:colors.gray, lineHeight:1.75, margin:'0 0 16px' }}>{featured.excerpt}</p>
               <div style={{ display:'flex', gap:'8px', fontSize:'12.5px', color:colors.grayLight, marginBottom:'20px' }}>
                 <span>{featured.date}</span><span>·</span><span>{featured.readTime}</span>
@@ -59,7 +59,7 @@ export default function Blog() {
           <div role="group" aria-label="Filter by category" style={{ display:'flex', gap:'10px', flexWrap:'wrap', marginBottom:'36px' }}>
             {allCats.map(c=>(
               <motion.button key={c} whileHover={{ scale:1.04 }} whileTap={{ scale:0.96 }} onClick={()=>setActiveCat(c)}
-                style={{ background:activeCat===c?colors.primary:colors.bg, color:activeCat===c?colors.white:colors.grayMid, border:'none', borderRadius:radius.full, padding:'7px 16px', fontSize:'13px', fontWeight:activeCat===c?fontWeights.bold:fontWeights.medium, cursor:'pointer', transition:'all .15s' }}>
+                style={{ background:activeCat===c?colors.primary:colors.bg, color:activeCat===c?colors.white:colors.grayMid, border:'none', borderRadius:radius.full, padding:'7px 16px', fontSize:'13px', fontWeight:activeCat===c?fontWeights.bold:fontWeights.text, cursor:'pointer', transition:'all .15s' }}>
                 {c}
               </motion.button>
             ))}
@@ -75,7 +75,7 @@ export default function Blog() {
                   <span style={{ position:'absolute', bottom:'12px', left:'14px', background:catColors[p.category]||colors.primary, color:'#fff', fontSize:'11px', fontWeight:fontWeights.bold, borderRadius:radius.full, padding:'3px 10px' }}>{p.category}</span>
                 </div>
                 <div style={{ padding:'18px 20px 22px', flex:1, display:'flex', flexDirection:'column' }}>
-                  <h3 style={{ fontSize:'14.5px', fontWeight:fontWeights.bold, color:colors.dark, margin:'0 0 10px', lineHeight:1.4, fontFamily:"'Plus Jakarta Sans','Inter',sans-serif" }}>{p.title}</h3>
+                  <h3 style={{ fontSize:'14.5px', fontWeight:fontWeights.bold, color:colors.dark, margin:'0 0 10px', lineHeight:1.4, fontFamily:fonts.display }}>{p.title}</h3>
                   <p style={{ fontSize:'13px', color:colors.gray, lineHeight:1.65, margin:'0 0 16px', flex:1 }}>{p.excerpt}</p>
                   <div style={{ display:'flex', gap:'8px', fontSize:'12px', color:colors.grayLight, marginTop:'auto' }}>
                     <span>{p.date}</span><span>·</span><span>{p.readTime}</span>
@@ -98,7 +98,7 @@ export default function Blog() {
         <Container size="sm">
           <motion.div initial={{ opacity:0,y:20 }} whileInView={{ opacity:1,y:0 }} viewport={{ once:true }} transition={{ duration:0.5 }} style={{ textAlign:'center' }}>
             <div style={{ width:'52px', height:'52px', borderRadius:'50%', background:colors.primaryLight, display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 18px', border:`1px solid ${colors.primaryBorder}` }}><svg width='24' height='24' viewBox='0 0 28 28' fill='none'><rect x='3' y='7' width='22' height='16' rx='2' stroke='#FFAF5F' strokeWidth='1.8'/><path d='M3 9L14 17L25 9' stroke='#FFAF5F' strokeWidth='1.8' strokeLinecap='round'/></svg></div>
-            <h3 style={{ fontSize:'clamp(18px,3vw,28px)', fontWeight:fontWeights.extrabold, color:colors.dark, margin:'0 0 10px', fontFamily:"'Plus Jakarta Sans','Inter',sans-serif", letterSpacing:'-0.5px' }}>Stay Updated</h3>
+            <h3 style={{ fontSize:'clamp(18px,3vw,28px)', fontWeight:fontWeights.extrabold, color:colors.dark, margin:'0 0 10px', fontFamily:fonts.display, letterSpacing:'-0.5px' }}>Stay Updated</h3>
             <p style={{ fontSize:'14px', color:colors.gray, margin:'0 0 28px', lineHeight:1.7 }}>
               Get the latest NGO insights and Doright updates delivered to your inbox.
             </p>

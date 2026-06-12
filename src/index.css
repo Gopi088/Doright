@@ -1,28 +1,89 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+/* Cupidus — Display / Headings */
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; font-size: 16px; }
+/* Cupidus Text — Body / UI */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Global Reset & Base Styles
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  /* Critical: prevent horizontal overflow at root */
+  overflow-x: hidden;
+  width: 100%;
+}
+
 body {
-  font-family: 'Inter', 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-family: 'Cupidus Text', sans-serif;
+  font-weight: 500;
   background: #F4F4F4;
   color: #4D4D4D;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Critical: lock horizontal scroll */
   overflow-x: hidden;
+  width: 100%;
+  min-height: 100vh;
+  /* Prevent any child from causing horizontal scroll */
+  position: relative;
 }
-a { text-decoration: none; color: inherit; }
-button { font-family: inherit; cursor: pointer; }
-img, svg { display: block; max-width: 100%; }
+
+/* Lock all containers */
+#root {
+  overflow-x: hidden;
+  width: 100%;
+  min-height: 100vh;
+}
+
+a  { text-decoration: none; color: inherit; }
+button { font-family: 'Cupidus Text', sans-serif; cursor: pointer; }
+img  { display: block; max-width: 100%; height: auto; }
+svg  { display: block; max-width: 100%; }
 ul, ol { list-style: none; }
-input, textarea { font-family: inherit; }
+input, textarea, select { font-family: 'Cupidus Text', sans-serif; }
+
+/* Headings use Cupidus display face */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Cupidus', sans-serif;
+  line-height: 1.15;
+  color: #4D4D4D;
+}
+
+/* Focus ring — accessibility */
+:focus-visible {
+  outline: 2px solid #FFAF5F;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
 
 /* Scrollbar */
-::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar       { width: 5px; }
 ::-webkit-scrollbar-track { background: #F4F4F4; }
 ::-webkit-scrollbar-thumb { background: #CCCCCC; border-radius: 3px; }
 
-/* Focus ring for accessibility */
-:focus-visible { outline: 2px solid #FFAF5F; outline-offset: 2px; border-radius: 4px; }
+/* Prevent oversized images/SVGs from breaking layouts */
+img, video, canvas, audio, iframe, embed, object {
+  max-width: 100%;
+}
 
-/* Framer Motion */
+/* Prevent text from overflowing on very small screens */
+p, h1, h2, h3, h4, h5, h6, span, a, li {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+/* Responsive grid/flex base helpers */
+.responsive-hide-mobile { display: block; }
+@media (max-width: 767px) {
+  .responsive-hide-mobile { display: none !important; }
+}
+
+/* Framer Motion performance */
 .will-change-transform { will-change: transform; }

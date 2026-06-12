@@ -5,7 +5,7 @@ import Footer from '../components/Footer';
 import Container from '../components/ui/Container';
 import Button from '../components/ui/Button';
 import { SearchIcon, LocationPinIcon, NoResultsIcon } from '../components/icons';
-import { colors, fontWeights, shadows, radius } from '../styles/theme';
+import { colors, fontWeights, shadows, radius } from '../styles/theme'; import { fonts } from '../styles/theme';
 import { ngoCards } from '../data/index';
 
 const categories = ['All','Education','Environment','Healthcare','Gender Equality','Water & Sanitation','Food Security'];
@@ -34,7 +34,7 @@ export default function NGOs() {
   });
 
   return (
-    <div style={{ fontFamily:"'Inter','Plus Jakarta Sans',sans-serif", background:colors.white }}>
+    <div style={{ fontFamily:fonts.body, background:colors.white }}>
       <Navbar />
 
       {/* Hero */}
@@ -44,7 +44,7 @@ export default function NGOs() {
             <span style={{ display:'inline-block', background:colors.primaryLight, color:colors.primary, fontSize:'11px', fontWeight:fontWeights.bold, borderRadius:radius.full, padding:'5px 14px', marginBottom:'16px', letterSpacing:'0.05em', textTransform:'uppercase' as const, border:`1px solid ${colors.primaryBorder}` }}>
               Our Partner NGOs
             </span>
-            <h1 style={{ fontSize:'clamp(24px,4vw,46px)', fontWeight:fontWeights.extrabold, fontFamily:"'Plus Jakarta Sans','Inter',sans-serif", color:colors.dark, margin:'0 0 16px', letterSpacing:'-1px', lineHeight:1.15 }}>
+            <h1 style={{ fontSize:'clamp(24px,4vw,46px)', fontWeight:fontWeights.extrabold, fontFamily:fonts.display, color:colors.dark, margin:'0 0 16px', letterSpacing:'-1px', lineHeight:1.15 }}>
               Browse Purpose-Driven NGOs
             </h1>
             <p style={{ fontSize:'14.5px', color:colors.gray, lineHeight:1.75, margin:'0 auto 32px', maxWidth:'560px' }}>
@@ -70,7 +70,7 @@ export default function NGOs() {
           <div role="group" aria-label="Filter by category" style={{ display:'flex', gap:'10px', flexWrap:'wrap', marginBottom:'40px' }}>
             {categories.map(c => (
               <motion.button key={c} whileHover={{ scale:1.04 }} whileTap={{ scale:0.96 }} onClick={() => setCat(c)}
-                style={{ background:cat===c?colors.primary:colors.bg, color:cat===c?colors.white:colors.grayMid, border:'none', borderRadius:radius.full, padding:'8px 18px', fontSize:'13px', fontWeight:cat===c?fontWeights.bold:fontWeights.medium, cursor:'pointer', transition:'all .15s' }}>
+                style={{ background:cat===c?colors.primary:colors.bg, color:cat===c?colors.white:colors.grayMid, border:'none', borderRadius:radius.full, padding:'8px 18px', fontSize:'13px', fontWeight:cat===c?fontWeights.bold:fontWeights.text, cursor:'pointer', transition:'all .15s' }}>
                 {c}
               </motion.button>
             ))}
@@ -122,7 +122,7 @@ export default function NGOs() {
 
       <section style={{ background:colors.primary, padding:'64px 0', textAlign:'center' }}>
         <Container size="sm">
-          <h2 style={{ fontSize:'clamp(20px,3vw,32px)', fontWeight:fontWeights.extrabold, color:'#fff', margin:'0 0 12px', fontFamily:"'Plus Jakarta Sans','Inter',sans-serif", letterSpacing:'-0.5px' }}>
+          <h2 style={{ fontSize:'clamp(20px,3vw,32px)', fontWeight:fontWeights.extrabold, color:'#fff', margin:'0 0 12px', fontFamily:fonts.display, letterSpacing:'-0.5px' }}>
             Register Your NGO Today
           </h2>
           <p style={{ fontSize:'15px', color:'rgba(255,255,255,0.88)', margin:'0 0 28px', lineHeight:1.7 }}>

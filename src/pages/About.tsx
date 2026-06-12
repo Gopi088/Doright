@@ -6,14 +6,14 @@ import DoRightLogo from '../components/DoRightLogo';
 import Section from '../components/ui/Section';
 import Container from '../components/ui/Container';
 import Button from '../components/ui/Button';
-import { colors, fontWeights, shadows, radius } from '../styles/theme';
+import { colors, fontWeights, shadows, radius } from '../styles/theme'; import { fonts } from '../styles/theme';
 import { ABOUT } from '../data/siteContent';
 
 const fadeUp = (delay=0) => ({ initial:{opacity:0,y:20}, whileInView:{opacity:1,y:0}, viewport:{once:true}, transition:{duration:0.5,delay} });
 
 export default function About() {
   return (
-    <div style={{ fontFamily:"'Inter','Plus Jakarta Sans',sans-serif", background:colors.white }}>
+    <div style={{ fontFamily:fonts.body, background:colors.white }}>
       <Navbar />
 
       {/* Hero */}
@@ -23,7 +23,7 @@ export default function About() {
             <span style={{ display:'inline-block', background:colors.primaryLight, color:colors.primary, fontSize:'11px', fontWeight:fontWeights.bold, borderRadius:radius.full, padding:'5px 14px', marginBottom:'16px', letterSpacing:'0.05em', textTransform:'uppercase' as const, border:`1px solid ${colors.primaryBorder}` }}>
               {ABOUT.hero.badge}
             </span>
-            <h1 style={{ fontSize:'clamp(26px,4.5vw,50px)', fontWeight:fontWeights.extrabold, fontFamily:"'Plus Jakarta Sans','Inter',sans-serif", color:colors.dark, margin:'0 0 18px', lineHeight:1.15, letterSpacing:'-1px' }}>
+            <h1 style={{ fontSize:'clamp(26px,4.5vw,50px)', fontWeight:fontWeights.extrabold, fontFamily:fonts.display, color:colors.dark, margin:'0 0 18px', lineHeight:1.15, letterSpacing:'-1px' }}>
               {ABOUT.hero.title}<br/>
               <span style={{ color:colors.primary }}>{ABOUT.hero.titleHighlight}</span>
             </h1>
@@ -38,8 +38,8 @@ export default function About() {
           <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(150px,1fr))', gap:'24px', textAlign:'center' }}>
             {ABOUT.stats.map((s,i) => (
               <motion.div key={s.label} {...fadeUp(i*0.1)}>
-                <div style={{ fontSize:'clamp(24px,3vw,38px)', fontWeight:fontWeights.extrabold, color:colors.primary, letterSpacing:'-1px', fontFamily:"'Plus Jakarta Sans','Inter',sans-serif" }}>{s.value}</div>
-                <div style={{ fontSize:'13px', color:colors.gray, marginTop:'4px', fontWeight:fontWeights.medium }}>{s.label}</div>
+                <div style={{ fontSize:'clamp(24px,3vw,38px)', fontWeight:fontWeights.extrabold, color:colors.primary, letterSpacing:'-1px', fontFamily:fonts.display }}>{s.value}</div>
+                <div style={{ fontSize:'13px', color:colors.gray, marginTop:'4px', fontWeight:fontWeights.text }}>{s.label}</div>
               </motion.div>
             ))}
           </div>
@@ -51,7 +51,7 @@ export default function About() {
         <Container>
           <div style={{ display:'flex', alignItems:'center', gap:'clamp(28px,5vw,64px)', flexWrap:'wrap' }}>
             <div style={{ flex:'1 1 340px', minWidth:0 }}>
-              <motion.h2 {...fadeUp()} style={{ fontSize:'clamp(22px,3vw,34px)', fontWeight:fontWeights.extrabold, color:colors.dark, fontFamily:"'Plus Jakarta Sans','Inter',sans-serif", margin:'0 0 20px', letterSpacing:'-0.5px' }}>
+              <motion.h2 {...fadeUp()} style={{ fontSize:'clamp(22px,3vw,34px)', fontWeight:fontWeights.extrabold, color:colors.dark, fontFamily:fonts.display, margin:'0 0 20px', letterSpacing:'-0.5px' }}>
                 {ABOUT.mission.title}
               </motion.h2>
               {[ABOUT.mission.body1, ABOUT.mission.body2].map((b,i) => (
@@ -64,7 +64,7 @@ export default function About() {
             <motion.div {...fadeUp(0.12)} style={{ flex:'0 0 auto' }}>
               <div style={{ width:'220px', height:'220px', background:colors.bgWarm, borderRadius:radius['2xl'], display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:'10px', border:`2px solid ${colors.borderWarm}` }}>
                 <DoRightLogo size={68} />
-                <div style={{ fontSize:'18px', fontWeight:fontWeights.extrabold, fontFamily:"'Plus Jakarta Sans','Inter',sans-serif" }}>
+                <div style={{ fontSize:'18px', fontWeight:fontWeights.extrabold, fontFamily:fonts.display }}>
                   <span style={{ color:colors.primary }}>do</span><span style={{ color:colors.dark }}>right</span>
                 </div>
                 <span style={{ fontSize:'10px', fontWeight:fontWeights.bold, color:colors.primary, letterSpacing:'0.1em', textTransform:'uppercase' as const, background:colors.primaryLight, borderRadius:radius.full, padding:'3px 10px' }}>ACT FOR IMPACT</span>
@@ -77,7 +77,7 @@ export default function About() {
       {/* Values */}
       <Section bg={colors.bgWarm} py="72px">
         <Container>
-          <motion.h2 {...fadeUp()} style={{ fontSize:'clamp(22px,3vw,34px)', fontWeight:fontWeights.extrabold, color:colors.dark, fontFamily:"'Plus Jakarta Sans','Inter',sans-serif", margin:'0 0 40px', letterSpacing:'-0.5px' }}>
+          <motion.h2 {...fadeUp()} style={{ fontSize:'clamp(22px,3vw,34px)', fontWeight:fontWeights.extrabold, color:colors.dark, fontFamily:fonts.display, margin:'0 0 40px', letterSpacing:'-0.5px' }}>
             Our Values
           </motion.h2>
           <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(220px,1fr))', gap:'22px' }}>
@@ -97,7 +97,7 @@ export default function About() {
       {/* Team */}
       <Section bg={colors.white} py="72px">
         <Container>
-          <motion.h2 {...fadeUp()} style={{ fontSize:'clamp(22px,3vw,34px)', fontWeight:fontWeights.extrabold, color:colors.dark, fontFamily:"'Plus Jakarta Sans','Inter',sans-serif", margin:'0 0 40px', letterSpacing:'-0.5px' }}>
+          <motion.h2 {...fadeUp()} style={{ fontSize:'clamp(22px,3vw,34px)', fontWeight:fontWeights.extrabold, color:colors.dark, fontFamily:fonts.display, margin:'0 0 40px', letterSpacing:'-0.5px' }}>
             Our Team
           </motion.h2>
           <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(200px,1fr))', gap:'22px' }}>
@@ -120,7 +120,7 @@ export default function About() {
       <section style={{ background:colors.primary, padding:'64px 0', textAlign:'center' }}>
         <Container size="sm">
           <motion.div {...fadeUp()}>
-            <h2 style={{ fontSize:'clamp(20px,3vw,32px)', fontWeight:fontWeights.extrabold, color:'#fff', margin:'0 0 14px', fontFamily:"'Plus Jakarta Sans','Inter',sans-serif", letterSpacing:'-0.5px' }}>
+            <h2 style={{ fontSize:'clamp(20px,3vw,32px)', fontWeight:fontWeights.extrabold, color:'#fff', margin:'0 0 14px', fontFamily:fonts.display, letterSpacing:'-0.5px' }}>
               Ready to Partner with Us?
             </h2>
             <p style={{ fontSize:'15px', color:'rgba(255,255,255,0.88)', margin:'0 0 28px', lineHeight:1.7 }}>

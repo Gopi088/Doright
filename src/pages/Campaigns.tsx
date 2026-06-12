@@ -4,7 +4,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Container from '../components/ui/Container';
 import Button from '../components/ui/Button';
-import { colors, fontWeights, shadows, radius } from '../styles/theme';
+import { colors, fontWeights, shadows, radius } from '../styles/theme'; import { fonts } from '../styles/theme';
 import { campaigns } from '../data/index';
 
 const cats = ['All','Education','Environment','Healthcare','Gender Equality','Water','Food'];
@@ -28,7 +28,7 @@ export default function Campaigns() {
   const filtered = active==='All' ? campaigns : campaigns.filter(c=>c.category===active);
 
   return (
-    <div style={{ fontFamily:"'Inter','Plus Jakarta Sans',sans-serif", background:colors.white }}>
+    <div style={{ fontFamily:fonts.body, background:colors.white }}>
       <Navbar />
 
       {/* Hero */}
@@ -38,7 +38,7 @@ export default function Campaigns() {
             <span style={{ display:'inline-block', background:colors.primaryLight, color:colors.primary, fontSize:'11px', fontWeight:fontWeights.bold, borderRadius:radius.full, padding:'5px 14px', marginBottom:'16px', letterSpacing:'0.05em', textTransform:'uppercase' as const, border:`1px solid ${colors.primaryBorder}` }}>
               Active Campaigns
             </span>
-            <h1 style={{ fontSize:'clamp(24px,4vw,46px)', fontWeight:fontWeights.extrabold, fontFamily:"'Plus Jakarta Sans','Inter',sans-serif", color:colors.dark, margin:'0 0 16px', letterSpacing:'-1px', lineHeight:1.15 }}>
+            <h1 style={{ fontSize:'clamp(24px,4vw,46px)', fontWeight:fontWeights.extrabold, fontFamily:fonts.display, color:colors.dark, margin:'0 0 16px', letterSpacing:'-1px', lineHeight:1.15 }}>
               Support a Campaign Today
             </h1>
             <p style={{ fontSize:'14.5px', color:colors.gray, lineHeight:1.75, maxWidth:'520px', margin:'0 auto' }}>
@@ -54,7 +54,7 @@ export default function Campaigns() {
           <div role="group" aria-label="Filter campaigns" style={{ display:'flex', gap:'10px', flexWrap:'wrap', marginBottom:'40px' }}>
             {cats.map(c=>(
               <motion.button key={c} whileHover={{ scale:1.04 }} whileTap={{ scale:0.96 }} onClick={()=>setActive(c)}
-                style={{ background:active===c?colors.primary:colors.bg, color:active===c?colors.white:colors.grayMid, border:'none', borderRadius:radius.full, padding:'8px 18px', fontSize:'13px', fontWeight:active===c?fontWeights.bold:fontWeights.medium, cursor:'pointer', transition:'all .15s' }}>
+                style={{ background:active===c?colors.primary:colors.bg, color:active===c?colors.white:colors.grayMid, border:'none', borderRadius:radius.full, padding:'8px 18px', fontSize:'13px', fontWeight:active===c?fontWeights.bold:fontWeights.text, cursor:'pointer', transition:'all .15s' }}>
                 {c}
               </motion.button>
             ))}
@@ -99,7 +99,7 @@ export default function Campaigns() {
         <Container>
           <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', gap:'24px', flexWrap:'wrap' }}>
             <div>
-              <h3 style={{ fontSize:'clamp(18px,2.5vw,26px)', fontWeight:fontWeights.extrabold, color:colors.dark, margin:'0 0 6px', fontFamily:"'Plus Jakarta Sans','Inter',sans-serif", letterSpacing:'-0.5px' }}>Every donation makes a difference</h3>
+              <h3 style={{ fontSize:'clamp(18px,2.5vw,26px)', fontWeight:fontWeights.extrabold, color:colors.dark, margin:'0 0 6px', fontFamily:fonts.display, letterSpacing:'-0.5px' }}>Every donation makes a difference</h3>
               <p style={{ fontSize:'14px', color:colors.gray, margin:0 }}>100% of donations go directly to verified NGOs.</p>
             </div>
             <Button href="/ngos" variant="primary" size="lg">Start a Campaign →</Button>
