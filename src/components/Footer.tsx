@@ -163,21 +163,7 @@ export default function Footer() {
               alignItems: "center",
             }}
           >
-            <a href="#" style={{ color: "#4d4d4d" }}>
-              <FaFacebookF size={18} />
-            </a>
-
-            <a href="#" style={{ color: "#4d4d4d" }}>
-              <FaXTwitter size={18} />
-            </a>
-
-            <a href="#" style={{ color: "#4d4d4d" }}>
-              <FaInstagram size={18} />
-            </a>
-
-            <a href="#" style={{ color: "#4d4d4d" }}>
-              <FaLinkedinIn size={18} />
-            </a>
+           
           </div>
         </div>
       </div>
