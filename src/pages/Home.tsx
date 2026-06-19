@@ -8,7 +8,7 @@ import NGOPartners from '../sections/NGOPartners';
 import GetCertified from '../sections/GetCertified';
 import GetFeatured from '../sections/GetFeatured';
 import JoinNetwork from '../sections/JoinNetwork';
-import AnimationSection from '../sections/ AnimationSection';
+import AnimationSection from '../components/ AnimationSection';
 import Animation from '../sections/Animation';
 
 export default function Home() {
