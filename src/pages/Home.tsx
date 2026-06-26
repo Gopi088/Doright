@@ -14,6 +14,7 @@ import heroImage2 from "../assets/heroImage2.jpg";
 import heroImage3 from "../assets/heroImage3.jpg";
 import storyImage from "../assets/storyImage.jpg";
 import treeImage from "../assets/treeImage.jpg"
+import actForImpactVideo from "../assets/Act for impact_1.mp4";
 
 /* ─── DESIGN TOKENS ─────────────────────────────────────────────────────────── */
 const T = {
@@ -1615,7 +1616,7 @@ const CTASection: React.FC = () => {
   const ref = useRef<HTMLDivElement>(null);
 
   return (
-    <section ref={ref} style={{ padding:"40px 0 140px", background:T.bgWhite }}>
+    <section id="final-cta" ref={ref} style={{ padding:"40px 0 140px", background:T.bgWhite }}>
       <div style={{ maxWidth:1200, margin:"0 auto", padding:"0 28px" }}>
         <Reveal>
           <motion.div
@@ -1676,21 +1677,22 @@ const CTASection: React.FC = () => {
                 overflow:"hidden",
               }}
             >
-              <motion.div
-                animate={{ opacity:[0.82,1,0.82] }}
-                transition={{ duration:3.4, repeat:Infinity, ease:"easeInOut" }}
+              <video
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
                 style={{
-                  color:"#fff",
-                  fontSize:"clamp(42px,4.8vw,70px)",
-                  fontWeight:300,
-                  lineHeight:0.92,
-                  letterSpacing:"0.01em",
-                  textAlign:"center",
-                  whiteSpace:"nowrap",
+                  width:"calc(100% + 2px)",
+                  height:"100%",
+                  objectFit:"cover",
+                  display:"block",
+                  marginLeft:-1,
                 }}
               >
-                ACT FOR<br />IMPACT
-              </motion.div>
+                <source src={actForImpactVideo} type="video/mp4" />
+              </video>
             </div>
           </motion.div>
         </Reveal>
@@ -1839,14 +1841,24 @@ const Home: React.FC = () => (
           padding: 44px 28px !important;
           flex-direction: column !important;
           align-items: flex-start !important;
+          gap: 24px !important;
+          min-height: auto !important;
         }
         .cta-card > div:first-child {
           padding: 0 !important;
+          flex-basis: auto !important;
+          width: 100% !important;
+        }
+        .cta-card h2 {
+          white-space: normal !important;
+          font-size: 28px !important;
+          line-height: 1.18 !important;
         }
         .cta-impact-panel {
           width: 100% !important;
+          max-width: none !important;
           flex-basis: auto !important;
-          min-height: 150px !important;
+          min-height: 170px !important;
           border-left: none !important;
           border-top: 1px solid rgba(0,0,0,.12) !important;
         }

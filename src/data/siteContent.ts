@@ -58,11 +58,11 @@ export const TRUSTED = {
 export const PLATFORM = {
   title: 'Platform Features',
   tabs: [
-    { id: 'health',    label: 'Health Fundraising Page',      desc: '' },
+    { id: 'health',    label: 'Health Fundraising Page',      desc: 'Doright enables NGOs to seamlessly create and manage multiple fundraising experiences from one platform.' },
     { id: 'donation',  label: 'Direct Donation Pages',        desc: 'Doright enables NGOs to seamlessly create and manage multiple fundraising experiences from one platform.' },
-    { id: 'campaign',  label: 'Fundraising Campaign',         desc: '' },
-    { id: 'events',    label: 'Events & Community Drive',     desc: '' },
-    { id: 'product',   label: 'Product & Merchandise Platform', desc: '' },
+    { id: 'campaign',  label: 'Fundraising Campaign',         desc: 'Doright enables NGOs to seamlessly create and manage multiple fundraising experiences from one platform.' },
+    { id: 'events',    label: 'Events & Community Drive',     desc: 'Doright enables NGOs to seamlessly create and manage multiple fundraising experiences from one platform.' },
+    { id: 'product',   label: 'Product & Merchandise Platform', desc: 'Doright enables NGOs to seamlessly create and manage multiple fundraising experiences from one platform.' },
   ],
   phone: {
     appTitle: 'Give',
