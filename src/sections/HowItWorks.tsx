@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import Container from '../components/ui/Container';
 import Section from '../components/ui/Section';
 import { PinIcon, FlagIcon, CyclistIcon } from '../components/icons';
-import { colors, fontWeights, fonts } from '../styles/theme';
+import { colors, fontWeights, fonts, shadows } from '../styles/theme';
 import { HOW_IT_WORKS } from '../data/siteContent';
 
 export default function HowItWorks() {
@@ -10,14 +10,14 @@ export default function HowItWorks() {
 
   return (
     <Section id="how-it-works" bg={colors.white} py="clamp(48px,7vw,80px)"
-      style={{ borderTop:`1px solid ${colors.border}` }} ariaLabel="How it works">
-      <Container>
+      style={{ borderTop:`2px solid ${colors.primary}` }} ariaLabel="How it works">
+      <Container style={{ maxWidth: '1040px' }}>
         <motion.div initial={{ opacity:0,y:20 }} whileInView={{ opacity:1,y:0 }} viewport={{ once:true }} transition={{ duration:0.5 }}
-          style={{ marginBottom:'clamp(32px,5vw,56px)' }}>
-          <h2 style={{ fontFamily:fonts.display, fontSize:'clamp(22px,3vw,36px)', fontWeight:fontWeights.extrabold, color:colors.dark, margin:'0 0 6px', letterSpacing:'-0.5px' }}>
+          style={{ marginBottom:'clamp(34px,5vw,62px)' }}>
+          <h2 style={{ fontFamily:fonts.display, fontSize:'clamp(24px,3vw,34px)', fontWeight:fontWeights.extrabold, color:colors.dark, margin:'0 0 6px', letterSpacing:'0' }}>
             {title}
           </h2>
-          <p style={{ fontFamily:fonts.body, fontWeight:fontWeights.text, fontSize:'13.5px', color:colors.gray }}>
+          <p style={{ fontFamily:fonts.body, fontWeight:fontWeights.textBold, fontSize:'11px', color:colors.dark }}>
             {subtitle}
           </p>
         </motion.div>
@@ -27,15 +27,15 @@ export default function HowItWorks() {
           <div style={{ minWidth:'320px' }}>
 
             {/* Icon row */}
-            <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', marginBottom:'4px' }}>
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', marginBottom:'2px' }}>
               {steps.map((s, i) => (
                 <motion.div key={s.num}
                   initial={{ opacity:0,y:16 }} whileInView={{ opacity:1,y:0 }} viewport={{ once:true }} transition={{ delay:i*0.1, duration:0.45 }}
-                  style={{ display:'flex', flexDirection:'column', alignItems:'center', height:'clamp(72px,9vw,100px)', justifyContent:'flex-end', paddingBottom:'4px' }}>
-                  {s.icon === 'pin'     && <PinIcon size={36} />}
-                  {s.icon === 'cyclist' && <CyclistIcon size={Math.min(88, 88)} />}
-                  {s.icon === 'flag'    && <FlagIcon size={40} />}
-                  {s.icon === 'none'    && <div style={{ height:'36px' }}/>}
+                  style={{ display:'flex', flexDirection:'column', alignItems:'center', height:'clamp(96px,10vw,125px)', justifyContent:'flex-end', paddingBottom:'4px' }}>
+                  {s.icon === 'pin'     && <PinIcon size={42} />}
+                  {s.icon === 'cyclist' && <CyclistIcon size={128} />}
+                  {s.icon === 'flag'    && <FlagIcon size={47} />}
+                  {s.icon === 'none'    && <div style={{ height:'40px' }}/>}
                   {i === 0 && (
                     <span style={{ fontFamily:fonts.body, fontWeight:fontWeights.textBold, fontSize:'10px', color:colors.gray, letterSpacing:'0.06em', marginTop:'3px', textTransform:'uppercase' as const }}>
                       START
@@ -46,8 +46,8 @@ export default function HowItWorks() {
             </div>
 
             {/* Timeline track */}
-            <div style={{ position:'relative', height:'48px', marginBottom:'12px' }}>
-              <div style={{ position:'absolute', top:'50%', left:'12.5%', right:'12.5%', height:'3px', transform:'translateY(-50%)', background:`repeating-linear-gradient(to right,${colors.primary} 0,${colors.primary} 12px,transparent 12px,transparent 20px)`, borderRadius:'2px' }}/>
+            <div style={{ position:'relative', height:'56px', marginBottom:'18px' }}>
+              <div style={{ position:'absolute', top:'50%', left:'8%', right:'8%', height:'2px', transform:'translateY(-50%)', background:colors.primary, borderRadius:'2px' }}/>
               <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', height:'100%' }}>
                 {steps.map((s, i) => (
                   <motion.div key={s.num}
@@ -55,11 +55,11 @@ export default function HowItWorks() {
                     transition={{ delay:0.3+i*0.1, type:'spring', stiffness:260, damping:20 }}
                     style={{ display:'flex', justifyContent:'center', alignItems:'center' }}>
                     <div style={{
-                      width:'38px', height:'38px', borderRadius:'50%',
-                      background:colors.primary, color:'#fff',
-                      fontFamily:fonts.display, fontWeight:fontWeights.extrabold, fontSize:'15px',
+                      width:'48px', height:'48px', borderRadius:'50%',
+                      background:colors.primary, color:colors.white,
+                      fontFamily:fonts.display, fontWeight:fontWeights.extrabold, fontSize:'18px',
                       display:'flex', alignItems:'center', justifyContent:'center',
-                      boxShadow:`0 3px 12px rgba(255,175,95,0.45)`, zIndex:1, position:'relative',
+                      boxShadow: shadows.primary, zIndex:1, position:'relative',
                     }}>
                       {s.num}
                     </div>
@@ -69,13 +69,13 @@ export default function HowItWorks() {
             </div>
 
             {/* Labels */}
-            <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:'8px' }}>
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:'12px' }}>
               {steps.map((s, i) => (
                 <motion.div key={s.num}
                   initial={{ opacity:0,y:12 }} whileInView={{ opacity:1,y:0 }} viewport={{ once:true }} transition={{ delay:0.5+i*0.08, duration:0.4 }}
                   style={{ textAlign:'center', padding:'0 4px' }}>
-                  <h4 style={{ fontFamily:fonts.display, fontWeight:fontWeights.bold, fontSize:'clamp(11px,1.2vw,14px)', color:colors.dark, margin:'0 0 5px' }}>{s.label}</h4>
-                  <p style={{ fontFamily:fonts.body, fontWeight:fontWeights.text, fontSize:'clamp(10px,1vw,12px)', color:colors.gray, lineHeight:1.55, margin:0 }}>{s.desc}</p>
+                  <h4 style={{ fontFamily:fonts.display, fontWeight:fontWeights.bold, fontSize:'11px', color:colors.darkTrue, margin:'0 0 6px' }}>{s.label}</h4>
+                  <p style={{ fontFamily:fonts.body, fontWeight:fontWeights.text, fontSize:'10px', color:colors.gray, lineHeight:1.55, margin:'0 auto', maxWidth:'125px' }}>{s.desc}</p>
                 </motion.div>
               ))}
             </div>

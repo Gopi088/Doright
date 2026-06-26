@@ -8,7 +8,7 @@ import { colors, fontWeights, shadows, radius } from '../styles/theme'; import {
 import { blogPosts } from '../data/index';
 
 const allCats = ['All','Fundraising','Compliance','SDG Goals','Donor Relations','Technology','Impact'];
-const catColors: Record<string,string> = { Fundraising:'#f97316', Compliance:'#3b82f6', 'SDG Goals':'#16a34a', 'Donor Relations':'#9333ea', Technology:'#0891b2', Impact:'#dc2626' };
+const catColors: Record<string,string> = { Fundraising:'#ffaf5f', Compliance:'#3b82f6', 'SDG Goals':'#16a34a', 'Donor Relations':'#9333ea', Technology:'#0891b2', Impact:'#dc2626' };
 
 export default function Blog() {
   const [featured, ...rest] = blogPosts;

@@ -1,134 +1,245 @@
-import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
-import DoRightLogo from '../components/DoRightLogo';
-import Section from '../components/ui/Section';
-import Container from '../components/ui/Container';
-import Button from '../components/ui/Button';
-import { colors, fontWeights, shadows, radius } from '../styles/theme'; import { fonts } from '../styles/theme';
-import { ABOUT } from '../data/siteContent';
+import { useState } from "react";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import founderImage from "../assets/founder.jpg";
+import member1 from "../assets/member1.jpg";
+import member2 from "../assets/member2.jpg";
+import member3 from "../assets/member3.jpg";
+import donateImage from "../assets/img4.jpg";
+import giveKindImage from "../assets/img2.jpg";
+import volunteerImage from "../assets/img3.jpg";
+import witnessImage from "../assets/img1.jpg";
+import storyImage from "../assets/storyImage.jpg";
+import boardDifferent from "../assets/board1.svg";
+import boardFor from "../assets/board2.svg";
+import boardFinal from "../assets/board3.svg";
+import "./Reference.css";
+import "./About.css";
 
-const fadeUp = (delay=0) => ({ initial:{opacity:0,y:20}, whileInView:{opacity:1,y:0}, viewport:{once:true}, transition:{duration:0.5,delay} });
+const founderSlides = [
+  {
+    eyebrow: "Our Story",
+    title: "Meet Pranav Gandhi,",
+    subtitle: "Our Founder.",
+    intro: "A Kindness-First Platform to Give, Volunteer, and See Real Change",
+    paragraphs: [
+      "I grew up in a home where giving wasn't an occasion — it was who we were. My father never gave speeches about compassion; he simply lived it, quietly and without expectation. Day after day, he showed me what it meant to care.",
+      "I still remember one winter evening, sitting across from him over tea. He told me about my grandfather — who, on a bitterly cold night, came across a man shivering on the roadside. Without thinking twice, he took off his own shirt and gave it to the man, walking home in just his vest.",
+      "When I asked my father about it, he just shrugged. \"It wasn't a big deal.\" But it was. It was everything.",
+    ],
+  },
+  {
+    eyebrow: "Our Story",
+    title: "Meet Pranav Gandhi,",
+    subtitle: "Our Founder.",
+    intro: "A Kindness-First Platform to Give, Volunteer, and See Real Change",
+    paragraphs: [
+      "That lesson stayed with me: giving is not a performance. It is a character trait, a quiet decision, and a way of showing up when someone needs you.",
+      "DoRight began with that feeling — the wish to make small acts easier, clearer, and more visible for anyone who wants to help.",
+    ],
+  },
+  {
+    eyebrow: "Our Story",
+    title: "Meet Pranav Gandhi,",
+    subtitle: "Our Founder.",
+    intro: "A Kindness-First Platform to Give, Volunteer, and See Real Change",
+    paragraphs: [
+      "The platform is built for everyday people with generous hearts. Not just donors, not just volunteers — people who believe kindness deserves a simple place to begin.",
+      "This is our story. We hope it becomes yours too.",
+    ],
+  },
+];
+
+const featureCards = [
+  { title: "Donate", body: "To verified, transparent NGOs making a tangible impact", image: donateImage },
+  { title: "Give in Kind", body: "Books, clothes, toys, technology — things that carry meaning", image: giveKindImage },
+  { title: "Volunteer", body: "Your time, skills and voice — mentoring, logistics, or showing up", image: volunteerImage },
+  { title: "Witness Impact", body: "See the real change your kindness creates", image: witnessImage },
+];
+
+const team = [
+  {
+    name: "Vivek Chordia",
+    role: "Chief Technology Advisor",
+    bio: "Vivek Chordia, with 26+ years of global experience, excels in IoT, AI, Cloud, and leadership. He collaborates and consults with organisations worldwide, driving strategy, innovation, and impactful results across industries.",
+    image: member1,
+  },
+  {
+    name: "Pranav Gandhi",
+    role: "Founder and CEO",
+    bio: "A dynamic business leader, Pranav has 26+ years of experience across diverse industries. He blends smart strategies with passionate execution and turns ideas into successful businesses.",
+    image: member2,
+  },
+  {
+    name: "Akshata Chandavarkar",
+    role: "Co-Founder and CIIO",
+    bio: "With 20 years of global experience, Akshata leads in AI, GRC, Cybersecurity, and HR Transformation. She believes that technology is a tool to drive collaboration and create a positive impact.",
+    image: member3,
+  },
+];
 
 export default function About() {
+  const [founderSlide, setFounderSlide] = useState(0);
+  const activeFounder = founderSlides[founderSlide];
+
   return (
-    <div style={{ fontFamily:fonts.body, background:colors.white }}>
+    <div className="dr-page dr-about-refined">
       <Navbar />
 
-      {/* Hero */}
-      <section aria-label="About hero" style={{ background:colors.bgWarm, padding:'72px 0 64px', textAlign:'center' }}>
-        <Container size="md">
-          <motion.div {...fadeUp()}>
-            <span style={{ display:'inline-block', background:colors.primaryLight, color:colors.primary, fontSize:'11px', fontWeight:fontWeights.bold, borderRadius:radius.full, padding:'5px 14px', marginBottom:'16px', letterSpacing:'0.05em', textTransform:'uppercase' as const, border:`1px solid ${colors.primaryBorder}` }}>
-              {ABOUT.hero.badge}
-            </span>
-            <h1 style={{ fontSize:'clamp(26px,4.5vw,50px)', fontWeight:fontWeights.extrabold, fontFamily:fonts.display, color:colors.dark, margin:'0 0 18px', lineHeight:1.15, letterSpacing:'-1px' }}>
-              {ABOUT.hero.title}<br/>
-              <span style={{ color:colors.primary }}>{ABOUT.hero.titleHighlight}</span>
-            </h1>
-            <p style={{ fontSize:'15px', color:colors.gray, lineHeight:1.75, maxWidth:'580px', margin:'0 auto' }}>{ABOUT.hero.body}</p>
-          </motion.div>
-        </Container>
-      </section>
-
-      {/* Stats strip */}
-      <section style={{ background:colors.white, borderTop:`1px solid ${colors.border}`, borderBottom:`1px solid ${colors.border}`, padding:'40px 0' }}>
-        <Container>
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(150px,1fr))', gap:'24px', textAlign:'center' }}>
-            {ABOUT.stats.map((s,i) => (
-              <motion.div key={s.label} {...fadeUp(i*0.1)}>
-                <div style={{ fontSize:'clamp(24px,3vw,38px)', fontWeight:fontWeights.extrabold, color:colors.primary, letterSpacing:'-1px', fontFamily:fonts.display }}>{s.value}</div>
-                <div style={{ fontSize:'13px', color:colors.gray, marginTop:'4px', fontWeight:fontWeights.text }}>{s.label}</div>
-              </motion.div>
-            ))}
-          </div>
-        </Container>
-      </section>
-
-      {/* Mission */}
-      <Section bg={colors.white} py="80px">
-        <Container>
-          <div style={{ display:'flex', alignItems:'center', gap:'clamp(28px,5vw,64px)', flexWrap:'wrap' }}>
-            <div style={{ flex:'1 1 340px', minWidth:0 }}>
-              <motion.h2 {...fadeUp()} style={{ fontSize:'clamp(22px,3vw,34px)', fontWeight:fontWeights.extrabold, color:colors.dark, fontFamily:fonts.display, margin:'0 0 20px', letterSpacing:'-0.5px' }}>
-                {ABOUT.mission.title}
-              </motion.h2>
-              {[ABOUT.mission.body1, ABOUT.mission.body2].map((b,i) => (
-                <motion.p key={i} {...fadeUp(0.1+i*0.08)} style={{ fontSize:'14.5px', color:colors.gray, lineHeight:1.78, margin:`0 0 14px` }}>{b}</motion.p>
-              ))}
-              <motion.div {...fadeUp(0.26)} style={{ marginTop:'28px' }}>
-                <Button href={ABOUT.mission.cta.href} variant="primary" size="lg">{ABOUT.mission.cta.label}</Button>
-              </motion.div>
+      <section className="about-founder-hero">
+        <div className="about-wrap about-founder-grid">
+          <div className="about-founder-copy">
+            <span className="about-pill"><i /> {activeFounder.eyebrow}</span>
+            <h1><strong>{activeFounder.title}</strong><br />{activeFounder.subtitle}</h1>
+            <p className="about-founder-intro">{activeFounder.intro.replace("Real Change", "")}<strong>Real Change</strong></p>
+            <div className="about-founder-story">
+              {activeFounder.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
             </div>
-            <motion.div {...fadeUp(0.12)} style={{ flex:'0 0 auto' }}>
-              <div style={{ width:'220px', height:'220px', background:colors.bgWarm, borderRadius:radius['2xl'], display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:'10px', border:`2px solid ${colors.borderWarm}` }}>
-                <DoRightLogo size={68} />
-                <div style={{ fontSize:'18px', fontWeight:fontWeights.extrabold, fontFamily:fonts.display }}>
-                  <span style={{ color:colors.primary }}>do</span><span style={{ color:colors.dark }}>right</span>
-                </div>
-                <span style={{ fontSize:'10px', fontWeight:fontWeights.bold, color:colors.primary, letterSpacing:'0.1em', textTransform:'uppercase' as const, background:colors.primaryLight, borderRadius:radius.full, padding:'3px 10px' }}>ACT FOR IMPACT</span>
+            <div className="about-founder-controls">
+              <span>{founderSlide + 1}/3</span>
+              <div className="about-founder-progress">{founderSlides.map((item, index) => <button key={item.paragraphs[0]} className={index === founderSlide ? "active" : ""} onClick={() => setFounderSlide(index)} aria-label={`Founder story slide ${index + 1}`} />)}</div>
+              <div className="about-founder-arrows">
+                <button onClick={() => setFounderSlide((founderSlide + founderSlides.length - 1) % founderSlides.length)} aria-label="Previous founder story">‹</button>
+                <button onClick={() => setFounderSlide((founderSlide + 1) % founderSlides.length)} aria-label="Next founder story">›</button>
               </div>
-            </motion.div>
+            </div>
           </div>
-        </Container>
-      </Section>
-
-      {/* Values */}
-      <Section bg={colors.bgWarm} py="72px">
-        <Container>
-          <motion.h2 {...fadeUp()} style={{ fontSize:'clamp(22px,3vw,34px)', fontWeight:fontWeights.extrabold, color:colors.dark, fontFamily:fonts.display, margin:'0 0 40px', letterSpacing:'-0.5px' }}>
-            Our Values
-          </motion.h2>
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(220px,1fr))', gap:'22px' }}>
-            {ABOUT.values.map((v,i) => (
-              <motion.div key={v.title} {...fadeUp(i*0.1)}
-                whileHover={{ y:-5, boxShadow:shadows.hover }}
-                style={{ background:colors.white, borderRadius:radius.xl, padding:'28px 24px', boxShadow:shadows.card, border:`1px solid ${colors.border}` }}>
-                <span style={{ fontSize:'30px', display:'block', marginBottom:'14px' }}>{v.icon}</span>
-                <h3 style={{ fontSize:'15px', fontWeight:fontWeights.bold, color:colors.dark, margin:'0 0 10px' }}>{v.title}</h3>
-                <p style={{ fontSize:'13.5px', color:colors.gray, lineHeight:1.65, margin:0 }}>{v.desc}</p>
-              </motion.div>
-            ))}
+          <div className="about-founder-card">
+            <img src={founderImage} alt="Pranav Gandhi" />
           </div>
-        </Container>
-      </Section>
+        </div>
+      </section>
 
-      {/* Team */}
-      <Section bg={colors.white} py="72px">
-        <Container>
-          <motion.h2 {...fadeUp()} style={{ fontSize:'clamp(22px,3vw,34px)', fontWeight:fontWeights.extrabold, color:colors.dark, fontFamily:fonts.display, margin:'0 0 40px', letterSpacing:'-0.5px' }}>
-            Our Team
-          </motion.h2>
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(200px,1fr))', gap:'22px' }}>
-            {ABOUT.team.map((m,i) => (
-              <motion.div key={m.name} {...fadeUp(i*0.1)}
-                whileHover={{ y:-5, boxShadow:shadows.hover }}
-                style={{ background:colors.bgWarm, borderRadius:radius.xl, padding:'32px 24px', textAlign:'center', border:`1px solid ${colors.borderWarm}` }}>
-                <div style={{ width:'72px', height:'72px', borderRadius:'50%', background:colors.primary, color:'#fff', fontSize:'22px', fontWeight:fontWeights.extrabold, display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 16px', boxShadow:shadows.primary }}>
-                  {m.initials}
+      <section className="about-principle">
+        <div className="about-wrap">
+          <div className="about-principle-card">
+            <div className="about-principle-mark"><strong>80</strong><em>/20</em><span>Principle</span></div>
+            <div className="about-principle-copy">
+              <span>The rule Pranav's father lived by</span>
+              <h2>"Earn as much as you want—but make sure 20% goes back to the world that helped you earn it. If you want to do less good, earn less. But if you want to make a real difference, then go out there and earn more—so you can give more."</h2>
+              <p>Not just a number — <strong>a way of life.</strong> The belief that prosperity and generosity are not opposites. The more you grow, the more you can give back.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="about-birth">
+        <div className="about-wrap about-birth-grid">
+          <div className="about-story-image"><img src={storyImage} alt="The birth of DoRight" /></div>
+          <div className="about-birth-copy">
+            <span className="about-pill"><i /> The Story</span>
+            <h2>The Birth of <strong>DoRight?</strong></h2>
+            <p className="about-birth-lead">Not in a boardroom. Not through a pitch deck.<br />But watching his father, Pranav felt something<br />— <strong>love, compassion, action.</strong></p>
+            <p>DoRight wasn't built to be just another donation platform. It was born from something deeper—a belief that kindness should have a home, a heartbeat, and a way forward.</p>
+            <p>This is more than a platform. It's a movement. A place where good intentions turn into real change. Where giving becomes a shared journey, not a transaction.</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="about-can-do">
+        <div className="about-wrap">
+          <h2><span>What You Can Do</span><span>On <strong>DoRight?</strong></span></h2>
+          <div className="about-feature-grid">
+            {featureCards.map((card) => (
+              <article className="about-feature-card" key={card.title}>
+                <div className="about-feature-art">
+                  <img src={card.image} alt={card.title} />
                 </div>
-                <h4 style={{ fontSize:'15px', fontWeight:fontWeights.bold, color:colors.dark, margin:'0 0 6px' }}>{m.name}</h4>
-                <p style={{ fontSize:'13px', color:colors.gray, margin:0 }}>{m.role}</p>
-              </motion.div>
+                <h3>{card.title}</h3>
+                <p>{card.body}</p>
+              </article>
             ))}
           </div>
-        </Container>
-      </Section>
+          <p className="about-feature-note">Give with Doright through <strong>PROMISES</strong> — where transparency and every donor–organisation relationship is valued and you<br />can <strong>witness the real change</strong> your kindness creates.</p>
+        </div>
+      </section>
 
-      {/* CTA */}
-      <section style={{ background:colors.primary, padding:'64px 0', textAlign:'center' }}>
-        <Container size="sm">
-          <motion.div {...fadeUp()}>
-            <h2 style={{ fontSize:'clamp(20px,3vw,32px)', fontWeight:fontWeights.extrabold, color:'#fff', margin:'0 0 14px', fontFamily:fonts.display, letterSpacing:'-0.5px' }}>
-              Ready to Partner with Us?
-            </h2>
-            <p style={{ fontSize:'15px', color:'rgba(255,255,255,0.88)', margin:'0 0 28px', lineHeight:1.7 }}>
-              Join hundreds of NGOs building trust and growing their impact with Doright.
-            </p>
-            <Button href="/ngos" variant="white" size="lg">Get Started Free →</Button>
-          </motion.div>
-        </Container>
+      <section className="about-team">
+        <div className="about-wrap">
+          <h2>The Team That<br /><span>Made It Happen</span></h2>
+          <div className="about-team-grid">
+            {team.map((person) => (
+              <article className="about-team-card" key={person.name}>
+                <div className="about-team-text">
+                  <h3>{person.name}</h3>
+                  <h4>{person.role}</h4>
+                  <p>{person.bio}</p>
+                  <a href="/" aria-label={`${person.name} LinkedIn`}>LinkedIn</a>
+                </div>
+                <img src={person.image} alt={person.name} />
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="about-founder-quote">
+        <div className="about-wrap">
+          <blockquote>
+            <p>"No dream, no matter how powerful, can take flight without the right people. I found not just team-mates, but kindred spirits — three ambitious minds who don't just believe in the dream. They owned it, breathed life into it, and carried it forward as if it were their own."</p>
+            <cite>— Pranav Gandhi, Founder & CEO</cite>
+          </blockquote>
+        </div>
+      </section>
+
+      <section className="about-different">
+        <div className="about-wrap about-different-grid">
+          <div className="about-different-left">
+            <img src={boardDifferent} alt="DoRight visible impact collage" />
+            <aside>
+              <p>We draw deep inspiration from my mentor, Mahatria, whose words are compass points for our every step:</p>
+              <strong>"If you truly want to lift humanity, educate a mind or enable a livelihood. Empower, don't just support."</strong>
+              <span>— This is the soul of DoRight.</span>
+            </aside>
+          </div>
+          <div className="about-different-copy">
+            <h2>What Makes <strong>DoRight</strong><br />Different?</h2>
+            <h3>It's not the features. It's the feeling.</h3>
+            <p>When you give through DoRight, you don't just send something off and hope. You see the impact.</p>
+            <ul>
+              <li>The classrooms that light up with new books.</li>
+              <li>The kitchens that come alive with groceries.</li>
+              <li>The children who are taught.</li>
+              <li>The hands that are held.</li>
+            </ul>
+            <p className="about-different-ending">Because your kindness deserves a story — one with a beginning, a middle, and most importantly, a visible change.</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="about-for">
+        <div className="about-wrap about-for-grid">
+          <div className="about-for-copy">
+            <span className="about-pill"><i /> Who This Is For?</span>
+            <h2>Not Just Charity.<br /><strong>It's Character.</strong></h2>
+            <div className="about-for-list">
+              <p>The mother who packs storybooks to share, not store.</p>
+              <p>The student with two free hours and a full heart.</p>
+              <p>The professional who quietly sets aside part of their pay for a child's school fees.</p>
+              <p>The person who's always thought "I want to help" — and just needed to know where.</p>
+            </div>
+            <div className="about-for-built">
+              <strong>DoRight was built for the everyday giver.</strong>
+              <span>For anyone who wants to help... but just doesn't know where to begin.</span>
+            </div>
+          </div>
+          <img src={boardFor} alt="Everyday giver collage" />
+        </div>
+      </section>
+
+      <section className="about-final">
+        <div className="about-wrap">
+          <span className="about-pill"><i /> Act For Impact</span>
+          <h2>This is where <strong>you begin.</strong></h2>
+          <h3>Because giving doesn't have to be grand.<br />It doesn't need a big cheque — just a big heart.</h3>
+          <p>DoRight is more than a platform. It's a reminder that kindness isn't measured in size — it's measured in sincerity. And sometimes, the smallest acts reveal the strongest character.</p>
+          <div className="about-final-rule" />
+          <h4>DoRight. <span>Act for Impact.</span></h4>
+          <p>Because in a world full of noise, the quietest acts of kindness still echo the loudest.</p>
+          <p>This is our story. We hope it becomes yours too.</p>
+          <a className="about-join" href="/ngos">Join Now</a>
+          <img src={boardFinal} alt="DoRight beginning illustration" />
+        </div>
       </section>
 
       <Footer />

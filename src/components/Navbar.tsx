@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import DoRightLogo from './DoRightLogo';
-import { colors, shadows, transitions, fonts, fontWeights } from '../styles/theme';
+import { colors, transitions, fonts, fontWeights } from '../styles/theme';
 import { NAV } from '../data/siteContent';
 
 export default function Navbar() {
@@ -24,60 +23,61 @@ export default function Navbar() {
   return (
     <header role="banner" style={{
       position: 'sticky', top: 0, zIndex: 200,
-      background: colors.white,
-      boxShadow: scrolled ? shadows.md : `0 1px 0 ${colors.border}`,
-      transition: transitions.normal,
-      // Must not overflow
+      background: 'rgba(255,255,255,0.96)',
+      backdropFilter: 'blur(12px)',
+      WebkitBackdropFilter: 'blur(12px)',
+      boxShadow: scrolled ? '0 2px 16px rgba(0,0,0,.08)' : 'none',
+      borderBottom: `1px solid ${colors.border}`,
+      transition: 'background 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, backdrop-filter 0.25s ease',
       width: '100%',
       overflow: 'hidden',
     }}>
       <nav
         style={{
-          maxWidth: '1180px',
+          maxWidth: '1200px',
           margin: '0 auto',
-          padding: '0 clamp(16px,4vw,24px)',
+          padding: '0 28px',
           display: 'flex',
           alignItems: 'center',
-          height: '58px',
-          gap: '24px',
+          height: '68px',
+          gap: '32px',
         }}
         aria-label="Main navigation"
       >
-        {/* Logo */}
-            <Link
-  to="/"
-  aria-label="DoRight Home"
-  style={{
-    display: "flex",
-    alignItems: "center",
-    flexShrink: 0,
-  }}
->
-  <img
-    src="/images/Logo.svg"
-    alt="DoRight"
-    style={{
-      height: "42px",
-      width: "auto",
-      display: "block",
-    }}
-  />
-</Link>
+        <Link
+          to="/"
+          aria-label="DoRight Home"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            flexShrink: 0,
+          }}
+        >
+          <img
+            src="/images/Logo.svg"
+            alt="DoRight"
+            style={{
+              height: "36px",
+              width: "auto",
+              display: "block",
+            }}
+          />
+        </Link>
 
-        {/* Desktop nav links */}
-        <ul role="list" style={{ display:'flex', gap:'22px', flex:1, margin:0, padding:0, listStyle:'none' }}
+        <ul style={{ display:'flex', gap:'2px', flex:1, margin:0, padding:0, listStyle:'none', alignItems:'center' }}
           className="responsive-hide-mobile">
           {NAV.links.map(n => (
             <li key={n.label}>
               <Link to={n.href} style={{
                 fontFamily: fonts.body,
-                fontSize: '13px',
-                fontWeight: isActive(n.href) ? fontWeights.textBold : fontWeights.text,
-                color: isActive(n.href) ? colors.primary : colors.grayMid,
+                fontSize: '14px',
+                fontWeight: fontWeights.text,
+                color: isActive(n.href) ? colors.dark : colors.gray,
                 textDecoration: 'none',
                 transition: transitions.fast,
-                padding: '4px 0',
-                borderBottom: isActive(n.href) ? `2px solid ${colors.primary}` : '2px solid transparent',
+                padding: '7px 13px',
+                borderRadius: '8px',
+                background: isActive(n.href) ? '#F4F4F4' : 'transparent',
                 whiteSpace: 'nowrap',
               }}>
                 {n.label}
@@ -86,24 +86,28 @@ export default function Navbar() {
           ))}
         </ul>
 
-        {/* Desktop CTAs */}
-        <div style={{ display:'flex', gap:'8px', alignItems:'center', flexShrink:0 }}
+        <div style={{ display:'flex', gap:'12px', alignItems:'center', flexShrink:0 }}
           className="responsive-hide-mobile">
-          <button style={{
-            background:'none', border:'none',
-            fontFamily: fonts.body, fontSize:'13px', fontWeight: fontWeights.text,
-            color: colors.grayMid, cursor:'pointer', padding:'6px 10px',
+          <Link to="/ngos" style={{
+            background: colors.white,
+            border:`1.5px solid ${colors.border}`,
+            borderBottomColor: colors.border,
+            borderRadius:'50px',
+            fontFamily: fonts.body, fontSize:'13px', fontWeight: fontWeights.textBold,
+            color: colors.dark, cursor:'pointer', padding:'9px 20px',
             whiteSpace: 'nowrap',
+            boxShadow: 'none',
+            textDecoration: 'none',
           }}>
             Login
-          </button>
+          </Link>
           <motion.div whileHover={{ scale:1.03 }} whileTap={{ scale:0.97 }}>
             <Link to={NAV.cta.href} style={{
               fontFamily: fonts.body,
               background: colors.primary, color: colors.white,
-              borderRadius: '20px', padding: '8px 18px',
+              borderRadius: '50px', padding: '9px 20px',
               fontSize: '13px', fontWeight: fontWeights.textBold,
-              boxShadow: shadows.primary, transition: transitions.normal,
+              boxShadow: 'none', transition: transitions.normal,
               whiteSpace: 'nowrap', display: 'inline-block',
             }}>
               {NAV.cta.label}
@@ -111,14 +115,13 @@ export default function Navbar() {
           </motion.div>
         </div>
 
-        {/* Hamburger — always visible, desktop hidden via CSS */}
         <button
           onClick={() => setOpen(o => !o)}
           aria-label={open ? 'Close navigation menu' : 'Open navigation menu'}
           aria-expanded={open}
           aria-controls="mobile-menu"
           style={{
-            background:'none', border:'none', padding:'6px',
+            background:'none', border:'none', padding:'8px',
             display:'flex', flexDirection:'column', gap:'5px',
             cursor:'pointer', marginLeft:'auto', flexShrink:0,
           }}
@@ -136,7 +139,6 @@ export default function Navbar() {
         </button>
       </nav>
 
-      {/* CSS: show/hide based on viewport */}
       <style>{`
         @media (min-width: 768px) {
           .responsive-hide-mobile { display: flex !important; }
@@ -147,7 +149,6 @@ export default function Navbar() {
         }
       `}</style>
 
-      {/* Mobile drawer */}
       <AnimatePresence>
         {open && (
           <motion.div id="mobile-menu" role="dialog" aria-label="Navigation menu"
@@ -170,9 +171,9 @@ export default function Navbar() {
                 </Link>
               ))}
               <div style={{ display:'flex', gap:'10px', marginTop:'6px', flexWrap:'wrap' }}>
-                <button style={{ flex:1, background:'none', border:`1.5px solid ${colors.border}`, borderRadius:'20px', padding:'9px 16px', fontFamily:fonts.body, fontSize:'13px', fontWeight:fontWeights.text, color:colors.grayMid, cursor:'pointer', minWidth:'100px' }}>
+                <Link to="/ngos" onClick={() => setOpen(false)} style={{ flex:1, background:'none', border:`1.5px solid ${colors.border}`, borderRadius:'20px', padding:'9px 16px', fontFamily:fonts.body, fontSize:'13px', fontWeight:fontWeights.text, color:colors.grayMid, cursor:'pointer', minWidth:'100px', textAlign:'center', textDecoration:'none' }}>
                   Login
-                </button>
+                </Link>
                 <Link to={NAV.cta.href} onClick={() => setOpen(false)}
                   style={{ flex:1, background:colors.primary, color:colors.white, borderRadius:'20px', padding:'9px 16px', fontFamily:fonts.body, fontSize:'13px', fontWeight:fontWeights.textBold, textAlign:'center', minWidth:'100px' }}>
                   {NAV.cta.label}

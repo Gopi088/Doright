@@ -1,3 +1,11 @@
+:root {
+  --color-primary: #faa950;
+  --color-dark: #1c1c1c;
+  --color-gray: #999999;
+  --color-bg: #ffffff;
+  --color-scroll: #e2e2e2;
+}
+
 /* Cupidus — Display / Headings */
 
 /* Cupidus Text — Body / UI */
@@ -21,10 +29,10 @@ html {
 }
 
 body {
-  font-family: 'Cupidus Text', sans-serif;
+  font-family: 'Cupidus Text', 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   font-weight: 500;
-  background: #F4F4F4;
-  color: #4D4D4D;
+  background: var(--color-bg);
+  color: var(--color-dark);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* Critical: lock horizontal scroll */
@@ -53,20 +61,20 @@ input, textarea, select { font-family: 'Cupidus Text', sans-serif; }
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Cupidus', sans-serif;
   line-height: 1.15;
-  color: #4D4D4D;
+  color: var(--color-dark);
 }
 
 /* Focus ring — accessibility */
 :focus-visible {
-  outline: 2px solid #FFAF5F;
+  outline: 2px solid var(--color-primary);
   outline-offset: 2px;
   border-radius: 4px;
 }
 
 /* Scrollbar */
 ::-webkit-scrollbar       { width: 5px; }
-::-webkit-scrollbar-track { background: #F4F4F4; }
-::-webkit-scrollbar-thumb { background: #CCCCCC; border-radius: 3px; }
+::-webkit-scrollbar-track { background: var(--color-bg); }
+::-webkit-scrollbar-thumb { background: var(--color-scroll); border-radius: 3px; }
 
 /* Prevent oversized images/SVGs from breaking layouts */
 img, video, canvas, audio, iframe, embed, object {
@@ -87,3 +95,34 @@ p, h1, h2, h3, h4, h5, h6, span, a, li {
 
 /* Framer Motion performance */
 .will-change-transform { will-change: transform; }
+
+/* Existing styles */
+
+/* ---------- NGO Carousel ---------- */
+
+.ngo-track {
+    animation: ngoMarquee 36s linear infinite;
+}
+
+.ngo-track.paused {
+    animation-play-state: paused;
+}
+
+.ngo-card {
+    transition: all .25s ease;
+}
+
+.ngo-card:hover {
+    border: 1px solid #FFAF5F !important;
+    box-shadow: 0 14px 32px rgba(0,0,0,.10);
+}
+
+@keyframes ngoMarquee {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-1680px);
+    }
+}

@@ -5,14 +5,14 @@
 
 // ─── Brand Colors ─────────────────────────────────────────────────────────────
 export const colors = {
-  primary:       '#FFAF5F',
+  primary:       '#ffaf5f',
   primaryDark:   '#E8963E',
   primaryDeep:   '#C97820',
   primaryLight:  '#FFF4E8',
   primaryBorder: '#FFD9A8',
   primaryGlow:   'rgba(255,175,95,0.35)',
 
-  dark:     '#4D4D4D',
+  dark:     '#4d4d4d',
   darkDeep: '#2D2D2D',
   darkTrue: '#1a1a1a',
 
@@ -20,6 +20,8 @@ export const colors = {
   grayMid:   '#6B6B6B',
   grayLight: '#CCCCCC',
   graySubtle:'#BBBBBB',
+  placeholder: '#C7C7C7',
+  placeholderDark: '#3F3F3F',
 
   white:   '#FFFFFF',
   bg:      '#F4F4F4',
