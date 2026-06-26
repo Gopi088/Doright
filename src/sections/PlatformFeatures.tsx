@@ -66,10 +66,10 @@ export default function PlatformFeatures() {
   return (
     <Section bg={colors.white} py="clamp(50px,7vw,88px)" ariaLabel="Platform Features">
       <Container style={{ maxWidth: '1040px' }}>
-        <div style={{ display:'flex', alignItems:'flex-start', justifyContent:'space-between', gap:'clamp(36px,8vw,150px)', flexWrap:'wrap' }}>
+        <div className="ngo-platform-layout" style={{ display:'flex', alignItems:'flex-start', justifyContent:'space-between', gap:'clamp(36px,8vw,150px)', flexWrap:'wrap' }}>
 
           {/* Left */}
-          <div style={{ flex:'1 1 min(390px,100%)', minWidth:0, maxWidth:'520px' }}>
+          <div className="ngo-platform-copy" style={{ flex:'1 1 min(390px,100%)', minWidth:0, maxWidth:'520px' }}>
             <motion.h2 initial={{ opacity:0,y:20 }} whileInView={{ opacity:1,y:0 }} viewport={{ once:true }} transition={{ duration:0.5 }}
               style={{ fontFamily:fonts.display, fontSize:'clamp(25px,3vw,34px)', fontWeight:fontWeights.extrabold, color:colors.dark, margin:'0 0 28px', letterSpacing:'0' }}>
               {PLATFORM.title}
@@ -120,7 +120,7 @@ export default function PlatformFeatures() {
           </div>
 
           {/* Right: phone */}
-          <motion.div initial={{ opacity:0, y:20 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true }} transition={{ duration:0.55, delay:0.15 }}
+          <motion.div className="ngo-phone-wrap" initial={{ opacity:0, y:20 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true }} transition={{ duration:0.55, delay:0.15 }}
             style={{ display:'flex', justifyContent:'center', alignItems:'flex-start', flex:'0 0 auto', width:'min(230px, 100%)', marginRight:'clamp(0px,5vw,58px)' }}>
             <PhoneMockup />
           </motion.div>

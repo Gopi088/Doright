@@ -30,9 +30,10 @@ export default function GetCertified() {
           </p>
         </motion.div>
 
-        <Grid minColWidth="210px" gap="clamp(24px,5vw,72px)">
+        <Grid minColWidth="210px" gap="clamp(24px,5vw,72px)" style={{ alignItems:'stretch' }}>
           {CERTIFICATION.tiers.map((tier, i) => (
             <motion.article key={tier.title}
+              className="ngo-cert-card"
               initial={{ opacity:0, y:28 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true }} transition={{ delay:i*0.12, duration:0.5 }}
               whileHover={{ y:-6, boxShadow: tier.featured ? shadows.primaryXl : shadows.hover }}
               style={{

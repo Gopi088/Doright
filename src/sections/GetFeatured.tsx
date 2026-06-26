@@ -3,35 +3,25 @@ import Container from '../components/ui/Container';
 import Section from '../components/ui/Section';
 import { colors, fontWeights, fonts, radius } from '../styles/theme';
 import { FEATURED } from '../data/siteContent';
+import featuredArtwork from '../assets/board3.svg';
 
 function SunAndPhotos() {
   return (
-    <div style={{ position:'relative', width:'min(310px,100%)', height:'270px', flexShrink:0, overflow:'visible' }}>
-      <svg aria-hidden="true" style={{ position:'absolute', left:'0', top:'78px', overflow:'visible' }} width="98" height="98" viewBox="0 0 98 98">
-        <g transform="translate(49,49)">
-          {Array.from({length:12},(_,i)=>{
-            const a=(i*30*Math.PI)/180;
-            return <line key={i} x1={Math.cos(a)*24} y1={Math.sin(a)*24} x2={Math.cos(a)*45} y2={Math.sin(a)*45}
-              stroke={colors.primary} strokeWidth="5" strokeLinecap="round"/>;
-          })}
-          <circle r="23" fill={colors.white} stroke={colors.primary} strokeWidth="7"/>
-        </g>
-      </svg>
-      <motion.div
-        initial={{ opacity:0, y:10 }}
-        whileInView={{ opacity:1, y:0 }}
-        viewport={{ once:true }}
-        transition={{ duration:0.5 }}
-        style={{
-          position:'absolute', left:'62px', top:'34px', zIndex:1,
-          width:'145px', height:'210px',
-          background:colors.placeholderDark,
-          border:`5px solid ${colors.grayLight}`,
-        }}
+    <motion.div
+      initial={{ opacity:0, scale:0.94 }}
+      whileInView={{ opacity:1, scale:1 }}
+      viewport={{ once:true }}
+      transition={{ duration:0.55, delay:0.1 }}
+      className="ngo-featured-artwork"
+      style={{ width:'min(330px,100%)', flexShrink:0 }}
+    >
+      <img
+        src={featuredArtwork}
+        alt=""
+        aria-hidden="true"
+        style={{ width:'100%', height:'auto', display:'block' }}
       />
-      <div style={{ position:'absolute', right:'8px', top:'0', width:'142px', height:'134px', background:colors.placeholderDark, border:`5px solid ${colors.grayLight}`, zIndex:2 }} />
-      <div style={{ position:'absolute', right:'34px', top:'126px', width:'132px', height:'132px', background:colors.placeholderDark, border:`5px solid ${colors.grayLight}`, zIndex:3 }} />
-    </div>
+    </motion.div>
   );
 }
 
@@ -39,9 +29,9 @@ export default function GetFeatured() {
   return (
     <Section bg={colors.white} py="clamp(62px,8vw,118px)" ariaLabel="Get Your NGO Featured">
       <Container style={{ maxWidth: '1040px' }}>
-        <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', gap:'clamp(42px,8vw,128px)', flexWrap:'wrap' }}>
+        <div className="ngo-featured-layout" style={{ display:'flex', alignItems:'center', justifyContent:'space-between', gap:'clamp(42px,8vw,128px)', flexWrap:'wrap' }}>
 
-          <div style={{ flex:'1 1 min(360px,100%)', minWidth:0, maxWidth:'500px' }}>
+          <div className="ngo-featured-copy" style={{ flex:'1 1 min(360px,100%)', minWidth:0, maxWidth:'500px' }}>
             <motion.h2 initial={{ opacity:0,y:20 }} whileInView={{ opacity:1,y:0 }} viewport={{ once:true }} transition={{ duration:0.5 }}
               style={{ fontFamily:fonts.display, fontSize:'clamp(25px,3vw,34px)', fontWeight:fontWeights.extrabold, color:colors.darkTrue, margin:'0 0 20px', lineHeight:1.2, letterSpacing:'0' }}>
               {FEATURED.title} {FEATURED.titleBold}
@@ -65,8 +55,13 @@ export default function GetFeatured() {
             </div>
           </div>
 
-          <motion.div initial={{ opacity:0, scale:0.94 }} whileInView={{ opacity:1, scale:1 }} viewport={{ once:true }} transition={{ duration:0.55, delay:0.1 }}
-            style={{ display:'flex', justifyContent:'center', flex:'0 1 auto' }}>
+          <motion.div
+            initial={{ opacity:0, scale:0.94 }}
+            whileInView={{ opacity:1, scale:1 }}
+            viewport={{ once:true }}
+            transition={{ duration:0.55, delay:0.1 }}
+            style={{ display:'flex', justifyContent:'center', flex:'0 1 auto' }}
+          >
             <SunAndPhotos />
           </motion.div>
 

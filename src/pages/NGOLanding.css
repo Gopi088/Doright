@@ -1,0 +1,137 @@
+.ngo-hero-layout,
+.ngo-platform-layout,
+.ngo-featured-layout {
+  min-width: 0;
+}
+
+.ngo-partners-carousel button,
+.ngo-join-actions a,
+.ngo-hero-actions a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ngo-featured-artwork img {
+  max-height: 300px;
+  object-fit: contain;
+}
+
+@media (max-width: 900px) {
+  .ngo-hero-layout,
+  .ngo-platform-layout,
+  .ngo-featured-layout {
+    justify-content: center !important;
+  }
+
+  .ngo-hero-copy,
+  .ngo-platform-copy,
+  .ngo-featured-copy {
+    max-width: 620px !important;
+  }
+
+  .ngo-phone-wrap {
+    margin-right: 0 !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .ngo-hero-layout {
+    text-align: center;
+    gap: 28px !important;
+  }
+
+  .ngo-hero-copy {
+    max-width: 100% !important;
+  }
+
+  .ngo-hero-actions,
+  .ngo-join-actions {
+    justify-content: center;
+  }
+
+  .ngo-hero-actions a,
+  .ngo-join-actions a {
+    width: min(100%, 240px);
+    justify-content: center;
+  }
+
+  .ngo-platform-layout {
+    gap: 32px !important;
+  }
+
+  .ngo-platform-copy {
+    max-width: 100% !important;
+  }
+
+  .ngo-phone-wrap {
+    width: 100% !important;
+  }
+
+  .ngo-partners-carousel {
+    grid-template-columns: 32px 1fr 32px !important;
+    gap: 6px !important;
+  }
+
+  .ngo-partners-carousel > button {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  .ngo-partner-strip {
+    grid-template-columns: repeat(5, minmax(36px, 1fr)) !important;
+    gap: 5px !important;
+  }
+
+  .ngo-partner-tile {
+    height: clamp(46px, 13vw, 64px) !important;
+  }
+
+  .ngo-cert-card {
+    max-width: 280px !important;
+    min-height: 310px !important;
+  }
+
+  .ngo-featured-layout {
+    text-align: left;
+    gap: 34px !important;
+  }
+
+  .ngo-featured-artwork {
+    width: min(270px, 100%) !important;
+    margin: 0 auto;
+  }
+
+  .ngo-join-card {
+    padding: 26px 20px !important;
+    text-align: center;
+    justify-content: center !important;
+    gap: 22px !important;
+  }
+
+  .ngo-join-copy {
+    flex-basis: 100% !important;
+  }
+
+  .ngo-join-copy p {
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .ngo-join-visual {
+    flex-basis: 100% !important;
+  }
+
+  .ngo-join-placeholder {
+    width: min(100%, 240px) !important;
+    height: 150px !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .ngo-partner-strip {
+    grid-template-columns: repeat(5, minmax(30px, 1fr)) !important;
+  }
+
+  .ngo-partner-tile {
+    border-radius: 7px !important;
+  }
+}

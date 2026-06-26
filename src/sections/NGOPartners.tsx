@@ -51,7 +51,7 @@ export default function NGOPartners() {
           </p>
         </motion.div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '38px 1fr 38px', alignItems: 'center', gap: '8px' }}>
+        <div className="ngo-partners-carousel" style={{ display: 'grid', gridTemplateColumns: '38px 1fr 38px', alignItems: 'center', gap: '8px' }}>
           <motion.button
             whileHover={{ scale: 1.08 }}
             whileTap={{ scale: 0.94 }}
@@ -71,9 +71,9 @@ export default function NGOPartners() {
             <ChevronLeftIcon size={12} color={colors.gray} />
           </motion.button>
 
-          <div style={{
+          <div className="ngo-partner-strip" style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(5, minmax(90px, 1fr))',
+            gridTemplateColumns: 'repeat(5, minmax(72px, 1fr))',
             gap: '10px',
             minWidth: 0,
           }}>
@@ -89,6 +89,7 @@ export default function NGOPartners() {
                   aria-pressed={selected}
                   aria-label={`Show ${item.name}`}
                   whileHover={{ y: -2 }}
+                  className="ngo-partner-tile"
                   style={{
                     height: '72px',
                     border: 0,

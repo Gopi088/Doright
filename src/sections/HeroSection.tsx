@@ -13,7 +13,7 @@ export default function HeroSection() {
       width: '100%',
     }}>
       <Container style={{ maxWidth: '1040px' }}>
-        <div style={{
+        <div className="ngo-hero-layout" style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -21,7 +21,7 @@ export default function HeroSection() {
           flexWrap: 'wrap',
         }}>
 
-          <div style={{ flex:'1 1 min(330px, 100%)', minWidth:0, maxWidth:'430px' }}>
+          <div className="ngo-hero-copy" style={{ flex:'1 1 min(330px, 100%)', minWidth:0, maxWidth:'430px' }}>
             <p style={{
               fontFamily: fonts.display,
               fontSize: 'clamp(25px,3.2vw,38px)',
@@ -54,7 +54,7 @@ export default function HeroSection() {
               {HERO.body}
             </p>
 
-            <div style={{ display:'flex', gap:'12px', flexWrap:'wrap' }}>
+            <div className="ngo-hero-actions" style={{ display:'flex', gap:'12px', flexWrap:'wrap' }}>
               <Button href={HERO.cta1.href} variant="primary" size="sm" style={{ minHeight: '38px', padding: '0 19px' }}>{HERO.cta1.label}</Button>
               <Button href={HERO.cta2.href} variant="ghost" size="sm" style={{ minHeight: '38px', padding: '0 19px', background: colors.white, color: colors.gray, borderColor: colors.white, boxShadow: shadows.sm }}>{HERO.cta2.label}</Button>
             </div>

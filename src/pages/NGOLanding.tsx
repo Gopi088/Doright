@@ -8,6 +8,7 @@ import NGOPartners from '../sections/NGOPartners';
 import GetCertified from '../sections/GetCertified';
 import GetFeatured from '../sections/GetFeatured';
 import JoinNetwork from '../sections/JoinNetwork';
+import './NGOLanding.css';
 
 
 export default function Home() {

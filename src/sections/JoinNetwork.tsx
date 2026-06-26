@@ -9,7 +9,7 @@ export default function JoinNetwork() {
   return (
     <Section bg={colors.white} py="clamp(22px,4vw,52px)" ariaLabel="Join the DoRight NGO Network">
       <Container style={{ maxWidth: '1040px' }}>
-        <motion.div initial={{ opacity:0, y:24 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true }} transition={{ duration:0.55 }}
+        <motion.div className="ngo-join-card" initial={{ opacity:0, y:24 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true }} transition={{ duration:0.55 }}
           style={{
             border: `1px solid ${colors.border}`,
             borderRadius: radius.lg,
@@ -23,7 +23,7 @@ export default function JoinNetwork() {
             boxShadow:`0 9px 0 ${colors.darkTrue}, ${shadows.card}`,
           }}>
 
-          <div style={{ flex:'1 1 min(300px,100%)', minWidth:0 }}>
+          <div className="ngo-join-copy" style={{ flex:'1 1 min(300px,100%)', minWidth:0 }}>
             <h2 style={{ fontFamily:fonts.display, fontSize:'clamp(27px,3.4vw,38px)', fontWeight:fontWeights.extrabold, color:colors.dark, margin:'0 0 12px', lineHeight:1.04, letterSpacing:'0' }}>
               {JOIN.title}<br/>
               <span style={{ color:colors.dark }}>{JOIN.titleBold}</span>
@@ -31,14 +31,14 @@ export default function JoinNetwork() {
             <p style={{ fontFamily:fonts.body, fontWeight:fontWeights.text, fontSize:'11px', color:colors.gray, lineHeight:1.7, margin:'0 0 15px', maxWidth:'410px' }}>
               {JOIN.body}
             </p>
-            <div style={{ display:'flex', gap:'10px', flexWrap:'wrap' }}>
+            <div className="ngo-join-actions" style={{ display:'flex', gap:'10px', flexWrap:'wrap' }}>
               <Button href={JOIN.cta1.href} variant="primary" size="sm" style={{ minHeight:'31px', padding:'0 20px' }}>{JOIN.cta1.label}</Button>
               <Button href={JOIN.cta2.href} variant="primary" size="sm" style={{ minHeight:'31px', padding:'0 20px' }}>{JOIN.cta2.label}</Button>
             </div>
           </div>
 
-          <div style={{ flex:'0 1 min(260px,100%)', minWidth:0, display:'flex', justifyContent:'center' }}>
-            <div style={{
+          <div className="ngo-join-visual" style={{ flex:'0 1 min(260px,100%)', minWidth:0, display:'flex', justifyContent:'center' }}>
+            <div className="ngo-join-placeholder" style={{
               width:'250px', height:'210px', maxWidth:'100%',
               background:colors.placeholder, border:`1px solid ${colors.grayLight}`,
               borderRadius:radius.lg, position:'relative',
