@@ -18,7 +18,7 @@ export default function NGOPartners() {
     <Section
       bg={colors.white}
       py="clamp(54px,7vw,86px)"
-      style={{ border: `2px solid ${colors.primary}` }}
+      style={{ borderTop: `2px solid ${colors.primary}`, borderBottom: `2px solid ${colors.primary}` }}
       ariaLabel="Meet Our NGO Partners"
     >
       <Container style={{ maxWidth: '1040px' }}>

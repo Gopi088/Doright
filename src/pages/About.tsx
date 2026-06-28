@@ -13,7 +13,6 @@ import storyImage from "../assets/storyImage.jpg";
 import boardDifferent from "../assets/board1.svg";
 import boardFor from "../assets/board2.svg";
 import boardFinal from "../assets/board3.svg";
-import "./Reference.css";
 import "./About.css";
 
 const founderSlides = [
@@ -25,7 +24,7 @@ const founderSlides = [
     paragraphs: [
       "I grew up in a home where giving wasn't an occasion — it was who we were. My father never gave speeches about compassion; he simply lived it, quietly and without expectation. Day after day, he showed me what it meant to care.",
       "I still remember one winter evening, sitting across from him over tea. He told me about my grandfather — who, on a bitterly cold night, came across a man shivering on the roadside. Without thinking twice, he took off his own shirt and gave it to the man, walking home in just his vest.",
-      "When I asked my father about it, he just shrugged. \"It wasn't a big deal.\" But it was. It was everything.",
+      `When I asked my father about it, he just shrugged. "It wasn't a big deal." But it was. It was everything.`,
     ],
   },
   {
@@ -34,8 +33,8 @@ const founderSlides = [
     subtitle: "Our Founder.",
     intro: "A Kindness-First Platform to Give, Volunteer, and See Real Change",
     paragraphs: [
-      "That lesson stayed with me: giving is not a performance. It is a character trait, a quiet decision, and a way of showing up when someone needs you.",
-      "DoRight began with that feeling — the wish to make small acts easier, clearer, and more visible for anyone who wants to help.",
+      "That night, I started noticing the quiet choices my father made. He lived by what he called the 80:20 principle: \"Earn as much as you want—but make sure 20% goes back to the world that helped you earn it. If you want to do less good, earn less. But if you want to make a real difference, then go out there and earn more—so you can give more.\"",
+      "He didn't just give money to causes—he gave his time, his attention, and his heart. He visited NGOs personally, asked them difficult questions, and ensured his contributions truly mattered. But time and again, he ran into barriers: disconnected systems, unclear impact, and a sense of distance that made giving feel... incomplete.",
     ],
   },
   {
@@ -44,8 +43,10 @@ const founderSlides = [
     subtitle: "Our Founder.",
     intro: "A Kindness-First Platform to Give, Volunteer, and See Real Change",
     paragraphs: [
-      "The platform is built for everyday people with generous hearts. Not just donors, not just volunteers — people who believe kindness deserves a simple place to begin.",
-      "This is our story. We hope it becomes yours too.",
+      "That's when a seed took root in me.",
+      "What if giving didn't have to feel that way? What if generosity had a clear path to real change? What if there was a way to bring kindness and technology together—to make it easier to give, to volunteer, and to see the ripple effects of our actions?",
+      "That vision became our mission: To build a platform where every kind heart finds its way to those who need it most—clearly, transparently, and impactfully.",
+      "Because giving should feel as powerful as the act itself. And change should never be out of reach.",
     ],
   },
 ];
@@ -80,165 +81,406 @@ const team = [
 
 export default function About() {
   const [founderSlide, setFounderSlide] = useState(0);
-  const activeFounder = founderSlides[founderSlide];
+  const total = founderSlides.length;
+
+  const goTo = (index: number) =>
+    setFounderSlide(Math.max(0, Math.min(total - 1, index)));
 
   return (
     <div className="dr-page dr-about-refined">
       <Navbar />
 
-      <section className="about-founder-hero">
-        <div className="about-wrap about-founder-grid">
-          <div className="about-founder-copy">
-            <span className="about-pill"><i /> {activeFounder.eyebrow}</span>
-            <h1><strong>{activeFounder.title}</strong><br />{activeFounder.subtitle}</h1>
-            <p className="about-founder-intro">{activeFounder.intro.replace("Real Change", "")}<strong>Real Change</strong></p>
-            <div className="about-founder-story">
-              {activeFounder.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+      {/* ═══════════════════════════════════════════
+          GRADIENT ZONE: Hero + 80/20 + Birth
+      ═══════════════════════════════════════════ */}
+      <div className="about-gradient-zone">
+
+        {/* ── 1. FOUNDER HERO ── */}
+        <section className="about-founder-hero">
+          <div className="about-wrap about-founder-grid">
+
+            {/* Left: copy + slider */}
+            <div className="about-founder-copy">
+              <div className="about-section-tag">
+                <span className="about-dot" />
+                {founderSlides[founderSlide].eyebrow}
+              </div>
+
+              <h1>
+                <strong>{founderSlides[founderSlide].title}</strong>
+                <br />
+                {founderSlides[founderSlide].subtitle}
+              </h1>
+
+              <p className="about-story-subhead">
+                A Kindness-First Platform to Give, Volunteer, and See{" "}
+                <strong>Real Change</strong>
+              </p>
+
+              {/* Slider */}
+              <div className="about-story-slider">
+                <div
+                  className="about-story-slides"
+                  style={{ transform: `translateX(-${founderSlide * 100}%)` }}
+                >
+                  {founderSlides.map((slide, i) => (
+                    <div className="about-story-slide" key={i}>
+                      {slide.paragraphs.map((p, j) => (
+                        <p key={j}>{p}</p>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Nav */}
+              <div className="about-story-nav">
+                <span className="about-story-counter">
+                  {founderSlide + 1}/{total}
+                </span>
+                <div className="about-story-track">
+                  <div
+                    className="about-story-progress"
+                    style={{ width: `${((founderSlide + 1) / total) * 100}%` }}
+                  />
+                </div>
+                <div className="about-story-arrows">
+                  <button
+                    className="about-story-arrow"
+                    aria-label="Previous"
+                    disabled={founderSlide === 0}
+                    onClick={() => goTo(founderSlide - 1)}
+                  >
+                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M10 12L6 8l4-4" />
+                    </svg>
+                  </button>
+                  <button
+                    className="about-story-arrow"
+                    aria-label="Next"
+                    disabled={founderSlide === total - 1}
+                    onClick={() => goTo(founderSlide + 1)}
+                  >
+                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M6 4l4 4-4 4" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
             </div>
-            <div className="about-founder-controls">
-              <span>{founderSlide + 1}/3</span>
-              <div className="about-founder-progress">{founderSlides.map((item, index) => <button key={item.paragraphs[0]} className={index === founderSlide ? "active" : ""} onClick={() => setFounderSlide(index)} aria-label={`Founder story slide ${index + 1}`} />)}</div>
-              <div className="about-founder-arrows">
-                <button onClick={() => setFounderSlide((founderSlide + founderSlides.length - 1) % founderSlides.length)} aria-label="Previous founder story">‹</button>
-                <button onClick={() => setFounderSlide((founderSlide + 1) % founderSlides.length)} aria-label="Next founder story">›</button>
+
+            {/* Right: founder photo */}
+            <div className="about-founder-photo">
+              <img src={founderImage} alt="Pranav Gandhi, Founder of DoRight" />
+            </div>
+
+          </div>
+        </section>
+
+        {/* ── 2. 80:20 PRINCIPLE CARD ── */}
+        <div className="about-principle-section">
+          <div className="about-wrap">
+            <div className="about-principle-card">
+              <div className="about-principle-left">
+                <div className="about-principle-number">
+                  80<span>/</span>20
+                </div>
+                <div className="about-principle-label">Principle</div>
+              </div>
+              <div className="about-principle-divider" />
+              <div className="about-principle-body">
+                <div className="about-principle-intro">
+                  The rule Pranav's father lived by
+                </div>
+                <blockquote className="about-principle-quote">
+                  "Earn as much as you want—but make sure 20% goes back to the world that helped you earn it. If you want to do less good, earn less. But if you want to make a real difference, then go out there and earn more—so you can give more."
+                </blockquote>
+                <p className="about-principle-sub">
+                  Not just a number — <strong>a way of life.</strong> The belief
+                  that prosperity and generosity are not opposites. The more you
+                  grow, the more you can give back.
+                </p>
               </div>
             </div>
           </div>
-          <div className="about-founder-card">
-            <img src={founderImage} alt="Pranav Gandhi" />
-          </div>
         </div>
-      </section>
 
-      <section className="about-principle">
-        <div className="about-wrap">
-          <div className="about-principle-card">
-            <div className="about-principle-mark"><strong>80</strong><em>/20</em><span>Principle</span></div>
-            <div className="about-principle-copy">
-              <span>The rule Pranav's father lived by</span>
-              <h2>"Earn as much as you want—but make sure 20% goes back to the world that helped you earn it. If you want to do less good, earn less. But if you want to make a real difference, then go out there and earn more—so you can give more."</h2>
-              <p>Not just a number — <strong>a way of life.</strong> The belief that prosperity and generosity are not opposites. The more you grow, the more you can give back.</p>
+        {/* ── 3. BIRTH OF DORIGHT ── */}
+        <section className="about-birth-section">
+          <div className="about-wrap about-birth-grid">
+
+            {/* Left: image */}
+            <div className="about-birth-image">
+              <img src={storyImage} alt="The Birth of DoRight" />
             </div>
-          </div>
-        </div>
-      </section>
 
-      <section className="about-birth">
-        <div className="about-wrap about-birth-grid">
-          <div className="about-story-image"><img src={storyImage} alt="The birth of DoRight" /></div>
-          <div className="about-birth-copy">
-            <span className="about-pill"><i /> The Story</span>
-            <h2>The Birth of <strong>DoRight?</strong></h2>
-            <p className="about-birth-lead">Not in a boardroom. Not through a pitch deck.<br />But watching his father, Pranav felt something<br />— <strong>love, compassion, action.</strong></p>
-            <p>DoRight wasn't built to be just another donation platform. It was born from something deeper—a belief that kindness should have a home, a heartbeat, and a way forward.</p>
-            <p>This is more than a platform. It's a movement. A place where good intentions turn into real change. Where giving becomes a shared journey, not a transaction.</p>
-          </div>
-        </div>
-      </section>
+            {/* Right: text */}
+            <div className="about-birth-copy">
+              <div className="about-section-tag">
+                <span className="about-dot" />
+                The Story
+              </div>
+              <h2>
+                The Birth of <strong>DoRight?</strong>
+              </h2>
+              <p className="about-birth-subhead">
+                Not in a boardroom. Not through a pitch deck. But watching his
+                father, Pranav felt something —{" "}
+                <strong>love, compassion, action.</strong>
+              </p>
+              <p>
+                DoRight wasn't built to be just another donation platform. It was
+                born from something deeper—a belief that kindness should have a
+                home, a heartbeat, and a way forward.
+              </p>
+              <p>
+                This is more than a platform. It's a movement. A place where good
+                intentions turn into real change. Where giving becomes a shared
+                journey, not a transaction.
+              </p>
+            </div>
 
-      <section className="about-can-do">
+          </div>
+        </section>
+
+      </div>{/* /about-gradient-zone */}
+
+      {/* ═══════════════════════════════════════════
+          4. WHAT YOU CAN DO — ORANGE BAND
+      ═══════════════════════════════════════════ */}
+      <section className="about-what-section">
         <div className="about-wrap">
-          <h2><span>What You Can Do</span><span>On <strong>DoRight?</strong></span></h2>
-          <div className="about-feature-grid">
+          <h2 className="about-what-heading">
+            <span className="about-what-line">What You Can Do</span>
+            <br />
+            <span className="about-what-line">
+              On <strong>DoRight?</strong>
+            </span>
+          </h2>
+
+          <div className="about-what-cards">
             {featureCards.map((card) => (
-              <article className="about-feature-card" key={card.title}>
-                <div className="about-feature-art">
+              <div className="about-what-card" key={card.title}>
+                <div className="about-what-card-img">
                   <img src={card.image} alt={card.title} />
                 </div>
-                <h3>{card.title}</h3>
-                <p>{card.body}</p>
-              </article>
-            ))}
-          </div>
-          <p className="about-feature-note">Give with Doright through <strong>PROMISES</strong> — where transparency and every donor–organisation relationship is valued and you<br />can <strong>witness the real change</strong> your kindness creates.</p>
-        </div>
-      </section>
-
-      <section className="about-team">
-        <div className="about-wrap">
-          <h2>The Team That<br /><span>Made It Happen</span></h2>
-          <div className="about-team-grid">
-            {team.map((person) => (
-              <article className="about-team-card" key={person.name}>
-                <div className="about-team-text">
-                  <h3>{person.name}</h3>
-                  <h4>{person.role}</h4>
-                  <p>{person.bio}</p>
-                  <a href="/" aria-label={`${person.name} LinkedIn`}>LinkedIn</a>
+                <div className="about-what-card-text">
+                  <h4>{card.title}</h4>
+                  <p>{card.body}</p>
                 </div>
-                <img src={person.image} alt={person.name} />
-              </article>
+              </div>
+            ))}
+          </div>
+
+          <p className="about-what-tagline">
+            <span className="about-what-tl-highlight">
+              Give with Doright through <strong>PROMISES</strong> — where
+              transparency and every donor–organisation relationship is valued and
+              you can <strong>witness the real change</strong> your kindness
+              creates.
+            </span>
+          </p>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          5. THE TEAM
+      ═══════════════════════════════════════════ */}
+      <section className="about-team-section">
+        <div className="about-wrap">
+          <h2 className="about-team-heading">
+            The Team That
+            <br />
+            <em>Made It Happen</em>
+          </h2>
+
+          <div className="about-team-grid">
+            {team.map((person, i) => (
+              <div
+                className={`about-team-card${i === 1 ? " about-team-card--featured" : ""}`}
+                key={person.name}
+              >
+                <div className="about-team-card-info">
+                  <div className="about-team-card-name">{person.name}</div>
+                  <div className="about-team-card-role">{person.role}</div>
+                  <p className="about-team-card-bio">{person.bio}</p>
+                  <a href="/login" className="about-team-card-linkedin">
+                    LinkedIn
+                  </a>
+                </div>
+                <div className="about-team-card-photo">
+                  <img src={person.image} alt={person.name} />
+                </div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="about-founder-quote">
+      {/* ── 5b. FOUNDER QUOTE BAND ── */}
+      <section className="about-quote-band">
         <div className="about-wrap">
-          <blockquote>
-            <p>"No dream, no matter how powerful, can take flight without the right people. I found not just team-mates, but kindred spirits — three ambitious minds who don't just believe in the dream. They owned it, breathed life into it, and carried it forward as if it were their own."</p>
-            <cite>— Pranav Gandhi, Founder & CEO</cite>
-          </blockquote>
+          <div className="about-quote-band-card">
+            <p className="about-quote-band-text">
+              <span className="about-qb-highlight">
+                "No dream, no matter how powerful, can take flight without the
+                right people. I found not just team-mates, but kindred spirits —
+                three ambitious minds who don't just believe in the dream. They
+                owned it, breathed life into it, and carried it forward as if it
+                were their own."
+              </span>
+            </p>
+            <div className="about-quote-band-attr">
+              <span className="about-qb-highlight">
+                — Pranav Gandhi, Founder &amp; CEO
+              </span>
+            </div>
+          </div>
         </div>
       </section>
 
-      <section className="about-different">
+      {/* ═══════════════════════════════════════════
+          6. WHAT MAKES DORIGHT DIFFERENT
+      ═══════════════════════════════════════════ */}
+      <section className="about-different-section">
         <div className="about-wrap about-different-grid">
+
+          {/* Left */}
           <div className="about-different-left">
-            <img src={boardDifferent} alt="DoRight visible impact collage" />
-            <aside>
-              <p>We draw deep inspiration from my mentor, Mahatria, whose words are compass points for our every step:</p>
-              <strong>"If you truly want to lift humanity, educate a mind or enable a livelihood. Empower, don't just support."</strong>
-              <span>— This is the soul of DoRight.</span>
-            </aside>
+            <div className="about-different-collage">
+              <img src={boardDifferent} alt="DoRight visible impact" />
+            </div>
+            <div className="about-different-quote-box">
+              <p className="about-different-quote-intro">
+                We draw deep inspiration from my mentor, Mahatria, whose words
+                are compass points for our every step:
+              </p>
+              <blockquote>
+                "If you truly want to lift humanity, educate a mind or enable a
+                livelihood. Empower, don't just support."
+              </blockquote>
+              <cite>— This is the soul of DoRight.</cite>
+            </div>
           </div>
-          <div className="about-different-copy">
-            <h2>What Makes <strong>DoRight</strong><br />Different?</h2>
-            <h3>It's not the features. It's the feeling.</h3>
-            <p>When you give through DoRight, you don't just send something off and hope. You see the impact.</p>
-            <ul>
-              <li>The classrooms that light up with new books.</li>
-              <li>The kitchens that come alive with groceries.</li>
-              <li>The children who are taught.</li>
-              <li>The hands that are held.</li>
-            </ul>
-            <p className="about-different-ending">Because your kindness deserves a story — one with a beginning, a middle, and most importantly, a visible change.</p>
+
+          {/* Right */}
+          <div className="about-different-right">
+            <h2>
+              What Makes <strong>DoRight</strong> Different?
+            </h2>
+            <p className="about-different-subhead">
+              It's not the features. It's the feeling.
+            </p>
+            <p className="about-different-intro">
+              When you give through DoRight, you don't just send something off
+              and hope. You see the impact.
+            </p>
+            <div className="about-feature-list">
+              {[
+                "The classrooms that light up with new books.",
+                "The kitchens that come alive with groceries.",
+                "The children who are taught.",
+                "The hands that are held.",
+              ].map((item) => (
+                <div className="about-feature-item" key={item}>
+                  <div className="about-feature-dot" />
+                  <p>{item}</p>
+                </div>
+              ))}
+            </div>
+            <p className="about-different-outro">
+              Because your kindness deserves a story — one with a beginning, a
+              middle, and most importantly, a visible change.
+            </p>
           </div>
+
         </div>
       </section>
 
-      <section className="about-for">
-        <div className="about-wrap about-for-grid">
-          <div className="about-for-copy">
-            <span className="about-pill"><i /> Who This Is For?</span>
-            <h2>Not Just Charity.<br /><strong>It's Character.</strong></h2>
-            <div className="about-for-list">
+      {/* ═══════════════════════════════════════════
+          7. NOT JUST CHARITY
+      ═══════════════════════════════════════════ */}
+      <section className="about-charity-section">
+        <div className="about-wrap about-charity-grid">
+
+          {/* Left */}
+          <div className="about-charity-left">
+            <div className="about-section-tag">
+              <span className="about-dot" />
+              Who This Is For?
+            </div>
+            <h2>
+              Not Just Charity.
+              <br />
+              <strong>It's Character.</strong>
+            </h2>
+            <div className="about-charity-list">
               <p>The mother who packs storybooks to share, not store.</p>
               <p>The student with two free hours and a full heart.</p>
-              <p>The professional who quietly sets aside part of their pay for a child's school fees.</p>
-              <p>The person who's always thought "I want to help" — and just needed to know where.</p>
+              <p>
+                The professional who quietly sets aside part of their pay for a
+                child's school fees.
+              </p>
+              <p>
+                The person who's always thought "I want to help" — and just
+                needed to know where.
+              </p>
             </div>
-            <div className="about-for-built">
+            <p className="about-charity-pullquote">
               <strong>DoRight was built for the everyday giver.</strong>
-              <span>For anyone who wants to help... but just doesn't know where to begin.</span>
-            </div>
+              <br />
+              For anyone who wants to help… but just doesn't know where to begin.
+            </p>
           </div>
-          <img src={boardFor} alt="Everyday giver collage" />
+
+          {/* Right */}
+          <div className="about-charity-image">
+            <img src={boardFor} alt="Everyday giver collage" />
+          </div>
+
         </div>
       </section>
 
-      <section className="about-final">
+      {/* ═══════════════════════════════════════════
+          8. CTA — ACT FOR IMPACT
+      ═══════════════════════════════════════════ */}
+      <section className="about-cta-section">
         <div className="about-wrap">
-          <span className="about-pill"><i /> Act For Impact</span>
-          <h2>This is where <strong>you begin.</strong></h2>
-          <h3>Because giving doesn't have to be grand.<br />It doesn't need a big cheque — just a big heart.</h3>
-          <p>DoRight is more than a platform. It's a reminder that kindness isn't measured in size — it's measured in sincerity. And sometimes, the smallest acts reveal the strongest character.</p>
-          <div className="about-final-rule" />
-          <h4>DoRight. <span>Act for Impact.</span></h4>
-          <p>Because in a world full of noise, the quietest acts of kindness still echo the loudest.</p>
-          <p>This is our story. We hope it becomes yours too.</p>
-          <a className="about-join" href="/ngos">Join Now</a>
-          <img src={boardFinal} alt="DoRight beginning illustration" />
+          <div className="about-cta-inner">
+            <div className="about-section-tag">
+              <span className="about-dot" />
+              Act for Impact
+            </div>
+            <h2>
+              This is where <strong>you begin.</strong>
+            </h2>
+            <p className="about-cta-lead">
+              Because giving doesn't have to be grand.
+              <br />
+              It doesn't need a big cheque — just a big heart.
+            </p>
+            <p>
+              DoRight is more than a platform. It's a reminder that kindness
+              isn't measured in size — it's measured in sincerity. And sometimes,
+              the smallest acts reveal the strongest character.
+            </p>
+            <div className="about-cta-divider" />
+            <p className="about-cta-tagline">
+              DoRight.{" "}
+              <span className="about-cta-tagline-accent">Act for Impact.</span>
+            </p>
+            <p>
+              Because in a world full of noise, the quietest acts of kindness
+              still echo the loudest.
+            </p>
+            <p>This is our story. We hope it becomes yours too.</p>
+            <a href="/ngos" className="about-join-btn">
+              Join Now
+            </a>
+            <div className="about-cta-svg-wrap">
+              <img src={boardFinal} alt="" />
+            </div>
+          </div>
         </div>
       </section>
 

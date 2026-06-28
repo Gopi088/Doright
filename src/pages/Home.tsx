@@ -7,6 +7,7 @@ import {
   useMotionValue,
 } from "framer-motion";
 import type { Variants, Transition, PanInfo } from "framer-motion";
+import { FaApple, FaGooglePlay } from "react-icons/fa";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import heroImage1 from "../assets/heroImage1.jpg";
@@ -50,10 +51,6 @@ const fadeUp: Variants = {
   hidden: { opacity: 0, y: 32 },
   show:   { opacity: 1, y: 0,  transition: TR() },
 };
-const fadeIn: Variants = {
-  hidden: { opacity: 0 },
-  show:   { opacity: 1, transition: TR(0.45) },
-};
 const scaleIn: Variants = {
   hidden: { opacity: 0, scale: 0.93 },
   show:   { opacity: 1, scale: 1,   transition: TR() },
@@ -69,7 +66,6 @@ const staggerFast: Variants = {
 
 /* ─── INTERFACES ─────────────────────────────────────────────────────────────*/
 interface Slide        { id:number; tag:string; headline:string; highlight:string; sub:string; cta:string; image:string; imagePosition:string; org:string; raised:string; goal:string; pct:number; donors:string; urgency:string; }
-interface FeedItem     { id:number; initials:string; name:string; city:string; org:string; cause:string; amount:string; time:string; isProduct:boolean; }
 interface NGO          { id:number; initials:string; name:string; cause:string; color:string; }
 interface Campaign     { id:number; tag:string; image:string; imagePosition:string; title:string; description:string; raised:string; goal:string; pct:number; org:string; orgInitials:string; orgColor:string; }
 interface HowStep      { id:number; label:string; headline:string; bold:string; body:string; link:string; }
@@ -83,15 +79,6 @@ const SLIDES: Slide[] = [
   { id:1, tag:"EDUCATION", headline:"Give a child", highlight:"a year of schooling.", sub:"₹4,800 covers a full academic year — books, meals, and a teacher who shows up. Verified by Teach For India Foundation.", cta:"Donate Now", image:heroImage1, imagePosition:"center", org:"Teach For India Foundation", raised:"₹3,65,000", goal:"₹5L", pct:73, donors:"418 donors", urgency:"6 days left" },
   { id:2, tag:"HEALTHCARE", headline:"Build a clinic", highlight:"for 5,000 families.", sub:"A Vidarbha village with no doctor within 40 km. Your donation funds the last mile of healthcare — geotagged, field-verified.", cta:"Donate Now", image:heroImage2, imagePosition:"center", org:"AarogyaSeva", raised:"₹4,05,000", goal:"₹5L", pct:81, donors:"532 donors", urgency:"3 days left" },
   { id:3, tag:"ENVIRONMENT", headline:"Plant 10,000", highlight:"native trees.", sub:"Each sapling is GPS-tagged and photo-tracked for 3 years. Watch your tree grow — and know it actually did.", cta:"Donate Now", image:heroImage3, imagePosition:"center", org:"GreenRoots India", raised:"₹68,000", goal:"₹2L", pct:34, donors:"129 donors", urgency:"11 days left" },
-];
-
-const FEED_ITEMS: FeedItem[] = [
-  { id:1, initials:"A", name:"Arjun M.",    city:"Delhi",     org:"Teach For India",  cause:"Education",   amount:"₹2,000",          time:"just now", isProduct:false },
-  { id:2, initials:"R", name:"Riya K.",     city:"Pune",      org:"CRY India",        cause:"Child Rights",amount:"₹500",             time:"2m ago",   isProduct:false },
-  { id:3, initials:"L", name:"Lakshmi V.",  city:"Kochi",     org:"Annapurna Trust",  cause:"Food",        amount:"₹1,500",           time:"just now", isProduct:false },
-  { id:4, initials:"N", name:"Nidhi A.",    city:"Ahmedabad", org:"ShaktiSeva Trust", cause:"Women",       amount:"₹750",             time:"2m ago",   isProduct:false },
-  { id:5, initials:"V", name:"Vijay C.",    city:"Kolkata",   org:"AarogyaSeva",      cause:"Healthcare",  amount:"Honey jar bought", time:"5m ago",   isProduct:true  },
-  { id:6, initials:"M", name:"Meera T.",    city:"Hyderabad", org:"GreenRoots India", cause:"Trees",       amount:"₹800",             time:"7m ago",   isProduct:false },
 ];
 
 const NGOS: NGO[] = [
@@ -153,6 +140,9 @@ const PRESS_STYLE: Record<string, PressStyle> = {
   Mint: { family:"DM Sans, sans-serif", italic:true },
 };
 
+const APP_STORE_URL = "https://apps.apple.com/in/app/doright-mobile-app/id6739503471";
+const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.dorightapp&pcampaignid=web_share";
+
 /* ─── SHARED COMPONENTS ──────────────────────────────────────────────────────*/
 
 const Reveal: React.FC<{ children: React.ReactNode; style?: React.CSSProperties }> = ({ children, style }) => {
@@ -207,11 +197,14 @@ const TxtLink: React.FC<{ children:React.ReactNode; style?:React.CSSProperties; 
 
 /* ─── §1  HERO ───────────────────────────────────────────────────────────────*/
 const Hero: React.FC = () => {
-  const [idx, setIdx] = useState(0);
+  const [trackIdx, setTrackIdx] = useState(1);
+  const [instantReset, setInstantReset] = useState(false);
   const [clipWidth, setClipWidth] = useState(0);
   const clipRef = useRef<HTMLDivElement>(null);
   const n = SLIDES.length;
   const GAP = 20;
+  const carouselSlides = useMemo(() => [SLIDES[n - 1], ...SLIDES, SLIDES[0]], [n]);
+  const idx = (trackIdx - 1 + n) % n;
 
   const getPeek = useCallback(() => {
     if (typeof window === "undefined") return 80;
@@ -220,9 +213,18 @@ const Hero: React.FC = () => {
     return 80;
   }, []);
 
-  const goTo = useCallback((i:number)=>{ setIdx(i); },[]);
-  const prev = useCallback(()=>goTo((idx-1+n)%n),[idx,n,goTo]);
-  const next = useCallback(()=>goTo((idx+1)%n),[idx,n,goTo]);
+  const goTo = useCallback((i:number)=>{
+    setInstantReset(false);
+    setTrackIdx(i + 1);
+  },[]);
+  const prev = useCallback(()=>{
+    setInstantReset(false);
+    setTrackIdx(current => current - 1);
+  },[]);
+  const next = useCallback(()=>{
+    setInstantReset(false);
+    setTrackIdx(current => current + 1);
+  },[]);
 
   useEffect(()=>{ const t=setInterval(next,5000); return ()=>clearInterval(t); },[next]);
 
@@ -235,7 +237,23 @@ const Hero: React.FC = () => {
 
   const peek = getPeek();
   const slideW = Math.max(0, clipWidth - (peek * 2) - (GAP * 2));
-  const x = clipWidth ? peek - idx * (slideW + GAP) : peek;
+  const x = clipWidth ? peek - trackIdx * (slideW + GAP) : peek;
+
+  const handleCarouselComplete = useCallback(() => {
+    if (trackIdx === n + 1) {
+      setInstantReset(true);
+      setTrackIdx(1);
+    } else if (trackIdx === 0) {
+      setInstantReset(true);
+      setTrackIdx(n);
+    }
+  }, [trackIdx, n]);
+
+  useEffect(() => {
+    if (!instantReset) return;
+    const frame = requestAnimationFrame(() => setInstantReset(false));
+    return () => cancelAnimationFrame(frame);
+  }, [instantReset]);
 
   const arrowStyle: React.CSSProperties = {
     position:"absolute", top:"50%", transform:"translateY(-50%)",
@@ -262,15 +280,16 @@ const Hero: React.FC = () => {
           <motion.div
             className="hero-track"
             animate={{ x }}
-            transition={{ duration:0.7, ease:[0.4,0,0.2,1] }}
+            transition={instantReset ? { duration:0 } : { duration:0.7, ease:[0.4,0,0.2,1] }}
+            onAnimationComplete={handleCarouselComplete}
             style={{
               display:"flex",
               gap:GAP,
               willChange:"transform",
             }}
           >
-            {SLIDES.map(slide => (
-              <div key={slide.id} className="hero-card" style={{
+            {carouselSlides.map((slide, slideIndex) => (
+              <div key={`${slide.id}-${slideIndex}`} className="hero-card" style={{
                 flex:`0 0 ${slideW ? `${slideW}px` : "calc(100% - 160px)"}`,
                 minHeight:"500px",
                 position:"relative",
@@ -348,10 +367,10 @@ const Hero: React.FC = () => {
           </motion.div>
 
           <motion.button onClick={prev} aria-label="Previous"
-            whileHover={{ y:-2, background:T.orange, color:"#fff" }}
+            whileHover={{background:T.orange, color:"#fff" }}
             style={{ ...arrowStyle, left:20 }}>‹</motion.button>
           <motion.button onClick={next} aria-label="Next"
-            whileHover={{ y:-2, background:T.orange, color:"#fff" }}
+            whileHover={{background:T.orange, color:"#fff" }}
             style={{ ...arrowStyle, right:20 }}>›</motion.button>
         </div>
 
@@ -374,40 +393,45 @@ const Hero: React.FC = () => {
 
 /* ─── §2  LIVE ACTIVITY ──────────────────────────────────────────────────────*/
 const LiveSection: React.FC = () => {
-  const [feed] = useState(FEED_ITEMS.slice(0,4));
   const [paymentMethod, setPaymentMethod] = useState("UPI");
+  const feed = [
+    { initials:"V", name:"Vijay C.", city:"Kolkata", org:"AarogyaSeva", cause:"Healthcare", amount:"Honey jar bought", time:"just now", tone:"green" },
+    { initials:"N", name:"Nidhi A.", city:"Ahmedabad", org:"ShaktiSeva Trust", cause:"Women", amount:"₹750", time:"just now", tone:"orange" },
+    { initials:"L", name:"Lakshmi V.", city:"Kochi", org:"Annapurna Trust", cause:"Food", amount:"₹1,500", time:"just now", tone:"gray" },
+    { initials:"F", name:"Farhan S.", city:"Lucknow", org:"GyaanDaan", cause:"Education", amount:"Journal bought", time:"just now", tone:"orange" },
+  ];
 
-  // useEffect(()=>{
-  //   const t = setInterval(()=>{
-  //     setFeed(prev=>{ const c=[...prev]; const last=c.pop()!; return [last,...c]; });
-  //   },3200);
-  //   return ()=>clearInterval(t);
-  // },[]);
+  const paymentMethods = [
+    { label:"UPI", icon:"⬡" },
+    { label:"NetBanking", icon:"🏛" },
+    { label:"Cards", icon:"💳" },
+    { label:"Wallets", icon:"👜" },
+  ];
 
   return (
-    <section style={{ padding:"80px 0", background:T.bgWhite }}>
+    <section className="live-section" style={{ padding:"80px 0", background:T.bgWhite }}>
       <div style={{ maxWidth:1200, margin:"0 auto", padding:"0 28px" }}>
         <Reveal>
-          {/* Ticker */}
-          <motion.div variants={fadeUp} style={{
-            display:"inline-flex", alignItems:"center", gap:10,
-            background:T.orangePale, borderRadius:999, padding:"8px 16px", marginBottom:32,
-          }}>
-            <motion.span animate={{ opacity:[1,0.2,1] }}
-              transition={{ duration:1.2, repeat:Infinity, ease:"easeInOut" }}
-              style={{ width:9, height:9, borderRadius:"50%", background:T.orange, flexShrink:0 }} />
-            <span style={{ fontWeight:600, fontSize:14, color:T.dark }}>27 donors active right now</span>
-            <span style={{ color:T.border, margin:"0 4px" }}>·</span>
-            <span style={{ fontSize:14, color:T.mid }}>Every act tracked in real time</span>
-          </motion.div>
-
-          <div className="two-col" style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:64, alignItems:"start" }}>
+          <div className="two-col live-main" style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:64, alignItems:"start" }}>
 
             {/* LEFT */}
             <div>
+              <motion.div variants={fadeUp} className="live-active-pill" style={{
+                display:"inline-flex", alignItems:"center", gap:8,
+                background:T.orangePale, borderRadius:999, padding:"8px 16px",
+                fontSize:13, color:T.dark, marginBottom:32,
+              }}>
+                <motion.span animate={{ opacity:[1,0.2,1] }}
+                  transition={{ duration:1.4, repeat:Infinity, ease:"easeInOut" }}
+                  style={{ width:8, height:8, borderRadius:"50%", background:T.orange, flexShrink:0 }} />
+                <span><strong style={{ color:T.dark, fontWeight:700 }}>25</strong> donors active right now</span>
+                <span style={{ color:T.light, margin:"0 2px" }}>·</span>
+                <span style={{ color:T.mid }}>Every act tracked in real time</span>
+              </motion.div>
+
               <motion.h2 variants={fadeUp} style={{
                 fontSize:"clamp(2.5rem,5vw,4.25rem)", fontWeight:400,
-                lineHeight:1.05, color:T.dark, margin:"0 0 24px",
+                lineHeight:1.02, color:T.dark, margin:"0 0 24px",
                 letterSpacing:0,
               }}>
                 do nothing.<br />
@@ -421,77 +445,81 @@ const LiveSection: React.FC = () => {
                 Give ₹500 or volunteer an afternoon.{" "}
                 <strong style={{ fontWeight:600 }}>Every act earns a Life — one person meaningfully reached.</strong>
               </motion.p>
-              <motion.p variants={fadeUp} style={{ fontSize:15, color:T.orange, fontWeight:600, lineHeight:1.7, marginBottom:28 }}>
+              <motion.a href="/campaigns" variants={fadeUp} style={{ display:"block", fontSize:15, color:T.orange, fontWeight:500, lineHeight:1.7, marginBottom:24, textDecoration:"none" }}>
                 Start from ₹150 — buy a notebook from an NGO. Your first Life, in under 2 minutes.
-              </motion.p>
+              </motion.a>
 
               <motion.div variants={fadeUp} style={{
-                background:T.orangeAlpha, borderRadius:T.r16,
-                padding:"20px 24px", marginBottom:32,
-                borderLeft:`3px solid ${T.orange}`,
+                background:T.orangePale, borderRadius:T.r16,
+                padding:"18px 20px", marginBottom:28,
               }}>
-                <p style={{ margin:0, fontWeight:600, fontSize:14.5, color:T.dark, lineHeight:1.65 }}>
+                <p style={{ margin:"0 0 5px", fontWeight:700, fontSize:14, color:T.dark, lineHeight:1.6 }}>
                   Only DoRight-approved NGOs — 30+ document checks, VKYC with geotagging.
                 </p>
-                <p style={{ margin:"6px 0 0", fontSize:13.5, color:T.mid, lineHeight:1.65 }}>
+                <p style={{ margin:0, fontSize:14, color:T.mid, lineHeight:1.6 }}>
                   Field photos from the ground. You'll actually know what happened.
                 </p>
               </motion.div>
 
-              <motion.div variants={fadeUp} style={{ display:"flex", gap:14, flexWrap:"wrap", marginBottom:20 }}>
+              <motion.div variants={fadeUp} style={{ display:"flex", gap:12, flexWrap:"wrap", marginBottom:14 }}>
                 <Btn href="/campaigns">Find your cause →</Btn>
                 <Btn href="/#how-it-works" ghost>See How It Works</Btn>
               </motion.div>
 
-              <motion.p variants={fadeUp} style={{ fontSize:13, color:T.light, marginBottom:14 }}>
+              <motion.p variants={fadeUp} style={{ fontSize:13, color:T.light, marginBottom:18 }}>
                 Give money · donate time · give things · buy from NGOs ·{" "}
                 <span style={{ color:T.orange, fontWeight:600 }}>all on one app</span>
               </motion.p>
 
               <motion.div variants={fadeUp} style={{ display:"flex", gap:10, alignItems:"center", flexWrap:"wrap", marginBottom:36 }}>
                 <span style={{ fontSize:13, color:T.light }}>Donate via</span>
-                {["UPI","NetBanking","Cards","Wallets"].map(m=>(
+                {paymentMethods.map(({ label, icon })=>(
                   <motion.button
-                    key={m}
+                    key={label}
                     type="button"
-                    onClick={()=>setPaymentMethod(m)}
+                    onClick={()=>setPaymentMethod(label)}
                     whileHover={{ y:-2 }}
                     whileTap={{ scale:0.96 }}
-                    aria-pressed={paymentMethod === m}
+                    aria-pressed={paymentMethod === label}
                     style={{
-                    fontSize:12.5, fontWeight:600,
-                    background:paymentMethod === m ? T.orange : "#fff",
-                    borderRadius:999, padding:"7px 14px",
-                    border:`1px solid ${paymentMethod === m ? T.orange : T.border}`,
-                    color:paymentMethod === m ? "#fff" : T.mid,
+                    display:"inline-flex", alignItems:"center", gap:5,
+                    fontSize:12, fontWeight:600,
+                    background:paymentMethod === label ? T.orange : T.bgGray,
+                    borderRadius:7, padding:"6px 11px",
+                    border:`1px solid ${paymentMethod === label ? T.orange : T.bgGray}`,
+                    color:paymentMethod === label ? "#fff" : T.mid,
                     fontFamily:"inherit",
                     cursor:"pointer",
-                    boxShadow:paymentMethod === m ? "0 8px 20px rgba(255,175,95,0.28)" : "none",
+                    boxShadow:paymentMethod === label ? "0 8px 20px rgba(255,175,95,0.28)" : "none",
                     transition:"all 0.22s ease",
-                  }}>{m}</motion.button>
+                  }}><span aria-hidden="true" style={{ fontSize:13 }}>{icon}</span>{label}</motion.button>
                 ))}
               </motion.div>
 
-              <motion.div variants={fadeUp} style={{
-                display:"flex", gap:36, paddingTop:28,
-                borderTop:`1px solid ${T.border}`, flexWrap:"wrap",
+              <motion.div className="live-stats" variants={fadeUp} style={{
+                display:"flex", paddingTop:28,
+                borderTop:`1px solid ${T.border}`,
               }}>
                 {[
                   { n:"2",     l:"Donated.",                         s:"₹0 unaccounted.", hi:false },
-                  { n:"300",   l:"DoRight-approved NGOs on platform", s:"",                hi:false },
-                  { n:"2,097+",l:"Donors who know what happened",     s:"",                hi:true  },
-                ].map(st=>(
-                  <div key={st.n}>
-                    <p style={{ fontSize:"clamp(1.5rem,2.8vw,2rem)", fontWeight:700, color:st.hi?T.orange:T.dark, margin:0 }}>{st.n}</p>
-                    <p style={{ fontSize:12.5, color:T.mid, margin:"3px 0 0", maxWidth:140, lineHeight:1.5 }}>{st.l}</p>
-                    {st.s && <p style={{ fontSize:11.5, color:T.light, margin:"2px 0 0" }}>{st.s}</p>}
+                  { n:"300",   l:"DoRight-approved NGOs on platform", s:"", hi:false },
+                  { n:"2,097+",l:"Donors who know what happened",     s:"", hi:true },
+                ].map((st, i)=>(
+                  <div key={st.n} style={{
+                    flex:1,
+                    paddingRight:i < 2 ? 24 : 0,
+                    marginRight:i < 2 ? 24 : 0,
+                    borderRight:i < 2 ? `1px solid ${T.border}` : "none",
+                  }}>
+                    <p style={{ fontSize:28, fontWeight:900, lineHeight:1, color:st.hi?T.orange:T.dark, margin:"0 0 4px" }}>{st.n}</p>
+                    <p style={{ fontSize:12, color:T.mid, margin:0, lineHeight:1.45 }}>{st.l}{st.s && <><br />{st.s}</>}</p>
                   </div>
                 ))}
               </motion.div>
             </div>
 
             {/* RIGHT — cards */}
-            <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
+            <div className="live-right" style={{ display:"flex", flexDirection:"column", gap:12 }}>
 
               {/* Live feed */}
               <motion.div variants={scaleIn} style={{
@@ -511,35 +539,36 @@ const LiveSection: React.FC = () => {
                   </div>
                   <span style={{ background:T.orange, color:"#fff", fontSize:10, fontWeight:700, borderRadius:6, padding:"3px 10px", letterSpacing:"0.06em" }}>LIVE</span>
                 </div>
-                <>
+                <div>
                   {feed.map((item,i)=>(
-                    <motion.div key={`${item.id}-${i}`}
+                    <motion.div key={`${item.name}-${i}`}
                       initial={{ opacity:0, y:-12 }} animate={{ opacity:1, y:0 }}
                       exit={{ opacity:0, y:12 }} transition={{ duration:0.35 }}
+                      whileHover={{ backgroundColor:T.bgGray }}
                       style={{
-                        display:"flex", alignItems:"center", justifyContent:"space-between",
-                        padding:"12px 20px",
+                        display:"flex", alignItems:"center", gap:12,
+                        padding:"13px 18px",
                         borderBottom: i<feed.length-1 ? `1px solid ${T.border}` : "none",
                       }}>
-                      <div style={{ display:"flex", alignItems:"center", gap:12 }}>
-                        <div style={{
-                          width:34, height:34, borderRadius:"50%",
-                          background:T.orangeAlpha,
-                          display:"flex", alignItems:"center", justifyContent:"center",
-                          fontWeight:700, fontSize:12, color:T.orange, flexShrink:0,
-                        }}>{item.initials}</div>
-                        <div>
-                          <p style={{ margin:0, fontWeight:600, fontSize:13.5, color:T.dark }}>{item.name} · {item.city}</p>
-                          <p style={{ margin:0, fontSize:12, color:T.light }}>{item.org} · {item.cause}</p>
-                        </div>
+                      <div style={{
+                        width:38, height:38, borderRadius:"50%",
+                        background:item.tone === "orange" ? T.orange : item.tone === "gray" ? T.border : T.orangePale,
+                        display:"flex", alignItems:"center", justifyContent:"center",
+                        fontWeight:700, fontSize:15,
+                        color:item.tone === "orange" ? "#fff" : item.tone === "gray" ? T.dark : T.orange,
+                        flexShrink:0,
+                      }}>{item.initials}</div>
+                      <div style={{ flex:1, minWidth:0 }}>
+                        <p style={{ margin:0, fontWeight:700, fontSize:14, color:T.dark }}>{item.name} · {item.city}</p>
+                        <p style={{ margin:"1px 0 0", fontSize:12, color:T.light }}>{item.org} · {item.cause}</p>
                       </div>
                       <div style={{ textAlign:"right" }}>
-                        <p style={{ margin:0, fontWeight:700, fontSize:13, color:item.isProduct?T.mid:T.orange }}>{item.amount}</p>
+                        <p style={{ margin:0, fontWeight:600, fontSize:13, color:T.orange }}>{item.amount}</p>
                         <p style={{ margin:0, fontSize:11, color:T.light }}>{item.time}</p>
                       </div>
                     </motion.div>
                   ))}
-                </>
+                </div>
               </motion.div>
 
               {/* Campaign preview */}
@@ -575,9 +604,9 @@ const LiveSection: React.FC = () => {
                       transition={{ duration:1.3, ease:"easeOut" }}
                       style={{ background:T.orange, height:"100%", borderRadius:99 }} />
                   </div>
-                  <div style={{ display:"flex", justifyContent:"space-between" }}>
-                    <span style={{ fontSize:13, color:T.dark, fontWeight:600 }}>Raised ₹68,000 of ₹2L</span>
-                    <span style={{ fontSize:12.5, color:T.light }}>11 days left</span>
+                  <div style={{ display:"flex", justifyContent:"space-between", gap:10, flexWrap:"wrap" }}>
+                    <span style={{ fontSize:12, color:T.mid }}>Raised <strong style={{ color:T.dark }}>₹68,000</strong> of ₹1L</span>
+                    <span style={{ fontSize:12, color:T.mid }}>⏱ 11 days left</span>
                   </div>
                 </div>
               </motion.div>
@@ -586,7 +615,7 @@ const LiveSection: React.FC = () => {
               <motion.div variants={scaleIn} style={{
                 background:T.dark, borderRadius:20, padding:"22px 20px", color:"#fff",
               }}>
-                <p style={{ fontWeight:700, fontSize:11, letterSpacing:"0.1em", color:T.orange, textTransform:"uppercase", margin:"0 0 14px" }}>
+                <p style={{ fontWeight:700, fontSize:11, letterSpacing:"0.09em", color:"rgba(255,255,255,.4)", textTransform:"uppercase", margin:"0 0 16px" }}>
                   WHAT HAPPENS AFTER →
                 </p>
                 {[
@@ -594,30 +623,30 @@ const LiveSection: React.FC = () => {
                   { b:"Field photo from the NGO", s:"— within 7 days, always" },
                   { b:"Your impact, live",         s:"— money, time, things, all in one place" },
                 ].map(r=>(
-                  <div key={r.b} style={{ display:"flex", gap:10, marginBottom:11 }}>
-                    <span style={{ color:T.orange, flexShrink:0, marginTop:3, fontSize:8 }}>●</span>
-                    <p style={{ margin:0, fontSize:13.5, lineHeight:1.65 }}>
+                  <div key={r.b} style={{ display:"flex", gap:12, marginBottom:13 }}>
+                    <span style={{ width:8, height:8, borderRadius:"50%", background:T.orange, flexShrink:0, marginTop:6 }} />
+                    <p style={{ margin:0, fontSize:14, lineHeight:1.5, color:"rgba(255,255,255,.75)" }}>
                       <strong style={{ fontWeight:600 }}>{r.b}</strong>{r.s}
                     </p>
                   </div>
                 ))}
-                <div style={{ marginTop:18, display:"flex", alignItems:"center", gap:12 }}>
+                <div style={{ marginTop:18, paddingTop:16, borderTop:"1px solid rgba(255,255,255,.08)", display:"flex", alignItems:"center", gap:10 }}>
                   <div style={{ display:"flex" }}>
-                    {["A","T","P","+"].map((l,i)=>(
+                    {["A","R","P","+"].map((l,i)=>(
                       <div key={l} style={{
-                        width:30, height:30, borderRadius:"50%",
-                        background: i<3 ? T.orangeAlpha : T.orange,
+                        width:26, height:26, borderRadius:"50%",
+                        background: i===0 ? T.orange : i===1 ? T.orangeMid : i===2 ? T.light : T.light,
                         border:`2px solid ${T.dark}`,
                         display:"flex", alignItems:"center", justifyContent:"center",
-                        fontSize:11, fontWeight:700,
-                        color: i<3 ? T.orange : "#fff",
-                        marginLeft: i>0 ? -9 : 0,
+                        fontSize:10, fontWeight:700,
+                        color:"#fff",
+                        marginLeft: i>0 ? -6 : 0,
                       }}>{l}</div>
                     ))}
                   </div>
                   <div>
-                    <p style={{ margin:0, fontWeight:600, fontSize:13.5 }}>2,000+ donors. Every act proven.</p>
-                    <p style={{ margin:0, fontSize:12, color:T.border }}>Join them · free app · takes 2 min</p>
+                    <p style={{ margin:0, fontWeight:700, fontSize:13 }}>2,000+ donors. Every act proven.</p>
+                    <p style={{ margin:"1px 0 0", fontSize:12, color:"rgba(255,255,255,.4)" }}>Join them · free app · takes 2 min</p>
                   </div>
                 </div>
               </motion.div>
@@ -778,8 +807,6 @@ width:"max-content",
 /* ─── §4  CAMPAIGNS ──────────────────────────────────────────────────────────*/
 const CampaignCard: React.FC<{ c:Campaign }> = memo(({ c }) => (
   <motion.div
-    variants={fadeIn}
-    whileHover={{ y:-6, boxShadow:"0 20px 50px rgba(0,0,0,0.12)" }}
     style={{
       background:T.bgWhite, borderRadius:20, overflow:"hidden",
       boxShadow:"0 2px 16px rgba(0,0,0,.06)", display:"flex", flexDirection:"column",
@@ -963,321 +990,271 @@ const AppSection: React.FC = () => {
   const [active, setActive] = useState(1);
 
   return (
-    <section id="download" style={{ padding:"80px 0", background:T.bgWhite }}>
-      <div style={{ maxWidth:1200, margin:"0 auto", padding:"0 28px" }}>
+    <section id="download" style={{ padding: "80px 0", background: T.bgWhite, overflow: "hidden" }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 28px" }}>
         <Reveal>
+          <motion.span variants={fadeUp} style={{
+            display: "block",
+            fontSize: 11, fontWeight: 700, color: T.orange,
+            letterSpacing: "0.13em", textTransform: "uppercase",
+            marginBottom: 20,
+          }}>
+            Free App · iOS &amp; Android
+          </motion.span>
+
+          <motion.h2 variants={fadeUp} style={{
+            textAlign: "left", fontSize: 45, fontWeight: 400,
+            lineHeight: 1.12, color: T.dark, margin: "0 0 16px",
+          }}>
+            Every act earns<br />a Life.
+          </motion.h2>
+
           <motion.p variants={fadeUp} style={{
-            fontSize:11, fontWeight:700, color:T.orange,
-            letterSpacing:"0.12em", textTransform:"uppercase", marginBottom:14,
-          }}>FREE APP · iOS &amp; ANDROID</motion.p>
+            textAlign: "left", fontSize: 16, color: "#666",
+            maxWidth: 600, margin: "0 0 64px", lineHeight: 1.75,
+          }}>
+            Money, time, things, purchases — DoRight converts everything into
+            one score. Watch your Lives grow every month.
+          </motion.p>
 
-          <div
-  className="app-grid"
-  style={{
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-    gap: "80px",
-    alignItems: "flex-start",
-  }}
->
+          {/* 2-col body */}
+          <div className="app-grid" style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: 80,
+            alignItems: "start",
+          }}>
+
+            {/* Left: accordion + download */}
             <div>
-              <motion.h2
-  variants={fadeUp}
- style={{
-  fontSize: "45px",
-  fontWeight: 400,
-  lineHeight: 1.12,
-  letterSpacing: "0",
-  color: T.dark,
-  margin: "0 0 26px",
-  maxWidth: 520,
-}}
->
-  Every act earns
-  <br />
-  a Life.
-</motion.h2>
-              <motion.p
-  variants={fadeUp}
-  style={{
-  fontSize: 16,
-  lineHeight: 1.75,
-  color: "#666",
-  maxWidth: 600,
-  marginBottom: 64,
-}}
->
-  Money, time, things, purchases — DoRight converts everything into
-  one score. Watch your Lives grow every month.
-</motion.p>
-
-              <div style={{ marginBottom:40 }}>
-                {APP_FEATURES.map((f,i)=>(
-                  <motion.div key={f.id} variants={fadeUp} onClick={()=>setActive(i)} style={{
-  padding: i === active ? "22px 28px" : "18px 20px",
-  borderRadius: 18,
-
-  background: i === active ? "#F8F8F8" : "transparent",
-
-  border:
-    i === active
-      ? `1px solid ${T.border}`
-      : "1px solid transparent",
-
-  borderBottom:
-    i === active
-      ? `3px solid ${T.orange}`
-      : "3px solid transparent",
-
-  boxShadow: "none",
-
-  marginBottom: 8,
-
-  transition: "all .35s ease",
-
-  cursor: "pointer",
-}}>
-                    <div
-style={{
-display:"flex",
-gap:34,
-alignItems:"flex-start"
-}}
->
+              <div style={{ display: "flex", flexDirection: "column", gap: 4, marginBottom: 0 }}>
+                {APP_FEATURES.map((f, i) => (
+                  <motion.div
+                    key={f.id}
+                    layout
+                    variants={fadeUp}
+                    onClick={() => setActive(i)}
+                    transition={{ layout: { duration: 0.28, ease: EASE } }}
+                    style={{
+                      background: i === active ? "#F8F8F8" : "transparent",
+                      borderRadius: 18,
+                      overflow: "hidden",
+                      cursor: "pointer",
+                      transition: "background .3s ease",
+                    }}
+                  >
+                    {/* Head */}
+                    <div style={{
+                      display: "flex", alignItems: "center", gap: 16,
+                      padding: "18px 20px",
+                    }}>
                       <span style={{
-                        fontWeight:700, fontSize:13,width:26,
-flexShrink:0,
-                        color: i===active ? T.orange : T.light, minWidth:26,
+                        fontSize: 12, fontWeight: 700, color: T.orange,
+                        width: 24, flexShrink: 0,
                       }}>{f.step}</span>
-                      <div style={{ flex:1 }}>
-                        <p style={{ margin:0, fontWeight: i===active?600:400, fontSize:15, color:T.dark }}>{f.title}</p>
-                        <AnimatePresence>
-                          {i===active && f.detail && (
-                            <motion.p
-                              initial={{ opacity:0, height:0 }}
-                              animate={{ opacity:1, height:"auto" }}
-                              exit={{ opacity:0, height:0 }}
-                              style={{ margin:"8px 0 0", fontSize:14, color:T.mid, lineHeight:1.7, overflow:"hidden", fontWeight:400 }}
-                            >{f.detail}</motion.p>
-                          )}
-                        </AnimatePresence>
-                      </div>
+                      <span style={{
+                        fontSize: 16,
+                        fontWeight: i === active ? 700 : 500,
+                        color: i === active ? T.dark : T.mid,
+                        transition: "all .3s ease",
+                      }}>{f.title}</span>
                     </div>
+
+                    {/* Body */}
+                    <AnimatePresence initial={false} mode="popLayout">
+                      {i === active && f.detail && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.3, ease: EASE }}
+                          style={{ overflow: "hidden" }}
+                        >
+                          <p style={{
+                            fontSize: 14, color: T.mid, lineHeight: 1.7,
+                            paddingLeft: 40, paddingBottom: 16,
+                            paddingRight: 20, margin: 0, fontWeight: 400,
+                          }}>{f.detail}</p>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                    {/* Orange bar */}
+                    <motion.div
+                      animate={{ scaleX: i === active ? 1 : 0 }}
+                      initial={{ scaleX: 0 }}
+                      transition={{ duration: 0.4, ease: EASE }}
+                      style={{
+                        height: 3, background: T.orange,
+                        transformOrigin: "left",
+                      }}
+                    />
                   </motion.div>
                 ))}
               </div>
 
-              <motion.div variants={fadeUp} style={{ paddingTop:34, borderTop:`1px solid ${T.border}` }}>
-                <p style={{ fontWeight:600, fontSize:15, color:T.dark, marginBottom:6 }}>Download DoRight — free forever</p>
-                <p style={{ fontSize:13, color:T.light, marginBottom:18, fontWeight:400 }}>iOS &amp; Android · Give money, time, things · See your Lives score</p>
-                <div style={{ display:"flex", gap:12, flexWrap:"wrap" }}>
-                  {[{s:"App Store",l:"Download on the"},{s:"Google Play",l:"Get it on"}].map(({s,l})=>(
-                    <motion.a key={s} href="#download" whileHover={{ scale:1.04 }} whileTap={{ scale:0.96 }} style={{
-                      background:T.dark, color:"#fff", border:"none",
-                      borderRadius:T.r16, padding:"11px 20px",
-                      fontSize:12.5, fontWeight:700, cursor:"pointer",
-                      display:"flex", flexDirection:"column", alignItems:"flex-start",
-                      gap:2, fontFamily:"inherit", textDecoration:"none",
-                    }}>
-                      <span style={{ fontSize:10, fontWeight:400, opacity:0.65 }}>{l}</span>
-                      <span>{s}</span>
+              {/* Download row */}
+              <motion.div variants={fadeUp} style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                flexWrap: "wrap",
+                gap: 20,
+                marginTop: 48,
+                paddingTop: 32,
+                borderTop: `1px solid ${T.border}`,
+              }}>
+                <div>
+                  <p style={{ fontSize: 18, fontWeight: 700, color: T.dark, margin: "0 0 5px" }}>
+                    Download DoRight — free forever
+                  </p>
+                  <p style={{ fontSize: 13, color: T.light, margin: 0, fontWeight: 400 }}>
+                    iOS &amp; Android · Give money, time, things · See your Lives score
+                  </p>
+                </div>
+
+                <div style={{ display: "flex", gap: 12 }}>
+                  {[
+                    { s: "App Store",    l: "Download on the", href: APP_STORE_URL, Icon: FaApple,      variant: "dark"  },
+                    { s: "Google Play",  l: "Get it on",       href: PLAY_STORE_URL, Icon: FaGooglePlay, variant: "light" },
+                  ].map(({ s, l, href, Icon, variant }) => (
+                    <motion.a
+                      key={s}
+                      href={href}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={`${l} ${s}`}
+                      whileHover={{ y: -2, boxShadow: "0 8px 24px rgba(0,0,0,.15)" }}
+                      whileTap={{ scale: 0.96 }}
+                      style={{
+                        display: "flex", alignItems: "center", gap: 10,
+                        padding: "11px 22px",
+                        borderRadius: T.r16,
+                        background: variant === "dark" ? T.dark : "#fff",
+                        color:      variant === "dark" ? "#fff" : T.dark,
+                        border: variant === "dark"
+                          ? `2px solid ${T.dark}`
+                          : `2px solid ${T.border}`,
+                        fontSize: 13, fontWeight: 600,
+                        fontFamily: "inherit", textDecoration: "none",
+                        cursor: "pointer", transition: "all .25s ease",
+                      }}
+                    >
+                      {React.createElement(
+                        Icon as React.ComponentType<{ size: number; "aria-hidden": boolean; style: React.CSSProperties }>,
+                        { size: 20, "aria-hidden": true, style: { flexShrink: 0 } }
+                      )}
+                      <span style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 2 }}>
+                        <span style={{ fontSize: 10, fontWeight: 400, opacity: 0.65 }}>{l}</span>
+                        <span>{s}</span>
+                      </span>
                     </motion.a>
                   ))}
                 </div>
               </motion.div>
             </div>
 
-            {/* Phone mockup */}
+            {/* Right: phone mockup */}
             <motion.div
-  className="app-phone"
-  variants={scaleIn}
-  style={{
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  }}
->
-  <div
-    style={{
-      width: 255,
-background: "#1D1D1D",
-borderRadius: 38,
-padding: "15px",
-boxShadow: "0 28px 60px rgba(0,0,0,.20)",
-    }}
-  >
-    {/* Dynamic Island */}
-    <div
-      style={{
-        width:60,
-height:7,
-margin:"0 auto 16px",
-      }}
-    />
-
-    {/* Screen */}
-    <div
-      style={{
-        background: "#202020",
-     borderRadius:24,
-padding:"15px",
-minHeight:445,
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      <p
-        style={{
-          color: "#777",
-          fontSize: 10,
-          fontWeight: 700,
-          letterSpacing: ".12em",
-          marginBottom: 10,
-        }}
-      >
-        YOUR GIVING TODAY.
-      </p>
-
-      <h2
-        style={{
-          color: "#fff",
-          fontSize: 32,
-          fontWeight: 700,
-          margin: 0,
-        }}
-      >
-        Give
-      </h2>
-
-      <p
-        style={{
-          color: T.orange,
-          fontSize: 9,
-          fontWeight: 700,
-          marginTop: 8,
-          marginBottom: 18,
-        }}
-      >
-        Money · Time · Things · Products
-      </p>
-
-      {[
-        {
-          name: "Handwoven Tote Bag",
-          by: "Shakti Women's Collective",
-          price: "₹480",
-        },
-        {
-          name: "Organic Honey (250g)",
-          by: "AarogyaSeva Trust",
-          price: "₹220",
-        },
-        {
-          name: "Recycled Paper Journal",
-          by: "GreenRoots India",
-          price: "₹150",
-        },
-      ].map((item) => (
-        <div
-          key={item.name}
-          style={{
-            background: "#2B2B2B",
-            borderRadius:13,
-padding:"11px",
-marginBottom:10,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              gap: 12,
-              alignItems: "center",
-            }}
-          >
-            <div
+              className="app-phone-wrap"
+              variants={scaleIn}
               style={{
-                width:34,
-height:34,
-borderRadius:8,
-                background: "#3a3a3a",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "flex-start",
+                position: "relative",
               }}
-            />
+            >
+              {/* Glow halo */}
+              <div style={{
+                position: "absolute",
+                width: 420, height: 420,
+                borderRadius: "50%",
+                background: "radial-gradient(circle, rgba(250,169,80,.10), transparent 70%)",
+                top: "50%", left: "50%",
+                transform: "translate(-50%, -50%)",
+                zIndex: 0,
+              }} />
 
-            <div>
-              <p
-                style={{
-                  color: "#fff",
-                  fontWeight: 700,
-                  fontSize: 11,
-                  margin: 0,
-                }}
-              >
-                {item.name}
-              </p>
+              {/* Phone shell */}
+              <div style={{
+                width: 300,
+                aspectRatio: "9 / 16",
+                background: "#1a1a1a",
+                borderRadius: 40,
+                border: "3px solid #2a2a2a",
+                overflow: "hidden",
+                boxShadow: "0 32px 80px rgba(0,0,0,.32)",
+                position: "relative", zIndex: 1,
+                display: "flex", flexDirection: "column",
+              }}>
+                {/* Notch */}
+                <div style={{
+                  height: 28, background: "#1a1a1a",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  flexShrink: 0,
+                }}>
+                  <div style={{ width: 60, height: 12, background: "#0d0d0d", borderRadius: 6 }} />
+                </div>
 
-              <p
-                style={{
-                  color: "#8f8f8f",
-                  fontSize: 8,
-                  margin: "4px 0 0",
-                }}
-              >
-                by {item.by}
-              </p>
-            </div>
-          </div>
+                {/* Screen body */}
+                <div style={{
+                  background: "#1a1a1a",
+                  padding: "20px 16px 0",
+                  flex: 1,
+                  display: "flex", flexDirection: "column",
+                }}>
+                  <p style={{
+                    fontSize: 9, fontWeight: 700, letterSpacing: ".12em",
+                    textTransform: "uppercase", color: "rgba(255,255,255,.35)",
+                    marginBottom: 4,
+                  }}>Your Giving Today.</p>
 
-          <span
-            style={{
-              color: T.orange,
-              fontWeight: 700,
-              fontSize: 14,
-            }}
-          >
-            {item.price}
-          </span>
-        </div>
-      ))}
+                  <h2 style={{ fontSize: 28, fontWeight: 800, color: "#fff", margin: "0 0 4px" }}>Give</h2>
 
-      <div
-        style={{
-          marginTop: "auto",
-          background: T.orange,
-          borderRadius: 14,
-          padding: "16px",
-          textAlign: "center",
-        }}
-      >
-        <p
-          style={{
-            color: "#fff",
-            fontSize: 8,
-            fontWeight: 700,
-            marginBottom: 8,
-            letterSpacing: ".08em",
-          }}
-        >
-          TODAY'S LIVES EARNED
-        </p>
+                  <p style={{
+                    fontSize: 10, fontWeight: 600, color: T.orange,
+                    marginBottom: 18, letterSpacing: ".02em",
+                  }}>Money · Time · Things · Products</p>
 
-        <p
-          style={{
-            color: "#fff",
-            fontSize: 18,
-            lineHeight:1.3,
-            fontWeight: 800,
-            margin: 0,
-          }}
-        >
-          +4 Lives added
-        </p>
-      </div>
-    </div>
-  </div>
-</motion.div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
+                    {[
+                      { name: "Handwoven Tote Bag",      by: "Shakti Women's Collective", price: "₹480" },
+                      { name: "Organic Honey (250g)",     by: "AarogyaSeva Trust",         price: "₹220" },
+                      { name: "Recycled Paper Journal",   by: "GreenRoots India",           price: "₹150" },
+                    ].map(item => (
+                      <div key={item.name} style={{
+                        display: "flex", alignItems: "center", gap: 10,
+                        background: "#2a2a2a", borderRadius: 12, padding: 12,
+                      }}>
+                        <div style={{ width: 40, height: 40, borderRadius: 8, background: "#3a3a3a", flexShrink: 0 }} />
+                        <div style={{ flex: 1 }}>
+                          <p style={{ fontSize: 12, fontWeight: 700, color: "#fff", margin: 0, lineHeight: 1.3 }}>{item.name}</p>
+                          <p style={{ fontSize: 9, color: "rgba(255,255,255,.4)", margin: "2px 0 0" }}>by {item.by}</p>
+                        </div>
+                        <span style={{ fontSize: 13, fontWeight: 700, color: T.orange, flexShrink: 0 }}>{item.price}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* CTA bar */}
+                  <div style={{
+                    background: T.orange,
+                    padding: "18px 16px",
+                    textAlign: "center",
+                    flexShrink: 0,
+                    marginTop: "auto",
+                  }}>
+                    <p style={{
+                      fontSize: 9, fontWeight: 600, color: "rgba(255,255,255,.7)",
+                      textTransform: "uppercase", letterSpacing: ".1em", marginBottom: 4,
+                    }}>Today's Lives Earned</p>
+                    <p style={{ fontSize: 15, fontWeight: 800, color: "#fff", margin: 0 }}>+4 Lives added</p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
           </div>
         </Reveal>
       </div>
@@ -1496,6 +1473,9 @@ const TestimonialsSection: React.FC = () => {
     else if (info.offset.x > 50) setPage(p=>(p-1+pages)%pages);
   },[pages]);
 
+  const prevPage = useCallback(() => setPage(p => (p - 1 + pages) % pages), [pages]);
+  const nextPage = useCallback(() => setPage(p => (p + 1) % pages), [pages]);
+
   const visible = useMemo(
     ()=>TESTIMONIALS.slice(page*perPage, page*perPage+perPage),
     [page, perPage]
@@ -1516,30 +1496,90 @@ const TestimonialsSection: React.FC = () => {
           </motion.h2>
         </Reveal>
 
-        <motion.div
-          drag="x"
-          dragConstraints={{ left:0, right:0 }}
-          dragElastic={0.1}
-          style={{ x:dragX, cursor:"grab", touchAction:"pan-y" }}
-          onDragEnd={onDragEnd}
-          onHoverStart={()=>{ isHovered.current=true; }}
-          onHoverEnd={()=>{ isHovered.current=false; }}
-        >
-          <AnimatePresence mode="wait">
-            <motion.div key={page}
-              initial={{ opacity:0, x:40 }}
-              animate={{ opacity:1, x:0 }}
-              exit={{ opacity:0, x:-40 }}
-              transition={{ duration:0.48, ease:EASE }}
-              style={{
-                display:"grid",
-                gridTemplateColumns:`repeat(${perPage},1fr)`,
-                gap:24, alignItems:"stretch",
-              }}>
-              {visible.map(t=><TCard key={t.id} t={t} />)}
-            </motion.div>
-          </AnimatePresence>
-        </motion.div>
+        <div className="testimonial-carousel" style={{ position:"relative" }}>
+          <motion.button
+            type="button"
+            onClick={prevPage}
+            aria-label="Previous testimonials"
+            whileHover={{ background:T.orange, color:"#fff" }}
+            whileTap={{ scale:0.94 }}
+            className="testimonial-arrow testimonial-arrow-left"
+            style={{
+              position:"absolute",
+              left:-18,
+              top:"50%",
+              transform:"translateY(-50%)",
+              width:42,
+              height:42,
+              borderRadius:"50%",
+              border:`1px solid ${T.border}`,
+              background:"#fff",
+              color:T.mid,
+              boxShadow:"0 8px 24px rgba(0,0,0,.10)",
+              zIndex:4,
+              display:"grid",
+              placeItems:"center",
+              fontSize:25,
+              lineHeight:1,
+            }}
+          >
+            ‹
+          </motion.button>
+
+          <motion.div
+            drag="x"
+            dragConstraints={{ left:0, right:0 }}
+            dragElastic={0.1}
+            style={{ x:dragX, cursor:"grab", touchAction:"pan-y" }}
+            onDragEnd={onDragEnd}
+            onHoverStart={()=>{ isHovered.current=true; }}
+            onHoverEnd={()=>{ isHovered.current=false; }}
+          >
+            <AnimatePresence mode="wait">
+              <motion.div key={page}
+                initial={{ opacity:0, x:40 }}
+                animate={{ opacity:1, x:0 }}
+                exit={{ opacity:0, x:-40 }}
+                transition={{ duration:0.48, ease:EASE }}
+                style={{
+                  display:"grid",
+                  gridTemplateColumns:`repeat(${perPage},1fr)`,
+                  gap:24, alignItems:"stretch",
+                }}>
+                {visible.map(t=><TCard key={t.id} t={t} />)}
+              </motion.div>
+            </AnimatePresence>
+          </motion.div>
+
+          <motion.button
+            type="button"
+            onClick={nextPage}
+            aria-label="Next testimonials"
+            whileHover={{background:T.orange, color:"#fff" }}
+            whileTap={{ scale:0.94 }}
+            className="testimonial-arrow testimonial-arrow-right"
+            style={{
+              position:"absolute",
+              right:-18,
+              top:"50%",
+              transform:"translateY(-50%)",
+              width:42,
+              height:42,
+              borderRadius:"50%",
+              border:`1px solid ${T.border}`,
+              background:"#fff",
+              color:T.mid,
+              boxShadow:"0 8px 24px rgba(0,0,0,.10)",
+              zIndex:4,
+              display:"grid",
+              placeItems:"center",
+              fontSize:25,
+              lineHeight:1,
+            }}
+          >
+            ›
+          </motion.button>
+        </div>
 
         <div style={{ display:"flex", justifyContent:"center", gap:8, marginTop:36 }}>
           {Array.from({length:pages}).map((_,i)=>(
@@ -1559,55 +1599,74 @@ const TestimonialsSection: React.FC = () => {
 
 /* ─── §9  PRESS ──────────────────────────────────────────────────────────────*/
 const PressSection: React.FC = () => (
-      <section style={{ padding:"80px 0", background:T.bgWhite }}>
-    <div style={{ maxWidth:1200, margin:"0 auto", padding:"0 28px" }}>
+  <section style={{ padding: "80px 0", background: T.bgWhite, overflow: "hidden" }}>
+    <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 28px" }}>
       <Reveal>
         <motion.p variants={fadeUp} style={{
-          textAlign:"center", fontSize:15, fontWeight:600, letterSpacing:"0.12em",
-          color:T.light, textTransform:"uppercase", marginBottom:48,
+          textAlign: "center", fontSize: 15, fontWeight: 600,
+          letterSpacing: "0.12em", color: T.light,
+          textTransform: "uppercase", marginBottom: 48,
         }}>
           BUILDING IMPACT, RECOGNISED WIDELY
         </motion.p>
-        <motion.div variants={stagger} className="press-grid" style={{
-          display:"flex", gap:20, overflowX:"auto", paddingBottom:12,
-          scrollbarWidth:"none",
-        }}>
-          {PRESS.map(item=>{
+      </Reveal>
+
+      <div style={{ overflow: "hidden", width: "100%" }}>
+        <div
+          className="press-marquee"
+          style={{
+            display: "flex",
+            gap: 20,
+            width: "max-content",
+            animation: "pressMarquee 28s linear infinite",
+          }}
+          onMouseEnter={e => (e.currentTarget.style.animationPlayState = "paused")}
+          onMouseLeave={e => (e.currentTarget.style.animationPlayState = "running")}
+        >
+          {[...PRESS, ...PRESS].map((item, i) => {
             const brand = PRESS_STYLE[item.outlet] ?? {};
             return (
-            <motion.div key={item.id} variants={fadeUp}
-              whileHover={{ y:-5, boxShadow:"0 16px 40px rgba(0,0,0,0.11)" }}
-              style={{
-                flex:"0 0 300px",
-                background:T.bgWhite, border:`1px solid ${T.border}`,
-                borderRadius:20, padding:24,
-                display:"flex", flexDirection:"column", gap:12,
-                cursor:"pointer",
-              }}>
-              <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between" }}>
-                <span style={{
-                  fontWeight:800,
-                  fontSize:13,
-                  color:item.color,
-                  fontFamily: brand.family,
-                  fontStyle: brand.italic ? "italic" : "normal",
-                  textTransform: brand.uppercase ? "uppercase" : "none",
-                  letterSpacing: brand.letterSpacing,
-                  display:"flex",
-                  alignItems:"center",
-                }}>{item.outlet}</span>
-                <span style={{ fontSize:11, color:T.light }}>{item.date}</span>
+              <div key={`${item.id}-${i}`}
+                style={{
+                  flex: "0 0 300px",
+                  background: T.bgWhite,
+                  border: `1px solid ${T.border}`,
+                  borderRadius: 20,
+                  padding: 24,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 12,
+                  cursor: "default",
+                }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <span style={{
+                    fontWeight: 800, fontSize: 13, color: item.color,
+                    fontFamily: brand.family,
+                    fontStyle: brand.italic ? "italic" : "normal",
+                    textTransform: brand.uppercase ? "uppercase" : "none",
+                    letterSpacing: brand.letterSpacing,
+                  }}>{item.outlet}</span>
+                  <span style={{ fontSize: 11, color: T.light }}>{item.date}</span>
+                </div>
+                <p style={{ fontWeight: 600, fontSize: 15, color: T.dark, lineHeight: 1.45, margin: 0, flex: 1 }}>
+                  <span style={{ color: T.orange, fontSize: 22, lineHeight: 0, verticalAlign: "-6px", marginRight: 2 }}>"</span>
+                  {item.headline}
+                </p>
+                <p style={{ fontSize: 13, color: T.mid, lineHeight: 1.65, margin: 0, fontWeight: 400 }}>{item.body}</p>
+                <TxtLink href="/blog" style={{ fontSize: 12, fontWeight: 700, marginTop: "auto" }}>Read Article →</TxtLink>
               </div>
-              <p style={{ fontWeight:600, fontSize:15, color:T.dark, lineHeight:1.45, margin:0, flex:1 }}>
-                <span style={{ color:T.orange, fontSize:22, lineHeight:0, verticalAlign:"-6px", marginRight:2 }}>"</span>{item.headline}
-              </p>
-              <p style={{ fontSize:13, color:T.mid, lineHeight:1.65, margin:0, fontWeight:400 }}>{item.body}</p>
-              <TxtLink href="/blog" style={{ fontSize:12, fontWeight:700, marginTop:"auto" }}>Read Article →</TxtLink>
-            </motion.div>
-          );})}
-        </motion.div>
-      </Reveal>
+            );
+          })}
+        </div>
+      </div>
     </div>
+
+    <style>{`
+      @keyframes pressMarquee {
+        0%   { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+      }
+    `}</style>
   </section>
 );
 
@@ -1616,65 +1675,90 @@ const CTASection: React.FC = () => {
   const ref = useRef<HTMLDivElement>(null);
 
   return (
-    <section id="final-cta" ref={ref} style={{ padding:"40px 0 140px", background:T.bgWhite }}>
-      <div style={{ maxWidth:1200, margin:"0 auto", padding:"0 28px" }}>
+    <section
+      id="final-cta"
+      ref={ref}
+      style={{ padding: "40px 0 140px", background: T.bgWhite }}
+    >
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 28px" }}>
         <Reveal>
           <motion.div
             className="cta-card"
             variants={scaleIn}
-            whileHover={{ y:-4 }}
+            whileHover={{ y: -4 }}
             style={{
-              background:"#E8E8E8",
-              borderRadius:T.r28,
-              display:"flex",
-              alignItems:"stretch",
-              position:"relative", overflow:"hidden",
-              boxShadow:"0 8px 0 0 #1A1A1A, 0 14px 36px rgba(0,0,0,.12)",
-              minHeight:260,
-            }}>
-            <div style={{
-              position:"relative",
-              zIndex:1,
-              flex:"1 1 66%",
-              padding:"68px 52px",
-              textAlign:"left",
-              display:"flex",
-              flexDirection:"column",
-              alignItems:"flex-start",
-            }}>
-              <h2 style={{
-                fontSize:35, fontWeight:500,
-                color:"#333333", margin:"0 0 6px", letterSpacing:0,
-                lineHeight:1.3,
-                whiteSpace:"nowrap",
-              }}>
+              background: "#e8e8e8",
+              borderRadius: 28,
+              boxShadow: "0 8px 0 0 #1a1a1a, 0 14px 36px rgba(0,0,0,.12)",
+              position: "relative",
+              overflow: "hidden",
+              display: "flex",
+              alignItems: "center",
+              padding: "68px 52px",
+              minHeight: 260,
+            }}
+          >
+            {/* Left content */}
+            <div
+              style={{
+                flex: 1,
+                position: "relative",
+                zIndex: 1,
+                textAlign: "left",
+              }}
+            >
+              <h2
+                style={{
+                  fontSize: 35,
+                  fontWeight: 500,
+                  color: "#333333",
+                  whiteSpace: "nowrap",
+                  lineHeight: 1.3,
+                  margin: "0 0 6px",
+                  letterSpacing: 0,
+                }}
+              >
                 Ready to Make a Difference?
               </h2>
-              <p style={{ fontSize:14, color:T.mid, margin:"0 0 12px", lineHeight:1.6, fontWeight:400 }}>
+              <p
+                style={{
+                  fontSize: 14,
+                  color: T.mid,
+                  margin: "0 0 12px",
+                  lineHeight: 1.6,
+                  fontWeight: 400,
+                }}
+              >
                 Join a community that believes in meaningful, transparent giving.
               </p>
-              <Btn href="/ngos" style={{
-                padding:"12px 28px", fontSize:13,
-                letterSpacing:"0.1em", textTransform:"uppercase", fontWeight:700,
-                width:"auto",
-              }}>
-                JOIN NOW
-              </Btn>
+              <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
+                <Btn
+                  href="/ngos"
+                  style={{
+                    padding: "12px 28px",
+                    fontSize: 13,
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    fontWeight: 700,
+                    width: "auto",
+                  }}
+                >
+                  JOIN NOW
+                </Btn>
+              </div>
             </div>
 
+            {/* Right video panel */}
             <div
-              className="cta-impact-panel"
+              className="cta-video-wrap"
               aria-hidden="true"
               style={{
-                flex:"0 0 34%",
-                maxWidth:"34%",
-                minHeight:260,
-                borderLeft:"1px solid rgba(0,0,0,.16)",
-                display:"flex",
-                alignItems:"center",
-                justifyContent:"center",
-                background:"#e8e8e8",
-                overflow:"hidden",
+                position: "absolute",
+                top: 0,
+                right: -1,
+                width: "calc(34% + 2px)",
+                height: "100%",
+                background: "#e8e8e8",
               }}
             >
               <video
@@ -1684,11 +1768,13 @@ const CTASection: React.FC = () => {
                 playsInline
                 preload="metadata"
                 style={{
-                  width:"calc(100% + 2px)",
-                  height:"100%",
-                  objectFit:"cover",
-                  display:"block",
-                  marginLeft:-1,
+                  width: "calc(100% + 2px)",
+                  height: "100%",
+                  objectFit: "cover",
+                  display: "block",
+                  marginLeft: -1,
+                  border: "none",
+                  outline: "none",
                 }}
               >
                 <source src={actForImpactVideo} type="video/mp4" />
@@ -1833,6 +1919,45 @@ const Home: React.FC = () => (
 
       @media (max-width: 640px) {
         .campaign-grid { grid-template-columns: 1fr !important; }
+      }
+
+      @media (max-width: 640px) {
+        .live-active-pill {
+          align-items: flex-start !important;
+          border-radius: 16px !important;
+          flex-wrap: wrap !important;
+        }
+        .live-stats {
+          flex-direction: column !important;
+          gap: 18px !important;
+        }
+        .live-stats > div {
+          border-right: none !important;
+          border-bottom: 1px solid ${T.border} !important;
+          margin-right: 0 !important;
+          padding-right: 0 !important;
+          padding-bottom: 18px !important;
+        }
+        .live-stats > div:last-child {
+          border-bottom: none !important;
+          padding-bottom: 0 !important;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .testimonial-arrow {
+          top: auto !important;
+          bottom: -62px !important;
+          transform: none !important;
+          width: 38px !important;
+          height: 38px !important;
+        }
+        .testimonial-arrow-left {
+          left: calc(50% - 82px) !important;
+        }
+        .testimonial-arrow-right {
+          right: calc(50% - 82px) !important;
+        }
       }
 
       /* ── CTA card ── */

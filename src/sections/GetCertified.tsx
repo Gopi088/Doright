@@ -7,7 +7,7 @@ export default function GetCertified() {
   return (
     <section aria-label="Certification tiers" style={{
       background: colors.bgWarm,
-      padding:'0 0 clamp(62px,8vw,104px)',
+      padding:'clamp(54px,7vw,78px) 0 clamp(62px,8vw,104px)',
       position:'relative',
       overflow:'hidden',
       width:'100%',

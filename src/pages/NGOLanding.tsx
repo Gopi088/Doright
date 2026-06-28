@@ -13,7 +13,7 @@ import './NGOLanding.css';
 
 export default function Home() {
   return (
-    <div>
+    <div className="ngo-reference-page">
       <Navbar />
       <HeroSection />
       <TrustedSection />

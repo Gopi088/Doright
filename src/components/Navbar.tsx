@@ -50,6 +50,7 @@ export default function Navbar() {
           style={{
             display: "flex",
             alignItems: "center",
+            height: "100%",
             flexShrink: 0,
           }}
         >
@@ -57,9 +58,10 @@ export default function Navbar() {
             src="/images/Logo.svg"
             alt="DoRight"
             style={{
-              height: "36px",
+              height: "34px",
               width: "auto",
               display: "block",
+              objectFit: "contain",
             }}
           />
         </Link>
@@ -88,19 +90,23 @@ export default function Navbar() {
 
         <div style={{ display:'flex', gap:'12px', alignItems:'center', flexShrink:0 }}
           className="responsive-hide-mobile">
-          <Link to="/ngos" style={{
-            background: colors.white,
-            border:`1.5px solid ${colors.border}`,
-            borderBottomColor: colors.border,
-            borderRadius:'50px',
-            fontFamily: fonts.body, fontSize:'13px', fontWeight: fontWeights.textBold,
-            color: colors.dark, cursor:'pointer', padding:'9px 20px',
-            whiteSpace: 'nowrap',
-            boxShadow: 'none',
-            textDecoration: 'none',
-          }}>
-            Login
-          </Link>
+          <motion.div whileHover={{ scale:1.03 }} whileTap={{ scale:0.97 }}>
+            <Link to="/login" style={{
+              background: colors.white,
+              border:`1.5px solid ${colors.border}`,
+              borderBottomColor: colors.border,
+              borderRadius:'50px',
+              fontFamily: fonts.body, fontSize:'13px', fontWeight: fontWeights.textBold,
+              color: colors.dark, cursor:'pointer', padding:'9px 20px',
+              whiteSpace: 'nowrap',
+              boxShadow: 'none',
+              textDecoration: 'none',
+              display: 'inline-block',
+              transition: transitions.normal,
+            }}>
+              Login
+            </Link>
+          </motion.div>
           <motion.div whileHover={{ scale:1.03 }} whileTap={{ scale:0.97 }}>
             <Link to={NAV.cta.href} style={{
               fontFamily: fonts.body,
@@ -171,7 +177,7 @@ export default function Navbar() {
                 </Link>
               ))}
               <div style={{ display:'flex', gap:'10px', marginTop:'6px', flexWrap:'wrap' }}>
-                <Link to="/ngos" onClick={() => setOpen(false)} style={{ flex:1, background:'none', border:`1.5px solid ${colors.border}`, borderRadius:'20px', padding:'9px 16px', fontFamily:fonts.body, fontSize:'13px', fontWeight:fontWeights.text, color:colors.grayMid, cursor:'pointer', minWidth:'100px', textAlign:'center', textDecoration:'none' }}>
+                <Link to="/login" onClick={() => setOpen(false)} style={{ flex:1, background:'none', border:`1.5px solid ${colors.border}`, borderRadius:'20px', padding:'9px 16px', fontFamily:fonts.body, fontSize:'13px', fontWeight:fontWeights.textBold, color:colors.dark, cursor:'pointer', minWidth:'100px', textAlign:'center', textDecoration:'none' }}>
                   Login
                 </Link>
                 <Link to={NAV.cta.href} onClick={() => setOpen(false)}

@@ -1,3 +1,7 @@
+.ngo-reference-page {
+  background: #fff;
+}
+
 .ngo-hero-layout,
 .ngo-platform-layout,
 .ngo-featured-layout {
@@ -13,6 +17,37 @@
 .ngo-featured-artwork img {
   max-height: 300px;
   object-fit: contain;
+}
+
+.ngo-partners-carousel {
+  max-width: 960px;
+}
+
+.ngo-partner-tile {
+  min-width: 0;
+}
+
+.ngo-cert-card {
+  transform-origin: center;
+}
+
+.ngo-join-card {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+@media (min-width: 901px) {
+  .ngo-hero-layout {
+    min-height: 330px;
+  }
+
+  .ngo-platform-layout {
+    min-height: 430px;
+  }
+
+  .ngo-featured-layout {
+    min-height: 315px;
+  }
 }
 
 @media (max-width: 900px) {
