@@ -14,9 +14,9 @@ const footerGroups = [
     links: [
       { label: "Our Story", href: "/about" },
       { label: "How We Verify", href: "/#how-it-works" },
-      { label: "Impact Reports", href: "/blog" },
-      { label: "Careers", href: "/about" },
-      { label: "Press Kit", href: "/blog" },
+      { label: "Impact Reports", href: "/impact-reports" },
+      { label: "Careers", href: "/careers" },
+      { label: "Press Kit", href: "/press-kit" },
     ],
   },
   {
@@ -24,29 +24,37 @@ const footerGroups = [
     links: [
       { label: "Browse NGOs", href: "/ngos" },
       { label: "Live Campaigns", href: "/campaigns" },
-      { label: "Volunteer", href: "/ngos" },
-      { label: "Give In Kind", href: "/campaigns" },
-      { label: "Download App", href: "/" },
+      { label: "Volunteer", href: "/volunteer" },
+      { label: "Give In Kind", href: "/give-in-kind" },
+      { label: "Download App", href: "/#download" },
     ],
   },
   {
     title: "CONTACT",
     links: [
       { label: "hello@doright.in", href: "mailto:hello@doright.in" },
-      { label: "Partner with Us", href: "/about" },
+      { label: "Partner with Us", href: "/ngos" },
       { label: "NGO Registration", href: "/ngos" },
-      { label: "Support", href: "/about" },
-      { label: "FAQ", href: "/blog" },
+      { label: "Support", href: "/support" },
+      { label: "FAQ", href: "/faq" },
     ],
   },
 ];
 
 const socials = [
-  { label: "Instagram", icon: FaInstagram },
-  { label: "YouTube", icon: FaYoutube },
-  { label: "X", icon: FaXTwitter },
-  { label: "LinkedIn", icon: FaLinkedinIn },
+  { label: "Instagram", icon: FaInstagram, href: "/instagram" },
+  { label: "YouTube", icon: FaYoutube, href: "/youtube" },
+  { label: "X", icon: FaXTwitter, href: "/x" },
+  { label: "LinkedIn", icon: FaLinkedinIn, href: "/linkedin" },
 ];
+
+function FooterLink({ href, children, style }: { href: string; children: React.ReactNode; style: React.CSSProperties }) {
+  if (href.startsWith("mailto:") || href.startsWith("http")) {
+    return <a href={href} style={style}>{children}</a>;
+  }
+
+  return <Link to={href} style={style}>{children}</Link>;
+}
 
 export default function Footer() {
   return (
@@ -89,10 +97,10 @@ export default function Footer() {
               }}
             />
             <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-              {socials.map(({ label, icon: Icon }) => (
-                <a
+              {socials.map(({ label, icon: Icon, href }) => (
+                <Link
                   key={label}
-                  href="/"
+                  to={href}
                   aria-label={label}
                   style={{
                     width: "36px",
@@ -108,7 +116,7 @@ export default function Footer() {
                   }}
                 >
                   {React.createElement(Icon as React.ComponentType<{ size: number }>, { size: 16 })}
-                </a>
+                </Link>
               ))}
             </div>
           </div>
@@ -140,9 +148,9 @@ export default function Footer() {
                 </h3>
                 <nav style={{ display: "flex", flexDirection: "column", gap: "3px" }}>
                   {group.links.map((link) => (
-                    <Link
+                    <FooterLink
                       key={link.label}
-                      to={link.href}
+                      href={link.href}
                       style={{
                         color: "rgba(255,255,255,.45)",
                         fontSize: "13px",
@@ -151,7 +159,7 @@ export default function Footer() {
                       }}
                     >
                       {link.label}
-                    </Link>
+                    </FooterLink>
                   ))}
                 </nav>
               </div>
@@ -172,11 +180,11 @@ export default function Footer() {
         >
           <span>© 2026 DoRight. All rights reserved.</span>
           <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-            <Link to="/about" style={{ color:"rgba(255,255,255,.25)", textDecoration:"none" }}>Privacy Policy</Link>
+            <Link to="/privacy-policy" style={{ color:"rgba(255,255,255,.25)", textDecoration:"none" }}>Privacy Policy</Link>
             <span>·</span>
-            <Link to="/about" style={{ color:"rgba(255,255,255,.25)", textDecoration:"none" }}>Terms of Use</Link>
+            <Link to="/terms-of-use" style={{ color:"rgba(255,255,255,.25)", textDecoration:"none" }}>Terms of Use</Link>
             <span>·</span>
-            <Link to="/about" style={{ color:"rgba(255,255,255,.25)", textDecoration:"none" }}>Cookie Policy</Link>
+            <Link to="/cookie-policy" style={{ color:"rgba(255,255,255,.25)", textDecoration:"none" }}>Cookie Policy</Link>
           </div>
         </div>
       </div>

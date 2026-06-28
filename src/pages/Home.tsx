@@ -16,6 +16,7 @@ import heroImage3 from "../assets/heroImage3.jpg";
 import storyImage from "../assets/storyImage.jpg";
 import treeImage from "../assets/treeImage.jpg"
 import actForImpactVideo from "../assets/Act for impact_1.mp4";
+import liveFeedSample from "../data/liveFeedSample.json";
 
 /* ─── DESIGN TOKENS ─────────────────────────────────────────────────────────── */
 const T = {
@@ -73,6 +74,7 @@ interface AppFeature   { id:number; step:string; title:string; detail:string; }
 interface Testimonial  { id:number; quote:string; name:string; role:string; initials:string; }
 interface PressItem    { id:number; outlet:string; color:string; date:string; headline:string; body:string; }
 interface PressStyle   { family?:string; italic?:boolean; uppercase?:boolean; letterSpacing?:string; }
+interface LiveFeedItem { id:number; initials:string; name:string; city:string; org:string; cause:string; amount:string; time:string; tone:"green"|"orange"|"gray"; }
 
 /* ─── DATA ───────────────────────────────────────────────────────────────────*/
 const SLIDES: Slide[] = [
@@ -142,6 +144,8 @@ const PRESS_STYLE: Record<string, PressStyle> = {
 
 const APP_STORE_URL = "https://apps.apple.com/in/app/doright-mobile-app/id6739503471";
 const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.dorightapp&pcampaignid=web_share";
+
+const LIVE_FEED_SAMPLE = liveFeedSample as LiveFeedItem[];
 
 /* ─── SHARED COMPONENTS ──────────────────────────────────────────────────────*/
 
@@ -219,20 +223,41 @@ const Hero: React.FC = () => {
   },[]);
   const prev = useCallback(()=>{
     setInstantReset(false);
-    setTrackIdx(current => current - 1);
+    setTrackIdx(current => current <= 0 ? current : current - 1);
   },[]);
   const next = useCallback(()=>{
     setInstantReset(false);
-    setTrackIdx(current => current + 1);
-  },[]);
+    setTrackIdx(current => current >= n + 1 ? current : current + 1);
+  },[n]);
 
-  useEffect(()=>{ const t=setInterval(next,5000); return ()=>clearInterval(t); },[next]);
+  useEffect(()=>{
+    const t = window.setInterval(() => {
+      if (document.visibilityState === "visible") next();
+    },5000);
+    return ()=>window.clearInterval(t);
+  },[next]);
+
+  useEffect(() => {
+    const normalizeTrack = () => {
+      setTrackIdx(current => {
+        if (current > n + 1) return 1;
+        if (current < 0) return n;
+        return current;
+      });
+    };
+    document.addEventListener("visibilitychange", normalizeTrack);
+    return () => document.removeEventListener("visibilitychange", normalizeTrack);
+  }, [n]);
 
   useEffect(() => {
     const update = () => setClipWidth(clipRef.current?.offsetWidth ?? 0);
     update();
     window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
+    document.addEventListener("visibilitychange", update);
+    return () => {
+      window.removeEventListener("resize", update);
+      document.removeEventListener("visibilitychange", update);
+    };
   }, []);
 
   const peek = getPeek();
@@ -240,10 +265,10 @@ const Hero: React.FC = () => {
   const x = clipWidth ? peek - trackIdx * (slideW + GAP) : peek;
 
   const handleCarouselComplete = useCallback(() => {
-    if (trackIdx === n + 1) {
+    if (trackIdx >= n + 1) {
       setInstantReset(true);
       setTrackIdx(1);
-    } else if (trackIdx === 0) {
+    } else if (trackIdx <= 0) {
       setInstantReset(true);
       setTrackIdx(n);
     }
@@ -394,12 +419,20 @@ const Hero: React.FC = () => {
 /* ─── §2  LIVE ACTIVITY ──────────────────────────────────────────────────────*/
 const LiveSection: React.FC = () => {
   const [paymentMethod, setPaymentMethod] = useState("UPI");
-  const feed = [
-    { initials:"V", name:"Vijay C.", city:"Kolkata", org:"AarogyaSeva", cause:"Healthcare", amount:"Honey jar bought", time:"just now", tone:"green" },
-    { initials:"N", name:"Nidhi A.", city:"Ahmedabad", org:"ShaktiSeva Trust", cause:"Women", amount:"₹750", time:"just now", tone:"orange" },
-    { initials:"L", name:"Lakshmi V.", city:"Kochi", org:"Annapurna Trust", cause:"Food", amount:"₹1,500", time:"just now", tone:"gray" },
-    { initials:"F", name:"Farhan S.", city:"Lucknow", org:"GyaanDaan", cause:"Education", amount:"Journal bought", time:"just now", tone:"orange" },
-  ];
+  const [feedStart, setFeedStart] = useState(0);
+  const [activeDonors, setActiveDonors] = useState(25);
+
+  const feed = useMemo(() => (
+    Array.from({ length:4 }, (_, i) => LIVE_FEED_SAMPLE[(feedStart + i) % LIVE_FEED_SAMPLE.length])
+  ), [feedStart]);
+
+  useEffect(() => {
+    const t = window.setInterval(() => {
+      setFeedStart(current => (current + 1) % LIVE_FEED_SAMPLE.length);
+      setActiveDonors(current => current >= 32 ? 24 : current + 1);
+    }, 3200);
+    return () => window.clearInterval(t);
+  }, []);
 
   const paymentMethods = [
     { label:"UPI", icon:"⬡" },
@@ -424,7 +457,7 @@ const LiveSection: React.FC = () => {
                 <motion.span animate={{ opacity:[1,0.2,1] }}
                   transition={{ duration:1.4, repeat:Infinity, ease:"easeInOut" }}
                   style={{ width:8, height:8, borderRadius:"50%", background:T.orange, flexShrink:0 }} />
-                <span><strong style={{ color:T.dark, fontWeight:700 }}>25</strong> donors active right now</span>
+                <span><strong style={{ color:T.dark, fontWeight:700 }}>{activeDonors}</strong> donors active right now</span>
                 <span style={{ color:T.light, margin:"0 2px" }}>·</span>
                 <span style={{ color:T.mid }}>Every act tracked in real time</span>
               </motion.div>
@@ -474,10 +507,10 @@ const LiveSection: React.FC = () => {
               <motion.div variants={fadeUp} style={{ display:"flex", gap:10, alignItems:"center", flexWrap:"wrap", marginBottom:36 }}>
                 <span style={{ fontSize:13, color:T.light }}>Donate via</span>
                 {paymentMethods.map(({ label, icon })=>(
-                  <motion.button
+                  <motion.a
                     key={label}
-                    type="button"
                     onClick={()=>setPaymentMethod(label)}
+                    href={`/payments/${label.toLowerCase()}`}
                     whileHover={{ y:-2 }}
                     whileTap={{ scale:0.96 }}
                     aria-pressed={paymentMethod === label}
@@ -492,7 +525,8 @@ const LiveSection: React.FC = () => {
                     cursor:"pointer",
                     boxShadow:paymentMethod === label ? "0 8px 20px rgba(255,175,95,0.28)" : "none",
                     transition:"all 0.22s ease",
-                  }}><span aria-hidden="true" style={{ fontSize:13 }}>{icon}</span>{label}</motion.button>
+                    textDecoration:"none",
+                  }}><span aria-hidden="true" style={{ fontSize:13 }}>{icon}</span>{label}</motion.a>
                 ))}
               </motion.div>
 
@@ -539,14 +573,15 @@ const LiveSection: React.FC = () => {
                   </div>
                   <span style={{ background:T.orange, color:"#fff", fontSize:10, fontWeight:700, borderRadius:6, padding:"3px 10px", letterSpacing:"0.06em" }}>LIVE</span>
                 </div>
-                <div>
+                <div style={{ height:260, overflow:"hidden" }}>
                   {feed.map((item,i)=>(
-                    <motion.div key={`${item.name}-${i}`}
-                      initial={{ opacity:0, y:-12 }} animate={{ opacity:1, y:0 }}
-                      exit={{ opacity:0, y:12 }} transition={{ duration:0.35 }}
+                    <motion.div key={`feed-row-${i}`}
                       whileHover={{ backgroundColor:T.bgGray }}
+                      animate={{ backgroundColor:"rgba(255,255,255,0)" }}
+                      transition={{ duration:0.25 }}
                       style={{
                         display:"flex", alignItems:"center", gap:12,
+                        minHeight:65, boxSizing:"border-box",
                         padding:"13px 18px",
                         borderBottom: i<feed.length-1 ? `1px solid ${T.border}` : "none",
                       }}>
@@ -559,12 +594,12 @@ const LiveSection: React.FC = () => {
                         flexShrink:0,
                       }}>{item.initials}</div>
                       <div style={{ flex:1, minWidth:0 }}>
-                        <p style={{ margin:0, fontWeight:700, fontSize:14, color:T.dark }}>{item.name} · {item.city}</p>
-                        <p style={{ margin:"1px 0 0", fontSize:12, color:T.light }}>{item.org} · {item.cause}</p>
+                        <p style={{ margin:0, fontWeight:700, fontSize:14, color:T.dark, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{item.name} · {item.city}</p>
+                        <p style={{ margin:"1px 0 0", fontSize:12, color:T.light, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{item.org} · {item.cause}</p>
                       </div>
-                      <div style={{ textAlign:"right" }}>
-                        <p style={{ margin:0, fontWeight:600, fontSize:13, color:T.orange }}>{item.amount}</p>
-                        <p style={{ margin:0, fontSize:11, color:T.light }}>{item.time}</p>
+                      <div style={{ textAlign:"right", minWidth:92, flexShrink:0 }}>
+                        <p style={{ margin:0, fontWeight:600, fontSize:13, color:T.orange, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{item.amount}</p>
+                        <p style={{ margin:0, fontSize:11, color:T.light, whiteSpace:"nowrap" }}>{item.time}</p>
                       </div>
                     </motion.div>
                   ))}
@@ -933,7 +968,7 @@ const HowSection: React.FC = () => {
         </Reveal>
 
         {/* Tab bar */}
-        <div style={{ display:"flex", borderBottom:`1px solid ${T.border}`, marginBottom:56, overflowX:"auto" }}>
+        <div style={{ display:"flex", borderBottom:`1px solid ${T.border}`, marginBottom:56, }}>
           {HOW_STEPS.map((s,i)=>(
             <button key={s.id} onClick={()=>setActive(i)} style={{
               background:"none", border:"none", cursor:"pointer",
