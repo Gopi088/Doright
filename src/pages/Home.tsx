@@ -1542,6 +1542,7 @@ const TestimonialsSection: React.FC = () => {
             onClick={prevPage}
             aria-label="Previous testimonials"
             whileHover={{ background:T.orange, color:"#fff" }}
+            whileTap={{ scale:0.94 }}
             className="testimonial-arrow testimonial-arrow-left"
             style={{
               position:"absolute",
@@ -1595,7 +1596,6 @@ const TestimonialsSection: React.FC = () => {
             onClick={nextPage}
             aria-label="Next testimonials"
             whileHover={{background:T.orange, color:"#fff" }}
-            whileTap={{ scale:0.94 }}
             className="testimonial-arrow testimonial-arrow-right"
             style={{
               position:"absolute",
