@@ -34,9 +34,9 @@ const variantHover: Record<Variant, string> = {
 };
 
 const sizeBase: Record<Size, CSSProperties> = {
-  sm: { padding: '7px 18px',   fontSize: '12px',   borderRadius: radius.full },
-  md: { padding: '10px 22px',  fontSize: '13.5px', borderRadius: radius.full },
-  lg: { padding: '13px 28px',  fontSize: '14.5px', borderRadius: radius.full },
+  sm: { padding: '9px 20px', fontSize: '13px', borderRadius: radius.full, lineHeight: 1 },
+  md: { padding: '9px 20px', fontSize: '13px', borderRadius: radius.full, lineHeight: 1 },
+  lg: { padding: '9px 20px', fontSize: '13px', borderRadius: radius.full, lineHeight: 1 },
 };
 
 export default function Button({ children, variant = 'primary', size = 'md', href, onClick, fullWidth, style, type = 'button', ariaLabel, disabled }: Props) {

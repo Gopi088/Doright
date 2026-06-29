@@ -80,10 +80,11 @@ export default function UnderConstruction() {
                 background: colors.primary,
                 color: colors.white,
                 borderRadius: radius.full,
-                padding: '13px 26px',
-                fontSize: '14px',
+                padding: '9px 20px',
+                fontSize: '13px',
                 fontWeight: fontWeights.textBold,
                 textDecoration: 'none',
+                lineHeight: 1,
               }}
             >
               Back to Home
@@ -95,10 +96,11 @@ export default function UnderConstruction() {
                 color: colors.dark,
                 border: `1.5px solid ${colors.border}`,
                 borderRadius: radius.full,
-                padding: '13px 26px',
-                fontSize: '14px',
+                padding: '9px 20px',
+                fontSize: '13px',
                 fontWeight: fontWeights.textBold,
                 textDecoration: 'none',
+                lineHeight: 1,
               }}
             >
               Explore NGOs

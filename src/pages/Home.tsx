@@ -194,8 +194,8 @@ const Btn: React.FC<{ children:React.ReactNode; style?:React.CSSProperties; ghos
       border: ghost ? `1.5px solid ${T.borderMid}` : "none",
       background: ghost ? "transparent" : T.orange,
       color: ghost ? T.dark : "#fff",
-      borderRadius: T.r999, padding:"14px 32px",
-      fontSize:15, fontWeight:600, cursor:"pointer", fontFamily:"inherit",
+      borderRadius: T.r999, padding:"9px 20px",
+      fontSize:13, fontWeight:700, cursor:"pointer", fontFamily:"inherit",
       lineHeight:1, letterSpacing:"0.01em", textDecoration:"none",
       ...style,
     }}
@@ -402,7 +402,7 @@ const Hero: React.FC = () => {
                     {slide.sub}
                   </p>
 
-                  <Btn href="/campaigns" style={{ width:"fit-content", padding:"14px 30px", fontWeight:700, fontSize:15, marginTop:10 }}>
+                  <Btn href="/campaigns" style={{ width:"fit-content", marginTop:10 }}>
                     {slide.cta} →
                   </Btn>
                 </div>
@@ -923,7 +923,7 @@ const CampaignCard: React.FC<{ c:Campaign }> = memo(({ c }) => (
           }}>{c.orgInitials}</div>
           <span style={{ fontSize:13, color:T.mid, fontWeight:400 }}>{c.org}</span>
         </div>
-        <Btn href="/campaigns" style={{ padding:"10px 20px", fontSize:13 }}>Donate Now</Btn>
+        <Btn href="/campaigns">Donate Now</Btn>
       </div>
     </div>
   </motion.div>

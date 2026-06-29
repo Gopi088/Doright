@@ -32,8 +32,8 @@ export default function JoinNetwork() {
               {JOIN.body}
             </p>
             <div className="ngo-join-actions" style={{ display:'flex', gap:'10px', flexWrap:'wrap' }}>
-              <Button href={JOIN.cta1.href} variant="primary" size="sm" style={{ minHeight:'31px', padding:'0 20px' }}>{JOIN.cta1.label}</Button>
-              <Button href={JOIN.cta2.href} variant="primary" size="sm" style={{ minHeight:'31px', padding:'0 20px' }}>{JOIN.cta2.label}</Button>
+              <Button href={JOIN.cta1.href} variant="primary" size="sm">{JOIN.cta1.label}</Button>
+              <Button href={JOIN.cta2.href} variant="primary" size="sm">{JOIN.cta2.label}</Button>
             </div>
           </div>
 

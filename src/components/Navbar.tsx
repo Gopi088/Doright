@@ -198,11 +198,11 @@ export default function Navbar() {
                 </Link>
               ))}
               <div style={{ display:'flex', gap:'10px', marginTop:'6px', flexWrap:'wrap' }}>
-                <Link to="/login" onClick={() => setOpen(false)} style={{ flex:1, background:'none', border:`1.5px solid ${colors.border}`, borderRadius:'20px', padding:'9px 16px', fontFamily:fonts.body, fontSize:'13px', fontWeight:fontWeights.textBold, color:colors.dark, cursor:'pointer', minWidth:'100px', textAlign:'center', textDecoration:'none' }}>
+                <Link to="/login" onClick={() => setOpen(false)} style={{ flex:1, background:'none', border:`1.5px solid ${colors.border}`, borderRadius:'50px', padding:'9px 20px', fontFamily:fonts.body, fontSize:'13px', fontWeight:fontWeights.textBold, color:colors.dark, cursor:'pointer', minWidth:'100px', textAlign:'center', textDecoration:'none', lineHeight:1 }}>
                   Login
                 </Link>
                 <Link to={NAV.cta.href} onClick={() => setOpen(false)}
-                  style={{ flex:1, background:colors.primary, color:colors.white, borderRadius:'20px', padding:'9px 16px', fontFamily:fonts.body, fontSize:'13px', fontWeight:fontWeights.textBold, textAlign:'center', minWidth:'100px' }}>
+                  style={{ flex:1, background:colors.primary, color:colors.white, borderRadius:'50px', padding:'9px 20px', fontFamily:fonts.body, fontSize:'13px', fontWeight:fontWeights.textBold, textAlign:'center', minWidth:'100px', textDecoration:'none', lineHeight:1 }}>
                   {NAV.cta.label}
                 </Link>
               </div>

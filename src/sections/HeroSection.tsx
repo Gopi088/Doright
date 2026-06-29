@@ -55,8 +55,8 @@ export default function HeroSection() {
             </p>
 
             <div className="ngo-hero-actions" style={{ display:'flex', gap:'12px', flexWrap:'wrap' }}>
-              <Button href={HERO.cta1.href} variant="primary" size="sm" style={{ minHeight: '38px', padding: '0 19px' }}>{HERO.cta1.label}</Button>
-              <Button href={HERO.cta2.href} variant="ghost" size="sm" style={{ minHeight: '38px', padding: '0 19px', background: colors.white, color: colors.gray, borderColor: colors.white, boxShadow: shadows.sm }}>{HERO.cta2.label}</Button>
+              <Button href={HERO.cta1.href} variant="primary" size="sm">{HERO.cta1.label}</Button>
+              <Button href={HERO.cta2.href} variant="ghost" size="sm" style={{ background: colors.white, color: colors.gray, borderColor: colors.white, boxShadow: shadows.sm }}>{HERO.cta2.label}</Button>
             </div>
           </div>
 
