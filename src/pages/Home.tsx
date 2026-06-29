@@ -15,6 +15,9 @@ import heroImage2 from "../assets/heroImage2.jpg";
 import heroImage3 from "../assets/heroImage3.jpg";
 import storyImage from "../assets/storyImage.jpg";
 import treeImage from "../assets/treeImage.jpg"
+import productImage1 from "../assets/img1.jpg";
+import productImage2 from "../assets/img2.jpg";
+import productImage3 from "../assets/img3.jpg";
 import actForImpactVideo from "../assets/Act for impact_1.mp4";
 import liveFeedSample from "../data/liveFeedSample.json";
 
@@ -209,6 +212,7 @@ const Hero: React.FC = () => {
   const [trackIdx, setTrackIdx] = useState(1);
   const [instantReset, setInstantReset] = useState(false);
   const [clipWidth, setClipWidth] = useState(0);
+  const [heroAutoplayPaused, setHeroAutoplayPaused] = useState(false);
   const clipRef = useRef<HTMLDivElement>(null);
   const n = SLIDES.length;
   const GAP = 20;
@@ -223,6 +227,7 @@ const Hero: React.FC = () => {
   }, []);
 
   const goTo = useCallback((i:number)=>{
+    setHeroAutoplayPaused(true);
     setInstantReset(false);
     setTrackIdx(i + 1);
   },[]);
@@ -237,10 +242,10 @@ const Hero: React.FC = () => {
 
   useEffect(()=>{
     const t = window.setInterval(() => {
-      if (document.visibilityState === "visible") next();
+      if (!heroAutoplayPaused && document.visibilityState === "visible") next();
     },5000);
     return ()=>window.clearInterval(t);
-  },[next]);
+  },[heroAutoplayPaused, next]);
 
   useEffect(() => {
     const normalizeTrack = () => {
@@ -424,18 +429,24 @@ const Hero: React.FC = () => {
 /* ─── §2  LIVE ACTIVITY ──────────────────────────────────────────────────────*/
 const LiveSection: React.FC = () => {
   const [paymentMethod, setPaymentMethod] = useState("UPI");
-  const [feedStart, setFeedStart] = useState(0);
+  const [feed, setFeed] = useState<LiveFeedItem[]>(() => LIVE_FEED_SAMPLE.slice(0, 4));
   const [activeDonors, setActiveDonors] = useState(25);
-
-  const feed = useMemo(() => (
-    Array.from({ length:4 }, (_, i) => LIVE_FEED_SAMPLE[(feedStart + i) % LIVE_FEED_SAMPLE.length])
-  ), [feedStart]);
+  const nextFeedIndexRef = useRef(4);
+  const feedRowRef = useRef(0);
 
   useEffect(() => {
     const t = window.setInterval(() => {
-      setFeedStart(current => (current + 1) % LIVE_FEED_SAMPLE.length);
+      setFeed(current => {
+        if (!LIVE_FEED_SAMPLE.length) return current;
+        const next = [...current];
+        const row = feedRowRef.current % Math.max(next.length, 1);
+        next[row] = LIVE_FEED_SAMPLE[nextFeedIndexRef.current % LIVE_FEED_SAMPLE.length];
+        feedRowRef.current = (feedRowRef.current + 1) % Math.max(next.length, 1);
+        nextFeedIndexRef.current = (nextFeedIndexRef.current + 1) % LIVE_FEED_SAMPLE.length;
+        return next;
+      });
       setActiveDonors(current => current >= 32 ? 24 : current + 1);
-    }, 3200);
+    }, 2600);
     return () => window.clearInterval(t);
   }, []);
 
@@ -585,27 +596,43 @@ const LiveSection: React.FC = () => {
                       animate={{ backgroundColor:"rgba(255,255,255,0)" }}
                       transition={{ duration:0.25 }}
                       style={{
-                        display:"flex", alignItems:"center", gap:12,
+                        display:"flex", alignItems:"center",
                         minHeight:65, boxSizing:"border-box",
                         padding:"13px 18px",
                         borderBottom: i<feed.length-1 ? `1px solid ${T.border}` : "none",
+                        position:"relative",
                       }}>
-                      <div style={{
-                        width:38, height:38, borderRadius:"50%",
-                        background:item.tone === "orange" ? T.orange : item.tone === "gray" ? T.border : T.orangePale,
-                        display:"flex", alignItems:"center", justifyContent:"center",
-                        fontWeight:700, fontSize:15,
-                        color:item.tone === "orange" ? "#fff" : item.tone === "gray" ? T.dark : T.orange,
-                        flexShrink:0,
-                      }}>{item.initials}</div>
-                      <div style={{ flex:1, minWidth:0 }}>
-                        <p style={{ margin:0, fontWeight:700, fontSize:14, color:T.dark, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{item.name} · {item.city}</p>
-                        <p style={{ margin:"1px 0 0", fontSize:12, color:T.light, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{item.org} · {item.cause}</p>
-                      </div>
-                      <div style={{ textAlign:"right", minWidth:92, flexShrink:0 }}>
-                        <p style={{ margin:0, fontWeight:600, fontSize:13, color:T.orange, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{item.amount}</p>
-                        <p style={{ margin:0, fontSize:11, color:T.light, whiteSpace:"nowrap" }}>{item.time}</p>
-                      </div>
+                      <AnimatePresence mode="wait" initial={false}>
+                        <motion.div
+                          key={item.id}
+                          initial={{ opacity:0, y:5 }}
+                          animate={{ opacity:1, y:0 }}
+                          exit={{ opacity:0, y:-5 }}
+                          transition={{ duration:0.2, ease:EASE }}
+                          style={{
+                            display:"flex", alignItems:"center", gap:12,
+                            width:"100%",
+                            willChange:"opacity, transform",
+                          }}
+                        >
+                          <div style={{
+                            width:38, height:38, borderRadius:"50%",
+                            background:item.tone === "orange" ? T.orange : item.tone === "gray" ? T.border : T.orangePale,
+                            display:"flex", alignItems:"center", justifyContent:"center",
+                            fontWeight:700, fontSize:15,
+                            color:item.tone === "orange" ? "#fff" : item.tone === "gray" ? T.dark : T.orange,
+                            flexShrink:0,
+                          }}>{item.initials}</div>
+                          <div style={{ flex:1, minWidth:0 }}>
+                            <p style={{ margin:0, fontWeight:700, fontSize:14, color:T.dark, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{item.name} · {item.city}</p>
+                            <p style={{ margin:"1px 0 0", fontSize:12, color:T.light, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{item.org} · {item.cause}</p>
+                          </div>
+                          <div style={{ textAlign:"right", minWidth:92, flexShrink:0 }}>
+                            <p style={{ margin:0, fontWeight:600, fontSize:13, color:T.orange, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{item.amount}</p>
+                            <p style={{ margin:0, fontSize:11, color:T.light, whiteSpace:"nowrap" }}>{item.time}</p>
+                          </div>
+                        </motion.div>
+                      </AnimatePresence>
                     </motion.div>
                   ))}
                 </div>
@@ -1218,79 +1245,137 @@ const AppSection: React.FC = () => {
 
               {/* Phone shell */}
               <div style={{
-                width: 300,
-                aspectRatio: "9 / 16",
-                background: "#1a1a1a",
-                borderRadius: 40,
-                border: "3px solid #2a2a2a",
-                overflow: "hidden",
-                boxShadow: "0 32px 80px rgba(0,0,0,.32)",
+                width: 310,
+                maxWidth: "min(310px, 82vw)",
+                aspectRatio: "9 / 18",
+                background: "linear-gradient(145deg,#2c2c2c,#060606 52%,#323232)",
+                borderRadius: 46,
+                border: "2px solid #3a3a3a",
+                padding: 8,
+                overflow: "visible",
+                boxShadow: "0 36px 86px rgba(0,0,0,.34), inset 0 0 0 1px rgba(255,255,255,.12)",
                 position: "relative", zIndex: 1,
                 display: "flex", flexDirection: "column",
               }}>
-                {/* Notch */}
-                <div style={{
-                  height: 28, background: "#1a1a1a",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  flexShrink: 0,
-                }}>
-                  <div style={{ width: 60, height: 12, background: "#0d0d0d", borderRadius: 6 }} />
-                </div>
+                <span aria-hidden="true" style={{
+                  position:"absolute", left:-5, top:96, width:4, height:44,
+                  borderRadius:"4px 0 0 4px", background:"#222",
+                  boxShadow:"0 82px 0 #222, 0 132px 0 #222",
+                }} />
+                <span aria-hidden="true" style={{
+                  position:"absolute", right:-5, top:150, width:4, height:78,
+                  borderRadius:"0 4px 4px 0", background:"#222",
+                }} />
 
                 {/* Screen body */}
                 <div style={{
-                  background: "#1a1a1a",
-                  padding: "20px 16px 0",
+                  background: "radial-gradient(circle at 50% 28%, rgba(255,175,95,.08), transparent 28%), linear-gradient(145deg,#1b1b1b,#090909 60%,#151515)",
+                  flex: 1,
+                  display: "flex", flexDirection: "column",
+                  borderRadius: 38,
+                  overflow: "hidden",
+                  border: "1px solid rgba(255,255,255,.08)",
+                  position:"relative",
+                }}>
+                  <div style={{
+                    height: 50,
+                    padding: "0 24px",
+                    display:"flex",
+                    alignItems:"center",
+                    justifyContent:"space-between",
+                    color:"#fff",
+                    fontSize:14,
+                    fontWeight:700,
+                    flexShrink:0,
+                  }}>
+                    <span>9:41</span>
+                    <div style={{
+                      position:"absolute", top:15, left:"50%",
+                      transform:"translateX(-50%)",
+                      width:92, height:30,
+                      background:"#050505",
+                      borderRadius:999,
+                      boxShadow:"inset 0 0 0 1px rgba(255,255,255,.03)",
+                    }} />
+                    <span aria-hidden="true" style={{
+                      position:"absolute", top:25, left:"calc(50% + 29px)",
+                      width:7, height:7, borderRadius:"50%",
+                      background:"#071528",
+                      boxShadow:"0 0 5px rgba(57,112,255,.45)",
+                    }} />
+                    <span style={{ fontSize:12, letterSpacing:1 }}>▮▮▮ ᯤ ▰</span>
+                  </div>
+                  <div style={{
+                  padding: "18px 24px 14px",
                   flex: 1,
                   display: "flex", flexDirection: "column",
                 }}>
                   <p style={{
-                    fontSize: 9, fontWeight: 700, letterSpacing: ".12em",
+                    fontSize: 12, fontWeight: 800, letterSpacing: ".16em",
                     textTransform: "uppercase", color: "rgba(255,255,255,.35)",
-                    marginBottom: 4,
+                    margin:"0 0 8px",
                   }}>Your Giving Today.</p>
 
-                  <h2 style={{ fontSize: 28, fontWeight: 800, color: "#fff", margin: "0 0 4px" }}>Give</h2>
+                  <h2 style={{ fontSize: 50, lineHeight:.92, fontWeight: 900, color: "#fff", margin: "0 0 12px", letterSpacing:0 }}>Give</h2>
 
                   <p style={{
-                    fontSize: 10, fontWeight: 600, color: T.orange,
-                    marginBottom: 18, letterSpacing: ".02em",
+                    fontSize: 16, fontWeight: 800, color: T.orange,
+                    margin:"0 0 24px", letterSpacing: 0,
                   }}>Money · Time · Things · Products</p>
 
-                  <div style={{ display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 12, flex: 1 }}>
                     {[
-                      { name: "Handwoven Tote Bag",      by: "Shakti Women's Collective", price: "₹480" },
-                      { name: "Organic Honey (250g)",     by: "AarogyaSeva Trust",         price: "₹220" },
-                      { name: "Recycled Paper Journal",   by: "GreenRoots India",           price: "₹150" },
+                      { name: "Handwoven Tote Bag",      by: "Shakti Women's Collective", price: "₹480", image: productImage1 },
+                      { name: "Organic Honey (250g)",     by: "AarogyaSeva Trust",         price: "₹220", image: productImage2 },
+                      { name: "Recycled Paper Journal",   by: "GreenRoots India",           price: "₹150", image: productImage3 },
                     ].map(item => (
                       <div key={item.name} style={{
                         display: "flex", alignItems: "center", gap: 10,
-                        background: "#2a2a2a", borderRadius: 12, padding: 12,
+                        background: "rgba(255,255,255,.08)", borderRadius: 16, padding: 10,
                       }}>
-                        <div style={{ width: 40, height: 40, borderRadius: 8, background: "#3a3a3a", flexShrink: 0 }} />
-                        <div style={{ flex: 1 }}>
-                          <p style={{ fontSize: 12, fontWeight: 700, color: "#fff", margin: 0, lineHeight: 1.3 }}>{item.name}</p>
-                          <p style={{ fontSize: 9, color: "rgba(255,255,255,.4)", margin: "2px 0 0" }}>by {item.by}</p>
+                        <img
+                          src={item.image}
+                          alt=""
+                          aria-hidden="true"
+                          style={{ width: 50, height: 50, borderRadius: 11, objectFit:"cover", flexShrink: 0 }}
+                        />
+                        <div style={{ flex: 1, minWidth:0 }}>
+                          <p style={{ fontSize: 15, fontWeight: 800, color: "#fff", margin: 0, lineHeight: 1.2, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{item.name}</p>
+                          <p style={{ fontSize: 11, color: "rgba(255,255,255,.62)", margin: "4px 0 0", whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>by {item.by}</p>
                         </div>
-                        <span style={{ fontSize: 13, fontWeight: 700, color: T.orange, flexShrink: 0 }}>{item.price}</span>
+                        <span style={{ fontSize: 16, fontWeight: 900, color: T.orange, flexShrink: 0 }}>{item.price}</span>
                       </div>
                     ))}
                   </div>
 
                   {/* CTA bar */}
                   <div style={{
-                    background: T.orange,
+                    background: "linear-gradient(135deg,#ffb55f,#f79a22)",
+                    borderRadius: 13,
                     padding: "18px 16px",
                     textAlign: "center",
                     flexShrink: 0,
                     marginTop: "auto",
+                    marginBottom: 22,
                   }}>
                     <p style={{
-                      fontSize: 9, fontWeight: 600, color: "rgba(255,255,255,.7)",
-                      textTransform: "uppercase", letterSpacing: ".1em", marginBottom: 4,
+                      fontSize: 10, fontWeight: 800, color: "rgba(255,255,255,.72)",
+                      textTransform: "uppercase", letterSpacing: ".1em", margin:"0 0 6px",
                     }}>Today's Lives Earned</p>
-                    <p style={{ fontSize: 15, fontWeight: 800, color: "#fff", margin: 0 }}>+4 Lives added</p>
+                    <p style={{ fontSize: 18, fontWeight: 900, color: "#fff", margin: 0 }}>+4 Lives added</p>
                   </div>
+                </div>
+                  <span aria-hidden="true" style={{
+                    position:"absolute",
+                    left:"50%",
+                    bottom:10,
+                    transform:"translateX(-50%)",
+                    width:112,
+                    height:5,
+                    borderRadius:999,
+                    background:"#fff",
+                    opacity:.95,
+                  }} />
                 </div>
               </div>
             </motion.div>
@@ -1542,7 +1627,6 @@ const TestimonialsSection: React.FC = () => {
             onClick={prevPage}
             aria-label="Previous testimonials"
             whileHover={{ background:T.orange, color:"#fff" }}
-            whileTap={{ scale:0.94 }}
             className="testimonial-arrow testimonial-arrow-left"
             style={{
               position:"absolute",

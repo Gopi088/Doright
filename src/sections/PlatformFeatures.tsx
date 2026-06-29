@@ -9,52 +9,90 @@ function PhoneMockup() {
   return (
     <div style={{
       width: 'min(230px, 100%)',
-      minHeight: '430px',
-      background: colors.darkTrue, borderRadius: '28px',
-      padding: '16px 13px',
-      boxShadow: shadows.xl,
-      border: `2px solid ${colors.darkDeep}`,
+      aspectRatio: '9 / 18',
+      background: 'linear-gradient(145deg,#2c2c2c,#060606 52%,#323232)',
+      borderRadius: '38px',
+      padding: '7px',
+      boxShadow: '0 30px 72px rgba(0,0,0,.32), inset 0 0 0 1px rgba(255,255,255,.12)',
+      border: '2px solid #3a3a3a',
       flexShrink: 0,
       display: 'flex',
       flexDirection: 'column',
+      position: 'relative',
     }}>
-      <div style={{ width:'54px', height:'6px', background:colors.darkDeep, borderRadius:'8px', margin:'0 auto 28px' }}/>
-      <div style={{ color:colors.white, fontSize:'9px', fontFamily:fonts.body, opacity:0.75, marginBottom:'14px' }}>
-        Donate your heart
-      </div>
-      <div style={{ fontFamily:fonts.display, fontSize:'26px', fontWeight:fontWeights.extrabold, color:colors.white, letterSpacing:'0', lineHeight:1 }}>Give</div>
-      <div style={{ fontFamily:fonts.body, fontSize:'10px', color:colors.primary, marginTop:'7px', fontWeight:fontWeights.text }}>Make Your Change Possible</div>
-      <div style={{ display:'none', justifyContent:'space-between', padding:'8px 12px 0', color:colors.white, fontSize:'12px', fontFamily:fonts.body }}>
-        <span style={{ fontWeight:fontWeights.textBold }}>9:41</span>
-        <span>●●● ▲</span>
-      </div>
-      <div style={{ background:colors.darkTrue, borderRadius:'24px', overflow:'hidden', flex:1, display:'none', flexDirection:'column' }}>
-        <div style={{ background:colors.darkTrue, padding:'22px 18px 14px', borderBottom:`1px solid ${colors.darkDeep}` }}>
-          <div style={{ fontFamily:fonts.display, fontSize:'26px', fontWeight:fontWeights.extrabold, color:colors.white, letterSpacing:'0' }}>Give</div>
-          <div style={{ fontFamily:fonts.body, fontSize:'11px', color:colors.primary, marginTop:'3px', fontWeight:fontWeights.text }}>Make Your Change Possible</div>
-          <div style={{ display:'flex', gap:'14px', marginTop:'12px' }}>
+      <span aria-hidden="true" style={{
+        position:'absolute',
+        left:'-5px',
+        top:'70px',
+        width:'3px',
+        height:'34px',
+        borderRadius:'4px 0 0 4px',
+        background:'#222',
+        boxShadow:'0 60px 0 #222, 0 96px 0 #222',
+      }} />
+      <span aria-hidden="true" style={{
+        position:'absolute',
+        right:'-5px',
+        top:'112px',
+        width:'3px',
+        height:'58px',
+        borderRadius:'0 4px 4px 0',
+        background:'#222',
+      }} />
+      <div style={{
+        flex:1,
+        borderRadius:'31px',
+        background:'linear-gradient(145deg,#1b1b1b,#090909 62%,#151515)',
+        border:'1px solid rgba(255,255,255,.08)',
+        overflow:'hidden',
+        display:'flex',
+        flexDirection:'column',
+        position:'relative',
+      }}>
+        <div style={{
+          height:'36px',
+          flexShrink:0,
+          position:'relative',
+          display:'flex',
+          alignItems:'center',
+          justifyContent:'center',
+        }}>
+          <span style={{
+            width:'58px',
+            height:'10px',
+            borderRadius:'999px',
+            background:'#050505',
+          }} />
+        </div>
+        <div style={{ padding:'10px 14px 0' }}>
+          <div style={{ color:colors.white, fontSize:'8px', fontFamily:fonts.body, opacity:0.75, marginBottom:'12px' }}>
+            Donate your heart
+          </div>
+          <div style={{ fontFamily:fonts.display, fontSize:'24px', fontWeight:fontWeights.extrabold, color:colors.white, letterSpacing:'0', lineHeight:1 }}>Give</div>
+          <div style={{ fontFamily:fonts.body, fontSize:'9px', color:colors.primary, marginTop:'7px', fontWeight:fontWeights.text }}>Make Your Change Possible</div>
+          <div style={{ display:'flex', gap:'10px', marginTop:'12px' }}>
             {PLATFORM.phone.tabs.map(t => (
-              <span key={t} style={{ fontFamily:fonts.body, fontSize:'11px', fontWeight:t==='Give'?fontWeights.textBold:fontWeights.text, color:t==='Give'?colors.primary:colors.dark, paddingBottom:'3px', borderBottom:t==='Give'?`1.5px solid ${colors.primary}`:'none' }}>{t}</span>
+              <span key={t} style={{
+                fontFamily:fonts.body,
+                fontSize:'7px',
+                fontWeight:t==='Give'?fontWeights.textBold:fontWeights.text,
+                color:t==='Give'?colors.primary:'rgba(255,255,255,.34)',
+                paddingBottom:'3px',
+                borderBottom:t==='Give'?`1px solid ${colors.primary}`:'none',
+              }}>{t}</span>
             ))}
           </div>
         </div>
-        <div style={{ padding:'16px', flex:1 }}>
-          {[78,52,36,64].map((w,i)=>(
-            <div key={i} style={{ background:colors.darkDeep, borderRadius:'12px', padding:'12px', marginBottom:'12px', display:'flex', gap:'12px', alignItems:'center' }}>
-              <div style={{ width:'42px', height:'42px', background:colors.primary, borderRadius:'9px', flexShrink:0, opacity:0.72 }}/>
-              <div style={{ flex:1, minWidth:0 }}>
-                <div style={{ height:'8px', width:'75%', background:colors.dark, borderRadius:'4px', marginBottom:'7px' }}/>
-                <div style={{ height:'6px', width:`${w}%`, background:colors.dark, borderRadius:'3px', marginBottom:'6px' }}/>
-                <div style={{ height:'3px', background:colors.dark, borderRadius:'2px' }}>
-                  <div style={{ height:'3px', width:`${w}%`, background:colors.primary, borderRadius:'2px' }}/>
-                </div>
-              </div>
-            </div>
-          ))}
-          <div style={{ background:colors.primary, borderRadius:'22px', padding:'12px 0', textAlign:'center', fontFamily:fonts.body, fontSize:'13px', fontWeight:fontWeights.textBold, color:colors.white }}>
-            Donate Now
-          </div>
-        </div>
+        <span aria-hidden="true" style={{
+          position:'absolute',
+          left:'50%',
+          bottom:'9px',
+          transform:'translateX(-50%)',
+          width:'74px',
+          height:'4px',
+          borderRadius:'999px',
+          background:'rgba(255,255,255,.84)',
+        }} />
       </div>
     </div>
   );

@@ -86,7 +86,7 @@ export default function Footer() {
         >
           <div className="footer-left" style={{ flex: "0 0 280px" }}>
             <img
-              src="/images/DoRightLogo.svg"
+              src="/images/footer logo.svg"
               alt="DoRight"
               style={{
                 height: "200px",
