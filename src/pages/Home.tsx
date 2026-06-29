@@ -1542,7 +1542,6 @@ const TestimonialsSection: React.FC = () => {
             onClick={prevPage}
             aria-label="Previous testimonials"
             whileHover={{ background:T.orange, color:"#fff" }}
-            whileTap={{ scale:0.94 }}
             className="testimonial-arrow testimonial-arrow-left"
             style={{
               position:"absolute",
