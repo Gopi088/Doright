@@ -500,7 +500,21 @@ export default function About() {
               still echo the loudest.
             </p>
             <p>This is our story. We hope it becomes yours too.</p>
-            <Link to="/ngos" className="about-join-btn">
+            <Link
+              to="/ngos"
+              className="about-join-btn"
+              style={{
+                display: "inline-block",
+                background: "#ffaf5f",
+                color: "#fff",
+                borderRadius: "50px",
+                padding: "9px 20px",
+                fontSize: "13px",
+                fontWeight: 700,
+                textDecoration: "none",
+                lineHeight: 1,
+              }}
+            >
               Join Now
             </Link>
             <div className="about-cta-svg-wrap">

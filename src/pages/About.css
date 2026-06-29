@@ -414,8 +414,7 @@
 
 .about-what-line {
   display: inline;
-  background: var(--about-white);
-  color: var(--about-orange);
+  color: var(--about-grey-600);
   padding: 4px 20px 6px;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
@@ -423,7 +422,7 @@
 
 .about-what-line strong {
   font-weight: 700;
-  color: var(--about-orange);
+  color: var(--about-black);
 }
 
 .about-what-cards {
@@ -498,7 +497,6 @@
 
 .about-what-tl-highlight {
   display: inline;
-  background: var(--about-white);
   color: var(--about-grey-600);
   padding: 3px 22px 6px;
   box-decoration-break: clone;

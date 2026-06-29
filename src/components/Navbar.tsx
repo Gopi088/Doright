@@ -19,6 +19,13 @@ export default function Navbar() {
   useEffect(() => setOpen(false), [location.pathname, location.hash]);
 
   useEffect(() => {
+    document.body.style.paddingTop = '68px';
+    return () => {
+      document.body.style.paddingTop = '';
+    };
+  }, []);
+
+  useEffect(() => {
     if (!open) return;
 
     const closeOnEscape = (event: KeyboardEvent) => {
@@ -34,7 +41,7 @@ export default function Navbar() {
 
   return (
     <header role="banner" style={{
-      position: 'sticky', top: 0, zIndex: 200,
+      position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9999,
       background: 'rgba(255,255,255,0.96)',
       backdropFilter: 'blur(12px)',
       WebkitBackdropFilter: 'blur(12px)',
@@ -127,6 +134,7 @@ export default function Navbar() {
               fontSize: '13px', fontWeight: fontWeights.textBold,
               boxShadow: 'none', transition: transitions.normal,
               whiteSpace: 'nowrap', display: 'inline-block',
+              textDecoration: 'none',
             }}>
               {NAV.cta.label}
             </Link>

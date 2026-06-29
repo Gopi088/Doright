@@ -4,7 +4,6 @@ import React, {
 } from "react";
 import {
   motion, AnimatePresence, useInView,
-  useMotionValue,
 } from "framer-motion";
 import type { Variants, Transition, PanInfo } from "framer-motion";
 import { FaApple, FaGooglePlay } from "react-icons/fa";
@@ -213,6 +212,7 @@ const Hero: React.FC = () => {
   const [instantReset, setInstantReset] = useState(false);
   const [clipWidth, setClipWidth] = useState(0);
   const [heroAutoplayPaused, setHeroAutoplayPaused] = useState(false);
+  const heroPauseTimer = useRef<number | null>(null);
   const clipRef = useRef<HTMLDivElement>(null);
   const n = SLIDES.length;
   const GAP = 20;
@@ -228,6 +228,11 @@ const Hero: React.FC = () => {
 
   const goTo = useCallback((i:number)=>{
     setHeroAutoplayPaused(true);
+    if (heroPauseTimer.current) window.clearTimeout(heroPauseTimer.current);
+    heroPauseTimer.current = window.setTimeout(() => {
+      setHeroAutoplayPaused(false);
+      heroPauseTimer.current = null;
+    }, 8000);
     setInstantReset(false);
     setTrackIdx(i + 1);
   },[]);
@@ -246,6 +251,10 @@ const Hero: React.FC = () => {
     },5000);
     return ()=>window.clearInterval(t);
   },[heroAutoplayPaused, next]);
+
+  useEffect(() => () => {
+    if (heroPauseTimer.current) window.clearTimeout(heroPauseTimer.current);
+  }, []);
 
   useEffect(() => {
     const normalizeTrack = () => {
@@ -432,18 +441,14 @@ const LiveSection: React.FC = () => {
   const [feed, setFeed] = useState<LiveFeedItem[]>(() => LIVE_FEED_SAMPLE.slice(0, 4));
   const [activeDonors, setActiveDonors] = useState(25);
   const nextFeedIndexRef = useRef(4);
-  const feedRowRef = useRef(0);
 
   useEffect(() => {
     const t = window.setInterval(() => {
       setFeed(current => {
         if (!LIVE_FEED_SAMPLE.length) return current;
-        const next = [...current];
-        const row = feedRowRef.current % Math.max(next.length, 1);
-        next[row] = LIVE_FEED_SAMPLE[nextFeedIndexRef.current % LIVE_FEED_SAMPLE.length];
-        feedRowRef.current = (feedRowRef.current + 1) % Math.max(next.length, 1);
+        const nextItem = LIVE_FEED_SAMPLE[nextFeedIndexRef.current % LIVE_FEED_SAMPLE.length];
         nextFeedIndexRef.current = (nextFeedIndexRef.current + 1) % LIVE_FEED_SAMPLE.length;
-        return next;
+        return [...current.slice(1), nextItem];
       });
       setActiveDonors(current => current >= 32 ? 24 : current + 1);
     }, 2600);
@@ -589,32 +594,23 @@ const LiveSection: React.FC = () => {
                   </div>
                   <span style={{ background:T.orange, color:"#fff", fontSize:10, fontWeight:700, borderRadius:6, padding:"3px 10px", letterSpacing:"0.06em" }}>LIVE</span>
                 </div>
-                <div style={{ height:260, overflow:"hidden" }}>
+                <div style={{ height:260, overflow:"hidden", position:"relative" }}>
+                  <AnimatePresence initial={false} mode="popLayout">
                   {feed.map((item,i)=>(
-                    <motion.div key={`feed-row-${i}`}
+                    <motion.div key={item.id}
+                      layout
+                      initial={{ opacity:0, y:65 }}
+                      animate={{ opacity:1, y:0, backgroundColor:"rgba(255,255,255,0)" }}
+                      exit={{ opacity:0, y:-65 }}
                       whileHover={{ backgroundColor:T.bgGray }}
-                      animate={{ backgroundColor:"rgba(255,255,255,0)" }}
-                      transition={{ duration:0.25 }}
+                      transition={{ duration:0.32, ease:EASE, layout:{ duration:0.32, ease:EASE } }}
                       style={{
-                        display:"flex", alignItems:"center",
+                        display:"flex", alignItems:"center", gap:12,
                         minHeight:65, boxSizing:"border-box",
                         padding:"13px 18px",
                         borderBottom: i<feed.length-1 ? `1px solid ${T.border}` : "none",
                         position:"relative",
                       }}>
-                      <AnimatePresence mode="wait" initial={false}>
-                        <motion.div
-                          key={item.id}
-                          initial={{ opacity:0, y:5 }}
-                          animate={{ opacity:1, y:0 }}
-                          exit={{ opacity:0, y:-5 }}
-                          transition={{ duration:0.2, ease:EASE }}
-                          style={{
-                            display:"flex", alignItems:"center", gap:12,
-                            width:"100%",
-                            willChange:"opacity, transform",
-                          }}
-                        >
                           <div style={{
                             width:38, height:38, borderRadius:"50%",
                             background:item.tone === "orange" ? T.orange : item.tone === "gray" ? T.border : T.orangePale,
@@ -631,10 +627,9 @@ const LiveSection: React.FC = () => {
                             <p style={{ margin:0, fontWeight:600, fontSize:13, color:T.orange, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{item.amount}</p>
                             <p style={{ margin:0, fontSize:11, color:T.light, whiteSpace:"nowrap" }}>{item.time}</p>
                           </div>
-                        </motion.div>
-                      </AnimatePresence>
                     </motion.div>
                   ))}
+                  </AnimatePresence>
                 </div>
               </motion.div>
 
@@ -772,6 +767,8 @@ display:"flex",
 padding:"5px",
 gap:GAP,
 width:"max-content",
+animation:"ngoLoop 72s linear infinite",
+animationPlayState: paused ? "paused" : "running",
 }}
 >
           {items.map((ngo, i) => (
@@ -1303,7 +1300,34 @@ const AppSection: React.FC = () => {
                       background:"#071528",
                       boxShadow:"0 0 5px rgba(57,112,255,.45)",
                     }} />
-                    <span style={{ fontSize:12, letterSpacing:1 }}>▮▮▮ ᯤ ▰</span>
+                    <span aria-hidden="true" style={{ display:"inline-flex", alignItems:"center", gap:5 }}>
+                      <span style={{ display:"inline-flex", alignItems:"flex-end", gap:2, height:12 }}>
+                        {[5,7,9,11].map(h => (
+                          <span key={h} style={{ width:3, height:h, borderRadius:2, background:"#fff", display:"block" }} />
+                        ))}
+                      </span>
+                      <span style={{
+                        width:13,
+                        height:9,
+                        borderTop:"2px solid #fff",
+                        borderLeft:"2px solid transparent",
+                        borderRight:"2px solid transparent",
+                        borderRadius:"50% 50% 0 0",
+                        display:"block",
+                        transform:"translateY(2px)",
+                      }} />
+                      <span style={{
+                        width:18,
+                        height:9,
+                        border:"1.7px solid #fff",
+                        borderRadius:3,
+                        display:"block",
+                        position:"relative",
+                      }}>
+                        <span style={{ position:"absolute", right:-4, top:2, width:2, height:5, borderRadius:2, background:"#fff" }} />
+                        <span style={{ position:"absolute", inset:"2px 3px", borderRadius:1.5, background:"#fff" }} />
+                      </span>
+                    </span>
                   </div>
                   <div style={{
                   padding: "18px 24px 14px",
@@ -1575,10 +1599,12 @@ const TCard: React.FC<{ t: Testimonial }> = memo(({ t }) => (
 ));
 
 const TestimonialsSection: React.FC = () => {
-  const [page, setPage] = useState(0);
   const [perPage, setPerPage] = useState(3);
-  const dragX = useMotionValue(0);
-  const isHovered = useRef(false);
+  const [trackIndex, setTrackIndex] = useState(3);
+  const [instantSlideReset, setInstantSlideReset] = useState(false);
+  const [cardStep, setCardStep] = useState(0);
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const GAP = 24;
 
   useEffect(()=>{
     const update = ()=>{
@@ -1589,22 +1615,55 @@ const TestimonialsSection: React.FC = () => {
     return ()=>window.removeEventListener("resize", update);
   },[]);
 
-  const pages = Math.ceil(TESTIMONIALS.length / perPage);
+  const pages = TESTIMONIALS.length;
+  const activeIndex = ((trackIndex - perPage) % pages + pages) % pages;
 
-  useEffect(()=>{ setPage(p=>Math.min(p, pages-1)); },[pages]);
+  useEffect(() => {
+    setTrackIndex(perPage);
+  }, [perPage]);
+
+  useEffect(() => {
+    const update = () => {
+      const width = viewportRef.current?.clientWidth ?? 0;
+      if (!width) return;
+      setCardStep(((width - GAP * (perPage - 1)) / perPage) + GAP);
+    };
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, [perPage]);
 
   const onDragEnd = useCallback((_:unknown, info:PanInfo)=>{
-    if (info.offset.x < -50) setPage(p=>(p+1)%pages);
-    else if (info.offset.x > 50) setPage(p=>(p-1+pages)%pages);
-  },[pages]);
+    if (info.offset.x < -50) setTrackIndex(p => p + 1);
+    else if (info.offset.x > 50) setTrackIndex(p => p - 1);
+  },[]);
 
-  const prevPage = useCallback(() => setPage(p => (p - 1 + pages) % pages), [pages]);
-  const nextPage = useCallback(() => setPage(p => (p + 1) % pages), [pages]);
-
-  const visible = useMemo(
-    ()=>TESTIMONIALS.slice(page*perPage, page*perPage+perPage),
-    [page, perPage]
+  const prevPage = useCallback(() => setTrackIndex(p => p - 1), []);
+  const nextPage = useCallback(() => setTrackIndex(p => p + 1), []);
+  const trackItems = useMemo(
+    () => [
+      ...TESTIMONIALS.slice(-perPage),
+      ...TESTIMONIALS,
+      ...TESTIMONIALS.slice(0, perPage),
+    ],
+    [perPage]
   );
+
+  const handleTrackComplete = useCallback(() => {
+    if (trackIndex >= pages + perPage) {
+      setInstantSlideReset(true);
+      setTrackIndex(perPage);
+    } else if (trackIndex <= perPage - 1) {
+      setInstantSlideReset(true);
+      setTrackIndex(pages + perPage - 1);
+    }
+  }, [trackIndex, pages, perPage]);
+
+  useEffect(() => {
+    if (!instantSlideReset) return;
+    const frame = requestAnimationFrame(() => setInstantSlideReset(false));
+    return () => cancelAnimationFrame(frame);
+  }, [instantSlideReset]);
 
   return (
     <section style={{ padding:"80px 0", background:T.bgGray }}>
@@ -1650,30 +1709,29 @@ const TestimonialsSection: React.FC = () => {
             ‹
           </motion.button>
 
-          <motion.div
-            drag="x"
-            dragConstraints={{ left:0, right:0 }}
-            dragElastic={0.1}
-            style={{ x:dragX, cursor:"grab", touchAction:"pan-y" }}
-            onDragEnd={onDragEnd}
-            onHoverStart={()=>{ isHovered.current=true; }}
-            onHoverEnd={()=>{ isHovered.current=false; }}
-          >
-            <AnimatePresence mode="wait">
-              <motion.div key={page}
-                initial={{ opacity:0, x:40 }}
-                animate={{ opacity:1, x:0 }}
-                exit={{ opacity:0, x:-40 }}
-                transition={{ duration:0.48, ease:EASE }}
-                style={{
-                  display:"grid",
-                  gridTemplateColumns:`repeat(${perPage},1fr)`,
-                  gap:24, alignItems:"stretch",
-                }}>
-                {visible.map(t=><TCard key={t.id} t={t} />)}
-              </motion.div>
-            </AnimatePresence>
-          </motion.div>
+          <div ref={viewportRef} style={{ cursor:"grab", touchAction:"pan-y", overflow:"hidden", paddingBottom:26 }}>
+            <motion.div
+              drag="x"
+              dragConstraints={{ left:0, right:0 }}
+              dragElastic={0.1}
+              animate={{ x: -trackIndex * cardStep }}
+              style={{ display:"flex", gap:GAP, alignItems:"stretch" }}
+              onDragEnd={onDragEnd}
+              onAnimationComplete={handleTrackComplete}
+              transition={instantSlideReset ? { duration:0 } : { duration:0.42, ease:EASE }}
+            >
+              {trackItems.map((t, i)=>(
+                <motion.div
+                  key={`${t.id}-${i}`}
+                  style={{
+                    flex:`0 0 calc((100% - ${GAP * (perPage - 1)}px) / ${perPage})`,
+                  }}
+                >
+                  <TCard t={t} />
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
 
           <motion.button
             type="button"
@@ -1706,11 +1764,11 @@ const TestimonialsSection: React.FC = () => {
 
         <div style={{ display:"flex", justifyContent:"center", gap:8, marginTop:36 }}>
           {Array.from({length:pages}).map((_,i)=>(
-            <button key={i} onClick={()=>setPage(i)} aria-label={`Page ${i+1}`}
+            <button key={i} onClick={()=>setTrackIndex(perPage + i)} aria-label={`Page ${i+1}`}
               style={{
-                width: i===page ? 28 : 9, height:9, borderRadius:99,
+                width: i===activeIndex ? 28 : 9, height:9, borderRadius:99,
                 border:"none", cursor:"pointer", padding:0,
-                background: i===page ? T.orange : T.border,
+                background: i===activeIndex ? T.orange : T.border,
                 transition:"all 0.35s ease",
               }} />
           ))}
@@ -1858,15 +1916,16 @@ const CTASection: React.FC = () => {
                 <Btn
                   href="/ngos"
                   style={{
-                    padding: "12px 28px",
+                    background: "#ffaf5f",
+                    padding: "9px 20px",
                     fontSize: 13,
-                    letterSpacing: "0.1em",
-                    textTransform: "uppercase",
+                    letterSpacing: 0,
+                    textTransform: "none",
                     fontWeight: 700,
                     width: "auto",
                   }}
                 >
-                  JOIN NOW
+                  Join Now
                 </Btn>
               </div>
             </div>
@@ -1939,6 +1998,11 @@ const Home: React.FC = () => (
       *, *::before, *::after { box-sizing: border-box; }
       body { margin: 0; -webkit-font-smoothing: antialiased; background: #ffffff; }
       html, body { overflow-x: hidden; }
+
+      @keyframes ngoLoop {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+      }
 
       .hero-card {
         transition: min-height 0.2s ease, width 0.2s ease;

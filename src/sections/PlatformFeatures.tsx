@@ -50,19 +50,67 @@ function PhoneMockup() {
         position:'relative',
       }}>
         <div style={{
-          height:'36px',
+          height:'42px',
           flexShrink:0,
           position:'relative',
           display:'flex',
           alignItems:'center',
-          justifyContent:'center',
+          justifyContent:'space-between',
+          padding:'0 16px',
+          color:colors.white,
+          fontSize:'9px',
+          fontFamily:fonts.body,
+          fontWeight:fontWeights.textBold,
         }}>
+          <span>9:41</span>
           <span style={{
-            width:'58px',
-            height:'10px',
+            position:'absolute',
+            top:'13px',
+            left:'50%',
+            transform:'translateX(-50%)',
+            width:'66px',
+            height:'18px',
             borderRadius:'999px',
             background:'#050505',
           }} />
+          <span aria-hidden="true" style={{
+            position:'absolute',
+            top:'19px',
+            left:'calc(50% + 20px)',
+            width:'5px',
+            height:'5px',
+            borderRadius:'50%',
+            background:'#071528',
+            boxShadow:'0 0 4px rgba(57,112,255,.45)',
+          }} />
+          <span aria-hidden="true" style={{ display:'inline-flex', alignItems:'center', gap:'4px' }}>
+            <span style={{ display:'inline-flex', alignItems:'flex-end', gap:'1.5px', height:'9px' }}>
+              {[4,5,7,9].map(h => (
+                <span key={h} style={{ width:'2px', height:`${h}px`, borderRadius:'2px', background:colors.white, display:'block' }} />
+              ))}
+            </span>
+            <span style={{
+              width:'10px',
+              height:'7px',
+              borderTop:`1.5px solid ${colors.white}`,
+              borderLeft:'1.5px solid transparent',
+              borderRight:'1.5px solid transparent',
+              borderRadius:'50% 50% 0 0',
+              display:'block',
+              transform:'translateY(1px)',
+            }} />
+            <span style={{
+              width:'14px',
+              height:'7px',
+              border:`1.4px solid ${colors.white}`,
+              borderRadius:'2.5px',
+              display:'block',
+              position:'relative',
+            }}>
+              <span style={{ position:'absolute', right:'-3px', top:'2px', width:'1.5px', height:'3px', borderRadius:'2px', background:colors.white }} />
+              <span style={{ position:'absolute', inset:'1.5px 2.5px', borderRadius:'1px', background:colors.white }} />
+            </span>
+          </span>
         </div>
         <div style={{ padding:'10px 14px 0' }}>
           <div style={{ color:colors.white, fontSize:'8px', fontFamily:fonts.body, opacity:0.75, marginBottom:'12px' }}>
