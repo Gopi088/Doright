@@ -53,7 +53,7 @@ export default function Campaigns() {
           {/* Filters */}
           <div role="group" aria-label="Filter campaigns" style={{ display:'flex', gap:'10px', flexWrap:'wrap', marginBottom:'40px' }}>
             {cats.map(c=>(
-              <motion.button key={c} whileHover={{ scale:1.04 }} whileTap={{ scale:0.96 }} onClick={()=>setActive(c)}
+              <motion.button type="button" key={c} aria-pressed={active===c} whileHover={{ scale:1.04 }} whileTap={{ scale:0.96 }} onClick={()=>setActive(c)}
                 style={{ background:active===c?colors.primary:colors.bg, color:active===c?colors.white:colors.grayMid, border:'none', borderRadius:radius.full, padding:'8px 18px', fontSize:'13px', fontWeight:active===c?fontWeights.bold:fontWeights.text, cursor:'pointer', transition:'all .15s' }}>
                 {c}
               </motion.button>
@@ -86,7 +86,7 @@ export default function Campaigns() {
                       </div>
                     ))}
                   </div>
-                  <Button variant="primary" size="md" fullWidth style={{ marginTop:'auto' }}>Donate Now</Button>
+                  <Button href={`/campaigns/${c.id}/donate`} variant="primary" size="md" fullWidth style={{ marginTop:'auto' }}>Donate Now</Button>
                 </div>
               </motion.article>
             ))}
@@ -102,7 +102,7 @@ export default function Campaigns() {
               <h3 style={{ fontSize:'clamp(18px,2.5vw,26px)', fontWeight:fontWeights.extrabold, color:colors.dark, margin:'0 0 6px', fontFamily:fonts.display, letterSpacing:'-0.5px' }}>Every donation makes a difference</h3>
               <p style={{ fontSize:'14px', color:colors.gray, margin:0 }}>100% of donations go directly to verified NGOs.</p>
             </div>
-            <Button href="/ngos" variant="primary" size="lg">Start a Campaign →</Button>
+            <Button href="/campaigns/start" variant="primary" size="lg">Start a Campaign →</Button>
           </div>
         </Container>
       </section>

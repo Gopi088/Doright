@@ -20,8 +20,8 @@ export const HERO = {
   titleLine1: 'DoRight to Amplify',
   titleLine2: 'Your Impact',
   body: '₹4,800 covers a full academic year — books, meals, and a teacher who shows up. Verified by Teach For India Foundation.',
-  cta1: { label: 'Register Your NGO', href: '/ngos' },
-  cta2: { label: 'Talk to Our Team',  href: '/about' },
+  cta1: { label: 'Register Your NGO', href: '/ngo-registration' },
+  cta2: { label: 'Talk to Our Team',  href: '/contact' },
 };
 
 // ─── Trusted ──────────────────────────────────────────────────────────────────
@@ -29,7 +29,7 @@ export const TRUSTED = {
   title: 'Trusted by',
   titleBold: 'Purpose-Driven NGOs',
   body: 'Doright collaborates with nonprofits and grassroots organizations working across education, healthcare, sustainability, women empowerment, child welfare, disability inclusion, animal welfare, and disaster response. Together, we are building a transparent and impact-driven giving ecosystem.',
-  cta: { label: 'Apply for Verification', href: '/ngos' },
+  cta: { label: 'Apply for Verification', href: '/ngo-verification' },
   features: [
     {
       title: 'Reach Donors Globally',
@@ -141,8 +141,8 @@ export const JOIN = {
   title: 'Join the Doright',
   titleBold: 'NGO Network',
   body: 'Become part of a trusted ecosystem focused on transparency, accessibility, and meaningful social impact.',
-  cta1: { label: 'Raise Funds with Doright', href: '/ngos' },
-  cta2: { label: 'Talk to Our Team',         href: '/about' },
+  cta1: { label: 'Raise Funds with Doright', href: '/ngo-fundraising' },
+  cta2: { label: 'Talk to Our Team',         href: '/contact' },
 };
 
 // ─── Footer ───────────────────────────────────────────────────────────────────

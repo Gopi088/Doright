@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import founderImage from "../assets/founder.jpg";
@@ -65,18 +66,21 @@ const team = [
     role: "Chief Technology Advisor",
     bio: "Vivek Chordia, with 26+ years of global experience, excels in IoT, AI, Cloud, and leadership. He collaborates and consults with organisations worldwide, driving strategy, innovation, and impactful results across industries.",
     image: member1,
+    linkedin: "https://www.linkedin.com/in/vivekchordia",
   },
   {
     name: "Pranav Gandhi",
     role: "Founder and CEO",
     bio: "A dynamic business leader, Pranav has 26+ years of experience across diverse industries. He blends smart strategies with passionate execution and turns ideas into successful businesses.",
     image: member2,
+    linkedin: "https://www.linkedin.com/in/pranav-gandhi-a81704280",
   },
   {
     name: "Akshata Chandavarkar",
     role: "Co-Founder and CIIO",
     bio: "With 20 years of global experience, Akshata leads in AI, GRC, Cybersecurity, and HR Transformation. She believes that technology is a tool to drive collaboration and create a positive impact.",
     image: member3,
+    linkedin: "https://www.linkedin.com/in/akshata-chandavarkar",
   },
 ];
 
@@ -312,22 +316,28 @@ export default function About() {
           <div className="about-team-grid">
             {team.map((person, i) => (
               <motion.div
-                className={`about-team-card${i === 1 ? " about-team-card--featured" : ""}`}
-                key={person.name}
-                {...revealItem(i * 0.08)}
-              >
-                <div className="about-team-card-info">
-                  <div className="about-team-card-name">{person.name}</div>
-                  <div className="about-team-card-role">{person.role}</div>
-                  <p className="about-team-card-bio">{person.bio}</p>
-                  <a href="/login" className="about-team-card-linkedin">
-                    LinkedIn
-                  </a>
-                </div>
-                <div className="about-team-card-photo">
-                  <img src={person.image} alt={person.name} />
-                </div>
-              </motion.div>
+          className={`about-team-card${i === 1 ? " about-team-card--featured" : ""}`}
+          key={person.name}
+          {...revealItem(i * 0.08)}
+        >
+          <div className="about-team-card-info">
+            <div className="about-team-card-name">{person.name}</div>
+            <div className="about-team-card-role">{person.role}</div>
+            <p className="about-team-card-bio">{person.bio}</p>
+            <a
+              href={person.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="about-team-card-linkedin"
+              aria-label={`${person.name} LinkedIn profile`}
+            >
+              LinkedIn
+            </a>
+          </div>
+          <div className="about-team-card-photo">
+            <img src={person.image} alt={person.name} />
+          </div>
+        </motion.div>
             ))}
           </div>
         </div>
@@ -490,9 +500,9 @@ export default function About() {
               still echo the loudest.
             </p>
             <p>This is our story. We hope it becomes yours too.</p>
-            <a href="/ngos" className="about-join-btn">
+            <Link to="/ngos" className="about-join-btn">
               Join Now
-            </a>
+            </Link>
             <div className="about-cta-svg-wrap">
               <img src={boardFinal} alt="" />
             </div>

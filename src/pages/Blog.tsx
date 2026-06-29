@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { motion } from 'framer-motion';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -16,6 +16,11 @@ export default function Blog() {
   const [activeCat, setActiveCat] = useState('All');
   const [subscribed, setSubscribed] = useState(false);
   const visible = activeCat==='All' ? rest : rest.filter(p=>p.category===activeCat);
+
+  const subscribe = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setSubscribed(true);
+  };
 
   return (
     <div style={{ fontFamily:fonts.body, background:colors.white }}>
@@ -51,14 +56,14 @@ export default function Blog() {
               <div style={{ display:'flex', gap:'8px', fontSize:'12.5px', color:colors.grayLight, marginBottom:'20px' }}>
                 <span>{featured.date}</span><span>·</span><span>{featured.readTime}</span>
               </div>
-              <Button variant="primary" size="md">Read Article →</Button>
+              <Button href={`/blog/${featured.id}`} variant="primary" size="md">Read Article →</Button>
             </div>
           </motion.article>
 
           {/* Category filter */}
           <div role="group" aria-label="Filter by category" style={{ display:'flex', gap:'10px', flexWrap:'wrap', marginBottom:'36px' }}>
             {allCats.map(c=>(
-              <motion.button key={c} whileHover={{ scale:1.04 }} whileTap={{ scale:0.96 }} onClick={()=>setActiveCat(c)}
+              <motion.button type="button" key={c} aria-pressed={activeCat===c} whileHover={{ scale:1.04 }} whileTap={{ scale:0.96 }} onClick={()=>setActiveCat(c)}
                 style={{ background:activeCat===c?colors.primary:colors.bg, color:activeCat===c?colors.white:colors.grayMid, border:'none', borderRadius:radius.full, padding:'7px 16px', fontSize:'13px', fontWeight:activeCat===c?fontWeights.bold:fontWeights.text, cursor:'pointer', transition:'all .15s' }}>
                 {c}
               </motion.button>
@@ -70,7 +75,7 @@ export default function Blog() {
             {visible.map((p,i)=>(
               <motion.article key={p.id} initial={{ opacity:0,y:20 }} whileInView={{ opacity:1,y:0 }} viewport={{ once:true }} transition={{ delay:i%3*0.08, duration:0.45 }}
                 whileHover={{ y:-5, boxShadow:shadows.hover }}
-                style={{ border:`1.5px solid ${colors.borderWarm}`, borderRadius:radius.xl, overflow:'hidden', background:colors.white, display:'flex', flexDirection:'column', cursor:'pointer', boxShadow:shadows.card }}>
+                style={{ border:`1.5px solid ${colors.borderWarm}`, borderRadius:radius.xl, overflow:'hidden', background:colors.white, display:'flex', flexDirection:'column', boxShadow:shadows.card }}>
                 <div style={{ height:'170px', background:`linear-gradient(135deg,${colors.primaryLight},${colors.primaryBorder})`, position:'relative' }}>
                   <span style={{ position:'absolute', bottom:'12px', left:'14px', background:catColors[p.category]||colors.primary, color:'#fff', fontSize:'11px', fontWeight:fontWeights.bold, borderRadius:radius.full, padding:'3px 10px' }}>{p.category}</span>
                 </div>
@@ -80,6 +85,7 @@ export default function Blog() {
                   <div style={{ display:'flex', gap:'8px', fontSize:'12px', color:colors.grayLight, marginTop:'auto' }}>
                     <span>{p.date}</span><span>·</span><span>{p.readTime}</span>
                   </div>
+                  <Button href={`/blog/${p.id}`} variant="outline" size="sm" style={{ marginTop:'18px', alignSelf:'flex-start' }}>Read Article →</Button>
                 </div>
               </motion.article>
             ))}
@@ -108,12 +114,12 @@ export default function Blog() {
                 ✓ You're subscribed! Thanks for joining.
               </motion.div>
             ) : (
-              <div style={{ display:'flex', gap:'10px', maxWidth:'420px', margin:'0 auto', flexWrap:'wrap' }}>
-                <input type="email" placeholder="Enter your email" value={email} onChange={e=>setEmail(e.target.value)} aria-label="Email address"
+              <form onSubmit={subscribe} style={{ display:'flex', gap:'10px', maxWidth:'420px', margin:'0 auto', flexWrap:'wrap' }}>
+                <input type="email" required autoComplete="email" placeholder="Enter your email" value={email} onChange={e=>setEmail(e.target.value)} aria-label="Email address"
                   style={{ flex:'1 1 200px', padding:'12px 18px', borderRadius:radius.full, border:`1.5px solid ${colors.border}`, fontSize:'14px', outline:'none', background:colors.white, boxSizing:'border-box' as const }}
                 />
-                <Button variant="primary" size="md" onClick={() => email && setSubscribed(true)}>Subscribe</Button>
-              </div>
+                <Button type="submit" variant="primary" size="md">Subscribe</Button>
+              </form>
             )}
           </motion.div>
         </Container>

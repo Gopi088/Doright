@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { CSSProperties, ReactNode } from 'react';
+import { Link } from 'react-router-dom';
 import { colors, radius, shadows, fontWeights, fonts, transitions } from '../../styles/theme';
 
 type Variant = 'primary' | 'outline' | 'ghost' | 'white';
@@ -55,13 +56,21 @@ export default function Button({ children, variant = 'primary', size = 'md', hre
     ...style,
   };
 
-  if (href) return (
-    <motion.a href={href} style={base} aria-label={ariaLabel}
-      whileHover={!disabled ? { scale: 1.02, backgroundColor: variantHover[variant] } : {}}
-      whileTap={!disabled ? { scale: 0.98 } : {}}>
-      {children}
-    </motion.a>
-  );
+  if (href) {
+    const motionProps = {
+      style: base,
+      'aria-label': ariaLabel,
+      whileHover: !disabled ? { scale: 1.02, backgroundColor: variantHover[variant] } : {},
+      whileTap: !disabled ? { scale: 0.98 } : {},
+    };
+
+    if (href.startsWith('/')) {
+      const MotionLink = motion(Link);
+      return <MotionLink to={href} {...motionProps}>{children}</MotionLink>;
+    }
+
+    return <motion.a href={href} {...motionProps}>{children}</motion.a>;
+  }
 
   return (
     <motion.button type={type} style={base} onClick={onClick} aria-label={ariaLabel} disabled={disabled}
