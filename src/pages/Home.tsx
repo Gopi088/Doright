@@ -153,7 +153,7 @@ const Reveal: React.FC<{ children: React.ReactNode; style?: React.CSSProperties 
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
   return (
-    <motion.div ref={ref} variants={stagger} initial="show" animate={inView ? "show" : "show"} style={style}>
+    <motion.div ref={ref} variants={stagger} initial="hidden" animate={inView ? "show" : "hidden"} style={style}>
       {children}
     </motion.div>
   );
@@ -180,7 +180,12 @@ const Pill: React.FC<{ label: string; dot?: boolean }> = memo(({ label, dot }) =
 const Btn: React.FC<{ children:React.ReactNode; style?:React.CSSProperties; ghost?:boolean; href?:string }> = ({ children, style, ghost, href = "/campaigns" }) => (
   <motion.a
     href={href}
-    whileHover={{ scale: ghost ? 1.02 : 1.04, boxShadow: ghost ? undefined : "0 8px 28px rgba(255,175,95,0.38)" }}
+    whileHover={{
+      scale: ghost ? 1.02 : 1.04,
+      borderColor: ghost ? "#ffaf5f" : undefined,
+      color: ghost ? "#ffaf5f" : undefined,
+      boxShadow: ghost ? undefined : "0 8px 28px rgba(255,175,95,0.38)",
+    }}
     whileTap={{ scale:0.96 }}
     style={{
       display:"inline-flex", alignItems:"center", justifyContent:"center",
@@ -506,7 +511,7 @@ const LiveSection: React.FC = () => {
 
               <motion.div variants={fadeUp} style={{ display:"flex", gap:10, alignItems:"center", flexWrap:"wrap", marginBottom:36 }}>
                 <span style={{ fontSize:13, color:T.light }}>Donate via</span>
-                {paymentMethods.map(({ label, icon })=>(
+                {paymentMethods.map(({ label,  })=>(
                   <motion.a
                     key={label}
                     onClick={()=>setPaymentMethod(label)}
@@ -526,7 +531,7 @@ const LiveSection: React.FC = () => {
                     boxShadow:paymentMethod === label ? "0 8px 20px rgba(255,175,95,0.28)" : "none",
                     transition:"all 0.22s ease",
                     textDecoration:"none",
-                  }}><span aria-hidden="true" style={{ fontSize:13 }}>{icon}</span>{label}</motion.a>
+                  }}><span aria-hidden="true" style={{ fontSize:13 }}></span>{label}</motion.a>
                 ))}
               </motion.div>
 

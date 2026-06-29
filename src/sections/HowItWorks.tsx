@@ -23,7 +23,7 @@ export default function HowItWorks() {
         </motion.div>
 
         {/* Timeline — responsive: collapses gracefully on mobile */}
-        <div style={{ overflowX:'auto', overflowY:'visible' }}>
+        <div style={{ }}>
           <div style={{ minWidth:'320px' }}>
 
             {/* Icon row */}

@@ -97,24 +97,35 @@ export default function Footer() {
               }}
             />
             <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-              {socials.map(({ label, icon: Icon, href }) => (
-                <Link
-                  key={label}
-                  to={href}
-                  aria-label={label}
-                  style={{
-                    width: "36px",
-                    height: "36px",
-                    borderRadius: "9px",
-                    background: "rgba(255,255,255,.07)",
-                    color: "rgba(255,255,255,.5)",
-                    display: "inline-flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    transition: "all 0.2s ease",
-                    textDecoration: "none",
-                  }}
-                >
+  {socials.map(({ label, icon: Icon, href }) => (
+    <Link
+      key={label}
+      to={href}
+      aria-label={label}
+      style={{
+        width: "36px",
+        height: "36px",
+        borderRadius: "9px",
+        background: "rgba(255,255,255,.07)",
+        color: "rgba(255,255,255,.5)",
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        transition: "all 0.2s ease",
+        textDecoration: "none",
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.background = "#ffaf5f";
+        e.currentTarget.style.color = "#000";
+        e.currentTarget.style.transform = "translateY(-2px)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.background = "rgba(255,255,255,.07)";
+        e.currentTarget.style.color = "rgba(255,255,255,.5)";
+        e.currentTarget.style.transform = "translateY(0)";
+      }}
+    >
+   
                   {React.createElement(Icon as React.ComponentType<{ size: number }>, { size: 16 })}
                 </Link>
               ))}

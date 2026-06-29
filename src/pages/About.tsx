@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { motion } from "framer-motion";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import founderImage from "../assets/founder.jpg";
@@ -79,6 +80,20 @@ const team = [
   },
 ];
 
+const revealSection = {
+  initial: { opacity: 0, y: 26 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, amount: 0.16 },
+  transition: { duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] },
+} as const;
+
+const revealItem = (delay = 0) => ({
+  initial: { opacity: 0, y: 18 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, amount: 0.2 },
+  transition: { duration: 0.48, delay, ease: [0.25, 0.46, 0.45, 0.94] },
+} as const);
+
 export default function About() {
   const [founderSlide, setFounderSlide] = useState(0);
   const total = founderSlides.length;
@@ -96,7 +111,7 @@ export default function About() {
       <div className="about-gradient-zone">
 
         {/* ── 1. FOUNDER HERO ── */}
-        <section className="about-founder-hero">
+        <motion.section className="about-founder-hero" {...revealSection}>
           <div className="about-wrap about-founder-grid">
 
             {/* Left: copy + slider */}
@@ -175,10 +190,10 @@ export default function About() {
             </div>
 
           </div>
-        </section>
+        </motion.section>
 
         {/* ── 2. 80:20 PRINCIPLE CARD ── */}
-        <div className="about-principle-section">
+        <motion.div className="about-principle-section" {...revealSection}>
           <div className="about-wrap">
             <div className="about-principle-card">
               <div className="about-principle-left">
@@ -203,10 +218,10 @@ export default function About() {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* ── 3. BIRTH OF DORIGHT ── */}
-        <section className="about-birth-section">
+        <motion.section className="about-birth-section" {...revealSection}>
           <div className="about-wrap about-birth-grid">
 
             {/* Left: image */}
@@ -241,26 +256,26 @@ export default function About() {
             </div>
 
           </div>
-        </section>
+        </motion.section>
 
       </div>{/* /about-gradient-zone */}
 
       {/* ═══════════════════════════════════════════
           4. WHAT YOU CAN DO — ORANGE BAND
       ═══════════════════════════════════════════ */}
-      <section className="about-what-section">
+      <motion.section className="about-what-section" {...revealSection}>
         <div className="about-wrap">
-          <h2 className="about-what-heading">
+          <motion.h2 className="about-what-heading" {...revealItem()}>
             <span className="about-what-line">What You Can Do</span>
             <br />
             <span className="about-what-line">
               On <strong>DoRight?</strong>
             </span>
-          </h2>
+          </motion.h2>
 
           <div className="about-what-cards">
-            {featureCards.map((card) => (
-              <div className="about-what-card" key={card.title}>
+            {featureCards.map((card, i) => (
+              <motion.div className="about-what-card" key={card.title} {...revealItem(i * 0.08)}>
                 <div className="about-what-card-img">
                   <img src={card.image} alt={card.title} />
                 </div>
@@ -268,37 +283,38 @@ export default function About() {
                   <h4>{card.title}</h4>
                   <p>{card.body}</p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
 
-          <p className="about-what-tagline">
+          <motion.p className="about-what-tagline" {...revealItem(0.12)}>
             <span className="about-what-tl-highlight">
               Give with Doright through <strong>PROMISES</strong> — where
               transparency and every donor–organisation relationship is valued and
               you can <strong>witness the real change</strong> your kindness
               creates.
             </span>
-          </p>
+          </motion.p>
         </div>
-      </section>
+      </motion.section>
 
       {/* ═══════════════════════════════════════════
           5. THE TEAM
       ═══════════════════════════════════════════ */}
-      <section className="about-team-section">
+      <motion.section className="about-team-section" {...revealSection}>
         <div className="about-wrap">
-          <h2 className="about-team-heading">
+          <motion.h2 className="about-team-heading" {...revealItem()}>
             The Team That
             <br />
             <em>Made It Happen</em>
-          </h2>
+          </motion.h2>
 
           <div className="about-team-grid">
             {team.map((person, i) => (
-              <div
+              <motion.div
                 className={`about-team-card${i === 1 ? " about-team-card--featured" : ""}`}
                 key={person.name}
+                {...revealItem(i * 0.08)}
               >
                 <div className="about-team-card-info">
                   <div className="about-team-card-name">{person.name}</div>
@@ -311,14 +327,14 @@ export default function About() {
                 <div className="about-team-card-photo">
                   <img src={person.image} alt={person.name} />
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* ── 5b. FOUNDER QUOTE BAND ── */}
-      <section className="about-quote-band">
+      <motion.section className="about-quote-band" {...revealSection}>
         <div className="about-wrap">
           <div className="about-quote-band-card">
             <p className="about-quote-band-text">
@@ -337,12 +353,12 @@ export default function About() {
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* ═══════════════════════════════════════════
           6. WHAT MAKES DORIGHT DIFFERENT
       ═══════════════════════════════════════════ */}
-      <section className="about-different-section">
+      <motion.section className="about-different-section" {...revealSection}>
         <div className="about-wrap about-different-grid">
 
           {/* Left */}
@@ -395,12 +411,12 @@ export default function About() {
           </div>
 
         </div>
-      </section>
+      </motion.section>
 
       {/* ═══════════════════════════════════════════
           7. NOT JUST CHARITY
       ═══════════════════════════════════════════ */}
-      <section className="about-charity-section">
+      <motion.section className="about-charity-section" {...revealSection}>
         <div className="about-wrap about-charity-grid">
 
           {/* Left */}
@@ -439,12 +455,12 @@ export default function About() {
           </div>
 
         </div>
-      </section>
+      </motion.section>
 
       {/* ═══════════════════════════════════════════
           8. CTA — ACT FOR IMPACT
       ═══════════════════════════════════════════ */}
-      <section className="about-cta-section">
+      <motion.section className="about-cta-section" {...revealSection}>
         <div className="about-wrap">
           <div className="about-cta-inner">
             <div className="about-section-tag">
@@ -482,7 +498,7 @@ export default function About() {
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       <Footer />
     </div>
