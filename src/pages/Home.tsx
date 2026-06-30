@@ -1,6 +1,6 @@
 import React, {
   useState, useEffect, useRef,
-  useCallback, memo, useMemo,
+  useCallback, memo, useMemo, useLayoutEffect,
 } from "react";
 import {
   motion, AnimatePresence, useInView,
@@ -210,7 +210,9 @@ const TxtLink: React.FC<{ children:React.ReactNode; style?:React.CSSProperties; 
 const Hero: React.FC = () => {
   const [trackIdx, setTrackIdx] = useState(1);
   const [instantReset, setInstantReset] = useState(false);
-  const [clipWidth, setClipWidth] = useState(0);
+  const [clipWidth, setClipWidth] = useState(() => (
+    typeof window === "undefined" ? 0 : window.innerWidth
+  ));
   const [heroAutoplayPaused, setHeroAutoplayPaused] = useState(false);
   const heroPauseTimer = useRef<number | null>(null);
   const clipRef = useRef<HTMLDivElement>(null);
@@ -268,7 +270,7 @@ const Hero: React.FC = () => {
     return () => document.removeEventListener("visibilitychange", normalizeTrack);
   }, [n]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const update = () => setClipWidth(clipRef.current?.offsetWidth ?? 0);
     update();
     window.addEventListener("resize", update);
@@ -2047,8 +2049,9 @@ const Home: React.FC = () => (
           top: auto !important;
           bottom: 0 !important;
           transform: none !important;
+          left: 0 !important;
           width: 100% !important;
-          padding: 28px 24px !important;
+          padding: 28px 34px !important;
           color: #fff !important;
         }
         .hero-copy h1 {

@@ -167,11 +167,11 @@ export default function Navbar() {
       </nav>
 
       <style>{`
-        @media (min-width: 768px) {
+        @media (min-width: 980px) {
           .responsive-hide-mobile { display: flex !important; }
           nav > button[aria-controls="mobile-menu"] { display: none !important; }
         }
-        @media (max-width: 767px) {
+        @media (max-width: 979px) {
           .responsive-hide-mobile { display: none !important; }
         }
       `}</style>
